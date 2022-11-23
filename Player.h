@@ -77,9 +77,5 @@ public:
 
     //‰½‚©‚É“–‚½‚Á‚½
     void OnCollision(GameObject* pTarget) override;
-
-    ////•Ç‚©‚Ç‚¤‚©‚Ì”»•Ê
-    //bool IsWall();
-
    
 };

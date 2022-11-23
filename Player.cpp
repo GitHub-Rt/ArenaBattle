@@ -212,7 +212,7 @@ void Player::Update()
     transform_.position_.z += moveCom.z;
 
     //Aボタンを押したら
-    if (Input::IsPadButtonDown(0, XINPUT_GAMEPAD_A))
+    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
     {
         //ジャンプ
         jumpFlg = true; //trueの間はジャンプできない(二段ジャンプ未実装 -> ※検討中)
@@ -253,7 +253,7 @@ void Player::Update()
     //////////////////////  攻撃処理     //////////////////////
 
     //マウスの左クリックが押された、PadのBボタンが押された
-    if ( Input::IsMouseButtonDown(0) ||  Input::IsPadButtonDown(0, XINPUT_GAMEPAD_B))
+    if ( Input::IsMouseButtonDown(0) ||  Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 0))
     {
 
         //通常攻撃
@@ -267,7 +267,7 @@ void Player::Update()
         }
     }
     //Qが押された、PadのYが押された
-    if ( Input::IsKeyDown(DIK_Q) ||  Input::IsPadButtonDown(0, XINPUT_GAMEPAD_Y))
+    if ( Input::IsKeyDown(DIK_Q) ||  Input::IsPadButtonDown(XINPUT_GAMEPAD_Y, 0 ))
     {
         //強攻撃
         attackNum = 2;
@@ -433,12 +433,4 @@ bool Player::PGetAlive()
 {
     return aliveFlg; 
 }
-
-////壁かどうかの判別
-//bool Player::IsWall()
-//{
-//    
-//}
-
-
 
