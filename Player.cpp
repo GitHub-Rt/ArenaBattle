@@ -28,7 +28,7 @@ Player::~Player()
 void Player::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("player.fbx");
+    hModel_ = Model::Load("woman.fbx");
     assert(hModel_ >= 0);
 
     //当たり判定枠

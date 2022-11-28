@@ -8,7 +8,7 @@ class Player : public GameObject
     //定数
     const FLOAT JUMPSPEED = 20.0f;           //ジャンプ時の初速度
     const FLOAT GRAVITY = 0.5f;            //重力
-    const FLOAT HALF_HEIGHT = 1.0f;         //オブジェクトの半分の高さ
+    const FLOAT HALF_HEIGHT = 5.0f;         //オブジェクトの半分の高さ
     const FLOAT PC_LENGTH = -30.0f;         //カメラからプレイヤーまでの距離
     const FLOAT CAMERA_ANGLE_SPEED = 0.025f; //カメラの旋回スピード
     const FLOAT MAX_HP = 30.0f;          //最大HP
