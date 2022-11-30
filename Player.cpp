@@ -137,7 +137,7 @@ void Player::Update()
     XMVECTOR vCom = XMVectorSet(move.x, 0, move.y, 0);
     prevPos = XMLoadFloat3(&transform_.position_);
 
-    //////////////////  モデルの回転  /////////////////////
+    //////////////////    モデルの回転  ・　移動　　  /////////////////////
 
 
     //カメラの位置から焦点に向かうベクトル
@@ -196,7 +196,7 @@ void Player::Update()
         moveFlg = false;
     }
     //回転
-    transform_.rotate_.y = XMVectorGetY(playerAngle);
+//    transform_.rotate_.y = XMVectorGetY(playerAngle);
 
     
     //型変換
@@ -210,6 +210,9 @@ void Player::Update()
     //移動
     transform_.position_.x += moveCom.x;
     transform_.position_.z += moveCom.z;
+    if (moveCom.x != 0 || moveCom.z != 0) {
+        transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
+    }
 
     //Aボタンを押したら
     if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))

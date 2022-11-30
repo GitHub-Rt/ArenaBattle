@@ -15,6 +15,7 @@ class Enemy : public GameObject
     int hModel_;    //モデル番号
     int pAcom;      //アタックの種類を保存
     
+    
     float HP = MAX_HP;  //敵HP
     float amountMove = 0.125f; //移動量
 

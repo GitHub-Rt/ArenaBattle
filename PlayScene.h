@@ -5,6 +5,9 @@
 //プレイシーンを管理するクラス
 class PlayScene : public GameObject
 {
+	int eCount;	//敵を出現させる間隔
+	int eNum;	//敵の出現回数
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

@@ -5,10 +5,8 @@
 #include "Engine/SphereCollider.h"
 #include "Engine/Global.h"
 #include "Engine/SceneManager.h"
+#include "PlayScene.h"
 
-//デバッグ用
-#include "Engine/Input.h"
-#include "Engine/SceneManager.h"
 
 
 
@@ -41,6 +39,11 @@ void Enemy::Initialize()
 //更新
 void Enemy::Update()
 {
+
+
+    
+
+
     //ステージ情報獲得
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
