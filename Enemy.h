@@ -8,13 +8,13 @@
 class Enemy : public GameObject
 {
     //定数宣言
-    const FLOAT HALF_HEIGHT = 1.5f;     //オブジェクトの半分の高さ
+    const FLOAT HALF_HEIGHT = 2.25f;     //オブジェクトの半分の高さ
     const FLOAT MAX_HP = 1.0f;          //最大HP
     const FLOAT EP_LENGTH = 2.5f;       //敵とプレイヤー間の距離
 
     int hModel_;    //モデル番号
     int pAcom;      //アタックの種類を保存
-    
+    int eNum;       //敵の総数
     
     float HP = MAX_HP;  //敵HP
     float amountMove = 0.125f; //移動量

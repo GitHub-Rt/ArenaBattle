@@ -22,39 +22,24 @@ void PlayScene::Initialize()
 	Instantiate<Wall>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
+	
 }
 
 //更新
 void PlayScene::Update()
 {
+	if (eNum < 6)
+	{
+		time++;
 
-    // 5秒ごとに　(ステージ内には最大で5体まで敵を出す)
-    switch (eCount)
-    {
-    default:
-        eCount++;
-
-    case 300:   
-
-        //敵が５体以下かどうか
-        if (eNum < 6)
-        {
-            //敵を出現
-            Instantiate<Enemy>(this);
-
-            eNum++;     //敵出現したのでカウントを増やす
-            eCount = 0; //敵の出現間隔をリセット
-
-            //ステージ内に5体敵を作ったら
-            if (eNum == 5)
-            {
-                //それ以上は敵を呼ばない　-> 敵をすべて倒したらボスを呼ぶようにする
-
-            }
-        }
-    }
-
-
+		// 3秒たったら…
+		if (time > 180)
+		{
+			Instantiate<Enemy>(this);	//敵を出現
+			time = 0;		//タイマーのリセット
+			eNum++;			//敵の出現をカウント
+		}
+	}
 }
 
 //描画

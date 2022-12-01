@@ -5,8 +5,9 @@
 //プレイシーンを管理するクラス
 class PlayScene : public GameObject
 {
-	int eCount;	//敵を出現させる間隔
-	int eNum;	//敵の出現回数
+	int eNum = 0;	//敵の出現数
+	float time;	//敵を出現させる間隔
+
 
 public:
 	//コンストラクタ
