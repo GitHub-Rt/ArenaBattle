@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+
+
 //プレイヤーを管理するクラス
 class Player : public GameObject
 {
@@ -11,8 +13,11 @@ class Player : public GameObject
     const FLOAT HALF_HEIGHT = 1.25f;         //オブジェクトの半分の高さ
     const FLOAT PC_LENGTH = -30.0f;         //カメラからプレイヤーまでの距離
     const FLOAT CAMERA_ANGLE_SPEED = 0.025f; //カメラの旋回スピード
+    const FLOAT MAX_CAMERA_UP = 5.0f;      //カメラの上方向の最大値
+    const FLOAT MAX_CAMERA_DOWN = 0.0f;     //カメラの下方向の最大値
     const FLOAT MAX_HP = 30.0f;          //最大HP
     const FLOAT NOUGHT = 0;             //０の時を表す
+    const FLOAT CIRCLE_RANGE = 60.0f;   //床の移動可能範囲円の半径
 
     //ローカル変数
     int hModel_;       //モデル番号
@@ -21,7 +26,8 @@ class Player : public GameObject
     float checkYG;     //ジャンプ時の座標保存
     float initVec = JUMPSPEED;  //ジャンプ
     float angleX;        //カメラの水平方向(横回転)
-    float angleY;        //カメラの鉛直方向(縦回転)
+    float angleY = 0.0f;        //カメラの鉛直方向(縦回転)
+    float moveLimit;    //円周にいるかどうか
     XMFLOAT3 move;
 
 
@@ -32,7 +38,8 @@ class Player : public GameObject
 
     //カメラ関連
     XMVECTOR playerAngle;   //プレイヤーの角度を保存
-    XMMATRIX mRotate;   //カメラの回転行列
+    XMMATRIX mRotateX;   //カメラの回転行列(水平方向)
+    XMMATRIX mRotateY;   //カメラの回転行列(鉛直方向)
 
     //フラグ関係
     bool pAttackS_;      //攻撃判定管理

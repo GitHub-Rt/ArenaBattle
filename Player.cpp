@@ -190,7 +190,7 @@ void Player::Update()
         
         //ベクトルにセットしてカメラの回転行列をかける
         playerAngle = XMVectorSet( 0, rotateY, 0, 0 );
-        playerAngle = XMVector3TransformCoord(playerAngle, mRotate);
+        playerAngle = XMVector3TransformCoord(playerAngle, mRotateX);
 
         //フラグのリセット
         moveFlg = false;
@@ -213,6 +213,13 @@ void Player::Update()
     if (moveCom.x != 0 || moveCom.z != 0) {
         transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
     }
+
+
+    //移動可能範囲かどうかの判定
+
+   
+
+
 
     //Aボタンを押したら
     if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
@@ -309,30 +316,65 @@ void Player::Update()
     //右スティック縦方向でカメラをプレイヤー中心に円回転させる
     if (Input::GetPadStickR(0).y != NULL)
     {
-        //右スティックを上に倒した
-        if (Input::GetPadStickR(0).y > 0.0f)
-        {
-            angleY += CAMERA_ANGLE_SPEED;
-        }
-
+        
         //右スティックを下に倒した
-        else if (Input::GetPadStickR(0).y < 0.0f)
+      if (Input::GetPadStickR(0).y < 0.0f)
+      {
+        //上方向の最大値に到達しているかどうか
+        //if (angleY < MAX_CAMERA_UP)
+        //{
+        //    angleY += CAMERA_ANGLE_SPEED;
+        //}
+        //else
+        //{
+        //    //上方向の最大値でセット
+        //    angleY = MAX_CAMERA_UP;
+        //}
+          angleY += CAMERA_ANGLE_SPEED;
+        if (angleY > MAX_CAMERA_UP)
         {
-            angleY -= CAMERA_ANGLE_SPEED;
+            angleY = MAX_CAMERA_UP;
+        }
+        
+      }
+
+        //右スティックを上に倒した
+        else if (Input::GetPadStickR(0).y > 0.0f)
+        {
+            //下方向の最大値に到達しているかどうか
+          //if(angleY > MAX_CAMERA_DOWN)
+          //{
+          //     angleY -= CAMERA_ANGLE_SPEED;
+          //}
+          //else
+          //{
+          //      //下方向の最大値でセット
+          //     angleY = MAX_CAMERA_DOWN;
+          //}
+          angleY -= CAMERA_ANGLE_SPEED;
+
+          if (angleY < MAX_CAMERA_DOWN)
+          {
+              angleY = MAX_CAMERA_DOWN;
+          }
+         
         }
 
-        //行列を変化
-        mRotate = XMMatrixRotationZ(angleY);
+       
+
+        
     }
     
     //行列を変化
-    mRotate = XMMatrixRotationY(angleX);
+    mRotateX = XMMatrixRotationY(angleX);
+    mRotateY = XMMatrixRotationX(angleY);
 
     //プレイヤーからカメラへのベクトル
     XMVECTOR vCam = XMVectorSet(0.0f, 3.0f, PC_LENGTH, 0.0f);
 
     //カメラの角度
-    XMVECTOR vRotate = XMVector3TransformCoord(vCam, mRotate);
+    XMVECTOR vRotate = XMVector3TransformCoord(vCam, mRotateY);     //縦方向の行列で変形
+    vRotate = XMVector3TransformCoord(vRotate, mRotateX);              //横方向の行列で変形
     
     //プレイヤーの動きにカメラを追従させるために移動行列作成
     XMMATRIX mMove = XMMatrixTranslation(moveCom.x, moveCom.y,moveCom.z);
