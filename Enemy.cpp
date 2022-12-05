@@ -113,7 +113,7 @@ void Enemy::Update()
         XMStoreFloat3(&transform_.position_, prevPos);
 
         //UŒ‚‚ğs‚¤
-        eAttackS_ = true;
+        //eAttackS_ = true;
     }
     else
     {

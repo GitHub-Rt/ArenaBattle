@@ -156,10 +156,10 @@ void Player::Update()
     vFront = XMVector3Normalize(vFront);
 
     //カメラの角度が変化したか
-    if (angle != 0.0f)
+    if (angleX != 0.0f)
     {
         //カメラの角度に合わせてプレイヤーベクトルを回転
-        XMMATRIX mCamRotate = XMMatrixRotationY(angle);
+        XMMATRIX mCamRotate = XMMatrixRotationY(angleX);
         vCom = XMVector3TransformCoord(vCom, mCamRotate);
     }
         
@@ -289,21 +289,44 @@ void Player::Update()
     XMFLOAT3 nowPos = GetPosition();
     XMVECTOR vPos = XMLoadFloat3(&nowPos);
     
-    //右スティックでカメラをプレイヤー中心に回転させる
-    if (Input::GetPadStickR(0).x < 0.0f )
+    //右スティック横方向でカメラをプレイヤー中心に回転させる
+    if (Input::GetPadStickR(0).x != NULL)
     {
-        //右スティックを左に倒したら
-        angle -= CAMERA_ANGLE_SPEED;
+        if (Input::GetPadStickR(0).x < 0.0f)
+        {
+            //右スティックを左に倒したら
+            angleX -= CAMERA_ANGLE_SPEED;
+        }
+
+        else if (Input::GetPadStickR(0).x > 0.0f)
+        {
+            //右スティックを右に倒したら
+            angleX += CAMERA_ANGLE_SPEED;
+        }
+
+        
+    }
+    //右スティック縦方向でカメラをプレイヤー中心に円回転させる
+    if (Input::GetPadStickR(0).y != NULL)
+    {
+        //右スティックを上に倒した
+        if (Input::GetPadStickR(0).y > 0.0f)
+        {
+            angleY += CAMERA_ANGLE_SPEED;
+        }
+
+        //右スティックを下に倒した
+        else if (Input::GetPadStickR(0).y < 0.0f)
+        {
+            angleY -= CAMERA_ANGLE_SPEED;
+        }
+
+        //行列を変化
+        mRotate = XMMatrixRotationZ(angleY);
     }
     
-    else if (Input::GetPadStickR(0).x > 0.0f )
-    {
-        //右スティックを右に倒したら
-        angle += CAMERA_ANGLE_SPEED;
-    }
-
-    //回転行列
-    mRotate = XMMatrixRotationY(angle);
+    //行列を変化
+    mRotate = XMMatrixRotationY(angleX);
 
     //プレイヤーからカメラへのベクトル
     XMVECTOR vCam = XMVectorSet(0.0f, 3.0f, PC_LENGTH, 0.0f);

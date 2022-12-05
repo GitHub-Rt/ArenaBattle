@@ -20,7 +20,8 @@ class Player : public GameObject
     int attackNum;    //攻撃の種類
     float checkYG;     //ジャンプ時の座標保存
     float initVec = JUMPSPEED;  //ジャンプ
-    float angle;        //カメラの水平方向
+    float angleX;        //カメラの水平方向(横回転)
+    float angleY;        //カメラの鉛直方向(縦回転)
     XMFLOAT3 move;
 
 
