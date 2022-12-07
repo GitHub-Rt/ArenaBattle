@@ -124,8 +124,8 @@ void Enemy::Update()
         XMStoreFloat3(&nextPos, vMove);
 
         //ˆÚ“®
-        transform_.position_.x += nextPos.x;
-        transform_.position_.z += nextPos.z;
+        //transform_.position_.x += nextPos.x;
+        //transform_.position_.z += nextPos.z;
     }
 
 

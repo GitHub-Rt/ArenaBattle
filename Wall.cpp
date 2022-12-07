@@ -4,9 +4,9 @@
 
 //コンストラクタ
 Wall::Wall(GameObject* parent)
-    :GameObject(parent, "Wall"), hModel_(-1)
+    :GameObject(parent, "Wall"),hModel_(-1)
 {
-
+    
 }
 
 //デストラクタ
@@ -20,9 +20,6 @@ void Wall::Initialize()
     //モデルデータのロード(壁モデル)
     hModel_ = Model::Load("wall.fbx");
     assert(hModel_ >= 0);
-
-
-
    
 }
 

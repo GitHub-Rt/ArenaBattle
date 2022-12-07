@@ -35,7 +35,7 @@ void PlayScene::Update()
 		// 3秒たったら…
 		if (time > 180)
 		{
-			Instantiate<Enemy>(this);	//敵を出現
+			//Instantiate<Enemy>(this);	//敵を出現
 			time = 0;		//タイマーのリセット
 			eNum++;			//敵の出現をカウント
 		}

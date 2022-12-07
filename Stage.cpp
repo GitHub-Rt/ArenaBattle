@@ -18,7 +18,7 @@ Stage::~Stage()
 void Stage::Initialize()
 {
     //モデルデータのロード(床モデル)
-    hModel_ = Model::Load("stage.fbx");
+    hModel_ = Model::Load("ButtleField.fbx");
     assert(hModel_ >= 0);    
 }
 
