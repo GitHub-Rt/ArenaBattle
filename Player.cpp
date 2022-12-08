@@ -207,6 +207,11 @@ void Player::Update()
     moveCom.x = moveCom.x * 0.25f;
     moveCom.z = moveCom.z * 0.25f;
 
+
+    
+
+
+
     //移動
     transform_.position_.x += moveCom.x;
     transform_.position_.z += moveCom.z;
@@ -215,29 +220,14 @@ void Player::Update()
     }
 
 
+    
     //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
-    moveLimit = (transform_.position_.x * transform_.position_.x) + (transform_.position_.z * transform_.position_.z);
+    moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
+
     if (moveLimit > CIRCLE_RANGE)
     {
-        if (transform_.position_.x < 0)
-        {
-            transform_.position_.x += moveCom.x;
-        }
-        else if (transform_.position_.x > 0)
-        {
-            transform_.position_.x -= moveCom.x;
-        }
-
-
-
-        if (transform_.position_.z < 0)
-        {
-            transform_.position_.z += moveCom.z;
-        }
-        else if (transform_.position_.z > 0)
-        {
-            transform_.position_.z -= moveCom.z;
-        }
+        //これ以上その先へは進めなくする
+        XMStoreFloat3(&transform_.position_, prevPos);
     }
 
    
@@ -336,56 +326,43 @@ void Player::Update()
 
         
     }
+
+
     //右スティック縦方向でカメラをプレイヤー中心に円回転させる
     if (Input::GetPadStickR(0).y != NULL)
     {
         
-        //右スティックを下に倒した
+      //右スティックを下に倒した
       if (Input::GetPadStickR(0).y < 0.0f)
       {
-        //上方向の最大値に到達しているかどうか
-        //if (angleY < MAX_CAMERA_UP)
-        //{
-        //    angleY += CAMERA_ANGLE_SPEED;
-        //}
-        //else
-        //{
-        //    //上方向の最大値でセット
-        //    angleY = MAX_CAMERA_UP;
-        //}
           angleY += CAMERA_ANGLE_SPEED;
+
+          //上方向の最大値に到達しているかどうか
         if (angleY > MAX_CAMERA_UP)
         {
             angleY = MAX_CAMERA_UP;
         }
-        
       }
 
-        //右スティックを上に倒した
-        else if (Input::GetPadStickR(0).y > 0.0f)
-        {
-            //下方向の最大値に到達しているかどうか
-          //if(angleY > MAX_CAMERA_DOWN)
-          //{
-          //     angleY -= CAMERA_ANGLE_SPEED;
-          //}
-          //else
-          //{
-          //      //下方向の最大値でセット
-          //     angleY = MAX_CAMERA_DOWN;
-          //}
-          angleY -= CAMERA_ANGLE_SPEED;
+       //右スティックを上に倒した
+       else if (Input::GetPadStickR(0).y > 0.0f)
+       {
+         angleY -= CAMERA_ANGLE_SPEED;
 
-          if (angleY < MAX_CAMERA_DOWN)
-          {
-              angleY = MAX_CAMERA_DOWN;
-          }
-         
-        }
-
-       
-
+         //下方向の最大値に到達しているかどうか
+         if (angleY < MAX_CAMERA_DOWN)
+         {
+             angleY = MAX_CAMERA_DOWN;
+         }
+       }
         
+    }
+
+    //カメラ角度のリセット(スタートボタンでリセット)
+    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0))
+    {
+        angleX = 0.0f;
+        angleY = 0.25f;
     }
     
     //行列を変化

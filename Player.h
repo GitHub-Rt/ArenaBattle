@@ -13,11 +13,11 @@ class Player : public GameObject
     const FLOAT HALF_HEIGHT = 1.25f;         //オブジェクトの半分の高さ
     const FLOAT PC_LENGTH = -30.0f;         //カメラからプレイヤーまでの距離
     const FLOAT CAMERA_ANGLE_SPEED = 0.025f; //カメラの旋回スピード
-    const FLOAT MAX_CAMERA_UP = 5.0f;      //カメラの上方向の最大値
+    const FLOAT MAX_CAMERA_UP = 1.0f;      //カメラの上方向の最大値
     const FLOAT MAX_CAMERA_DOWN = 0.0f;     //カメラの下方向の最大値
     const FLOAT MAX_HP = 30.0f;          //最大HP
     const FLOAT NOUGHT = 0;             //０の時を表す
-    const FLOAT CIRCLE_RANGE = 60.0f;   //床の移動可能範囲円の半径
+    const FLOAT CIRCLE_RANGE = 3600.0f;   //床の移動可能範囲円の半径
 
     //ローカル変数
     int hModel_;       //モデル番号
@@ -25,9 +25,11 @@ class Player : public GameObject
     int attackNum;    //攻撃の種類
     float checkYG;     //ジャンプ時の座標保存
     float initVec = JUMPSPEED;  //ジャンプ
-    float angleX;        //カメラの水平方向(横回転)
-    float angleY = 0.0f;        //カメラの鉛直方向(縦回転)
     float moveLimit;    //円周にいるかどうか
+    // ※カメラには初期角度を入れておく
+    float angleX = 0.0f;        //カメラの水平方向(横回転) 
+    float angleY = 0.25f;       //カメラの鉛直方向(縦回転)
+    
     XMFLOAT3 move;
 
 
