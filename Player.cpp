@@ -188,6 +188,15 @@ void Player::Update()
     }
 
 
+    //回避・ダッシュ機能  (R2ボタンで回避。回避した後に移動が行われたらダッシュを行う)
+    
+
+
+    
+
+
+    //////////////////////////  ジャンプ処理  ///////////////////////////////
+
     //Aボタンを押したら
     if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
     {
@@ -199,7 +208,6 @@ void Player::Update()
     }
 
 
-    //////////////////////////  ジャンプ処理  ///////////////////////////////
     if (jumpFlg == true)
     {
         transform_.position_.y += initVec;     //速度でY座標を変化 ←　今後変更ジャンプの挙動をもっと自然に
@@ -362,8 +370,7 @@ void Player::Update()
     if (eStatus == NULL)
     {
         //敵はもう存在しない
-        MessageBox(NULL, "敵を倒しました。OKボタンを押した後にスタートボタンを押してください", "Game Clear", MB_OK);
-        
+ 
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_CLEAR);
     }
