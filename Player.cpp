@@ -123,15 +123,8 @@ void Player::Update()
 
     //////////  コントローラー  /////////
 
-    //プレイヤーの移動量
-    
+    //プレイヤーの移動
     move = Input::GetPadStickL(0);
-
-    
-    if (move.x != NOUGHT ||  move.y != NOUGHT)
-    {
-        moveFlg = true;
-    }
 
     //プレイヤーのベクトル
     XMVECTOR vCom = XMVectorSet(move.x, 0, move.y, 0);
@@ -165,39 +158,6 @@ void Player::Update()
         
     //斜め方向のベクトル(正規化)
     XMVECTOR vComOblipue_ = XMVector3Normalize(vCom);
-
-    if (moveFlg == true) 
-    {
-        //frontとmoveの内積を求める
-        XMVECTOR vecDot = XMVector3Dot(vFront, vComOblipue_);
-
-
-        //向いている角度を求める（ラジアン）
-        float dot = XMVectorGetX(vecDot);
-        float angleR = acos(dot);
-
-        //もとから向いているベクトルと動くベクトルの外積
-        XMVECTOR cross = XMVector3Cross(vFront, vComOblipue_);
-
-        //外積の結果のYがマイナス　＝　下向き　＝ 左に進んでいる　
-        if (XMVectorGetY(cross) < 0)
-        {
-            angleR *= -1;
-        }
-
-        //角度の保存
-        float rotateY  = angleR * 180.0f / 3.14f;
-        
-        //ベクトルにセットしてカメラの回転行列をかける
-        playerAngle = XMVectorSet( 0, rotateY, 0, 0 );
-        playerAngle = XMVector3TransformCoord(playerAngle, mRotateX);
-
-        //フラグのリセット
-        moveFlg = false;
-    }
-    //回転
-//    transform_.rotate_.y = XMVectorGetY(playerAngle);
-
     
     //型変換
     XMFLOAT3 moveCom;
@@ -208,19 +168,16 @@ void Player::Update()
     moveCom.z = moveCom.z * 0.25f;
 
 
-    
-
-
-
     //移動
     transform_.position_.x += moveCom.x;
     transform_.position_.z += moveCom.z;
-    if (moveCom.x != 0 || moveCom.z != 0) {
+
+    //モデル自身の回転
+    if (moveCom.x != 0 || moveCom.z != 0) 
+    {
         transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
     }
 
-
-    
     //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
     moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
 
@@ -229,9 +186,6 @@ void Player::Update()
         //これ以上その先へは進めなくする
         XMStoreFloat3(&transform_.position_, prevPos);
     }
-
-   
-
 
 
     //Aボタンを押したら

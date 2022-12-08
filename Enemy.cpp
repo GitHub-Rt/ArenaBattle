@@ -89,8 +89,6 @@ void Enemy::Update()
     }
     else
     {
-        //MessageBox(NULL, "プレイヤーが倒されました。OKボタンを押した後にスタートボタンを押してください", "Game Over", MB_OK);
-
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_OVER);
     }
@@ -113,7 +111,7 @@ void Enemy::Update()
         XMStoreFloat3(&transform_.position_, prevPos);
 
         //攻撃を行う
-        //eAttackS_ = true;
+        eAttackS_ = true;
     }
     else
     {
@@ -124,8 +122,8 @@ void Enemy::Update()
         XMStoreFloat3(&nextPos, vMove);
 
         //移動
-        //transform_.position_.x += nextPos.x;
-        //transform_.position_.z += nextPos.z;
+        transform_.position_.x += nextPos.x;
+        transform_.position_.z += nextPos.z;
     }
 
 
