@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Stage.h"
 #include "Wall.h"
+#include "Start.h"
 
 //デバッグ用
 #include "Engine/Input.h"
@@ -119,14 +120,7 @@ void Player::Update()
             transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
         }
 
-        //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
-        moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
-
-        if (moveLimit > CIRCLE_RANGE)
-        {
-            //これ以上その先へは進めなくする
-            XMStoreFloat3(&transform_.position_, vPrevPos);
-        }
+        
 
     }
 
@@ -151,6 +145,14 @@ void Player::Update()
         moveFlg = true;
     }
 
+    //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
+    moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
+
+    if (moveLimit > CIRCLE_RANGE)
+    {
+        //これ以上その先へは進めなくする
+        XMStoreFloat3(&transform_.position_, vPrevPos);
+    }
 
 
 
@@ -242,16 +244,28 @@ void Player::Update()
     {
         switch (attackNum)
         {
-        case1:
+        case 1:
             //通常攻撃
             //体当たりにようなモーション
 
+            if (aCount < 30)
+            {
+               //少し後ろに下がる
+            }
+            else if (aCount == 30)
+            {
+                //攻撃したときの位置に戻る
+            }
+            else
+            {
+                aCount = 0;
+                attackNum = NULL;
+                moveFlg = true;
+                attackFlg = false;
+            }
 
 
-
-            attackNum = NULL;
-            moveFlg = true;
-            attackFlg = false;
+            aCount++;
             
 
             break;
@@ -260,7 +274,7 @@ void Player::Update()
 
             //強攻撃
             //回転して薙ぎ払うようなモーション
-            if (aCount <= 30)
+            if (aCount <= 90)
             {
                 transform_.rotate_.y += 12.0f;
             }
@@ -382,29 +396,36 @@ void Player::Update()
 
     ///////////////////////   敵の攻撃    ///////////////////////////////
 
-    //敵の状態確認
-    Enemy* eStatus = (Enemy*)FindObject("Enemy");
-    //存在するかどうかを確認
-    if (eStatus == NULL)
+    if (enemyFlg == false)
     {
-        //敵はもう存在しない
-        Sleep(1200);
-
-        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-    }
-    else
-    {
-        eAttackS_ = eStatus->EGetCondition();
-        if (eAttackS_ == true)
+        //敵の状態確認
+        Enemy* eStatus = (Enemy*)FindObject("Enemy");
+        //存在するかどうかを確認
+        if (eStatus == NULL)
         {
-            HP -= 0.25f;
-            eStatus->ESetFalse(eAttackS_);
+            //敵はもう存在しない
+            Sleep(1200);
+
+            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+            pSceneManager->ChangeScene(SCENE_ID_CLEAR);
         }
-        SAFE_RELEASE(eStatus);
+        else
+        {
+            eAttackS_ = eStatus->EGetCondition();
+            if (eAttackS_ == true)
+            {
+                HP -= 0.25f;
 
+
+                //被ダメージモーション
+
+
+                eStatus->ESetFalse(eAttackS_);
+            }
+            SAFE_RELEASE(eStatus);
+
+        }
     }
-
     //HPがなくなったら
     if (HP <= 0)
     {
@@ -474,6 +495,11 @@ void Player::OnCollision(GameObject* pTarget)
             //これ以上その先へは進めなくする
             XMStoreFloat3(&transform_.position_, vPrevPos);
         }
+    }
+
+    if (pTarget->FindObject("Start"))
+    {
+        enemyFlg = true;
     }
 }
 

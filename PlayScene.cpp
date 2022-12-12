@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Stage.h"
 #include "Wall.h"
+#include "Start.h"
 
 
 //デバッグ用
@@ -18,15 +19,29 @@ PlayScene::PlayScene(GameObject* parent)
 //初期化
 void PlayScene::Initialize()
 {
-	Instantiate<Stage>(this);
+	//Instantiate<Stage>(this);
 	Instantiate<Wall>(this);
 	Instantiate<Player>(this);
-	Instantiate<Enemy>(this);
+	Instantiate<Start>(this);
+
+	Start* pStart = (Start*)FindObject("start");
+	if (pStart == NULL)
+	{
+		Instantiate<Stage>(this);
+		Instantiate<Enemy>(this);
+
+		SAFE_DELETE(pStart);
+	}
+
+	//Instantiate<Enemy>(this);
 }
 
 //更新
 void PlayScene::Update()
 {
+	
+	
+
 	if (eNum < 6)
 	{
 		time++;

@@ -189,8 +189,8 @@ void Enemy::OnCollision(GameObject* pTarget)
                 case 1:
                     //HP -= 0.25f;
 
-                    transform_.position_.x -= nextPos.x * 30.0f;
-                    transform_.position_.z -= nextPos.z * 30.0f;
+                    transform_.position_.x -= nextPos.x * 45.0f;
+                    transform_.position_.z -= nextPos.z * 45.0f;
 
                     break;
                 //ã≠çUåÇ

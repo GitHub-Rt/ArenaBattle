@@ -8,6 +8,7 @@ class PlayScene : public GameObject
 	int eNum = 0;	//敵の出現数
 	float time;	//敵を出現させる間隔
 
+	
 
 public:
 	//コンストラクタ

@@ -55,6 +55,7 @@ class Player : public GameObject
     bool moveFlg = true;       //プレイヤーの移動管理
     bool aliveFlg;      //生きてるかどうか
     bool eAlive;        //敵が生きているかどうか
+    bool enemyFlg;      //敵が出現したかどうか
 
 
     
