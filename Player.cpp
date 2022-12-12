@@ -60,75 +60,14 @@ void Player::Update()
     }
 
 
-    //////////////////////   移動処理    //////////////////////////
-
-    //float moveX, moveZ;
-
-    //////////////  キーボード  /////////
-
-    //if (angle != 0.0f)
-    //{
-    //    //カメラの角度が変化した
-    //    moveX = 1 * angle;
-    //    moveZ = 1 * angle;
-    //}
-    //else
-    //{
-    //    //カメラの角度変化なし
-    //    moveX = 1;
-    //    moveZ = 1;
-    //}
-    //
-    //XMVECTOR vKeyX = XMVectorSet(moveX, 0, 0, 0);    //横方向のベクトル
-    //XMVECTOR vKeyZ = XMVectorSet(0, 0, moveZ, 0);    //縦(奥)方向のベクトル
-
-    ////斜め方向のベクトル(正規化)
-    //XMVECTOR vKeyOblipue_X = XMVector3Normalize(vKeyX);
-    //XMVECTOR vKeyOblipue_Z = XMVector3Normalize(vKeyZ);
-    //
-    ////型変換
-    //XMFLOAT3 moveKeyX, moveKeyZ;
-    //XMStoreFloat3(&moveKeyX, vKeyOblipue_X);
-    //XMStoreFloat3(&moveKeyZ, vKeyOblipue_Z);
-    //
-    //if (Input::IsKey(DIK_W))
-    //{
-    //    //前進
-    //    transform_.position_.z += moveKeyZ.z * 0.125f;
-    //}
-    //if (Input::IsKey(DIK_D))
-    //{
-    //    //右方向
-    //    transform_.position_.x += moveKeyX.x * 0.215f;
-    //}
-    //if (Input::IsKey(DIK_S))
-    //{
-    //    //後退
-    //    transform_.position_.z -= moveKeyZ.z * 0.125f;
-    //}
-
-    //if (Input::IsKey(DIK_A))
-    //{
-    //    //左方向
-    //    transform_.position_.x -= moveKeyX.x * 0.125f;
-    //}
-
-    //if (Input::IsKeyDown(DIK_SPACE) && jumpFlg == false)
-    //{
-    //    //ジャンプ
-    //    jumpFlg = true; //trueの間はジャンプできない(二段ジャンプ未実装 -> ※検討中)
-    //    //ジャンプ前の座標の保存
-    //    checkYG = (transform_.position_.y + HALF_HEIGHT);
-    //}
-
-    //////////  コントローラー  /////////
+    //////////////////////   移動処理  (コントローラーのみ対応)    //////////////////////////
 
     //プレイヤーの移動
     move = Input::GetPadStickL(0);
 
     //プレイヤーのベクトル
     XMVECTOR vCom = XMVectorSet(move.x, 0, move.y, 0);
-    prevPos = XMLoadFloat3(&transform_.position_);
+    vPrevPos = XMLoadFloat3(&transform_.position_);
 
     //////////////////    モデルの回転  ・　移動　　  /////////////////////
 
@@ -155,44 +94,52 @@ void Player::Update()
         XMMATRIX mCamRotate = XMMatrixRotationY(angleX);
         vCom = XMVector3TransformCoord(vCom, mCamRotate);
     }
-        
+
     //斜め方向のベクトル(正規化)
     XMVECTOR vComOblipue_ = XMVector3Normalize(vCom);
-    
+
     //型変換
     XMFLOAT3 moveCom;
     XMStoreFloat3(&moveCom, vComOblipue_);
-    
+
     //移動量の調整
     moveCom.x = moveCom.x * 0.25f;
     moveCom.z = moveCom.z * 0.25f;
 
-
-    //移動
-    transform_.position_.x += moveCom.x;
-    transform_.position_.z += moveCom.z;
-
-    //モデル自身の回転
-    if (moveCom.x != 0 || moveCom.z != 0) 
+    //攻撃中は移動できない  ※回避はいつでもできる
+    if (moveFlg == true)
     {
-        transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
+        //移動
+        transform_.position_.x += moveCom.x;
+        transform_.position_.z += moveCom.z;
+
+        //モデル自身の回転
+        if (moveCom.x != 0 || moveCom.z != 0)
+        {
+            transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
+        }
+
+        //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
+        moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
+
+        if (moveLimit > CIRCLE_RANGE)
+        {
+            //これ以上その先へは進めなくする
+            XMStoreFloat3(&transform_.position_, vPrevPos);
+        }
+
     }
 
-    //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
-    moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
+    //回避 (R2ボタンで回避) ➡　攻撃中断もできる
 
-    if (moveLimit > CIRCLE_RANGE)
+    if (Input::GetPadTrrigerR(0) != NULL)
     {
-        //これ以上その先へは進めなくする
-        XMStoreFloat3(&transform_.position_, prevPos);
+
+        attackFlg = false;
+        moveFlg = true;
     }
 
 
-    //回避・ダッシュ機能  (R2ボタンで回避。回避した後に移動が行われたらダッシュを行う)
-    
-
-
-    
 
 
     //////////////////////////  ジャンプ処理  ///////////////////////////////
@@ -234,43 +181,102 @@ void Player::Update()
             return;
         }
     }
-    
+
+
+
     //////////////////////  攻撃処理     //////////////////////
 
-    //マウスの左クリックが押された、PadのBボタンが押された
-    if ( Input::IsMouseButtonDown(0) ||  Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 0))
+    //いま攻撃を行えるかどうか
+    if (attackFlg == false)
     {
-
-        //通常攻撃
-        attackNum = 1;
-        //モーション
-
-        //当たったか判定
-        if (pAttackS_ == false)
+        //PadのBボタンが押された
+        if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B, 0))
         {
-            pAttackS_ = true;
+            //通常攻撃
+            attackNum = 1;
+
+
+            //攻撃しているかどうか判定
+            if (pAttackS_ == false)
+            {
+                pAttackS_ = true;
+            }
+            attackFlg = true;
+            moveFlg = false;
+        }
+
+        //PadのYが押された
+        if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y, 0))
+        {
+            //強攻撃
+            attackNum = 2;
+
+
+            //攻撃しているかどうか判定
+            if (pAttackS_ == false)
+            {
+                pAttackS_ = true;
+            }
+            attackFlg = true;
+            moveFlg = false;
         }
     }
-    //Qが押された、PadのYが押された
-    if ( Input::IsKeyDown(DIK_Q) ||  Input::IsPadButtonDown(XINPUT_GAMEPAD_Y, 0 ))
-    {
-        //強攻撃
-        attackNum = 2;
-        //モーション
 
-        //当たったか判定(ちょっと当たり範囲広めがいいかも...)
-        if (pAttackS_ == false)
+
+
+
+    //モーション
+    if (attackNum != NULL)
+    {
+        switch (attackNum)
         {
-            pAttackS_ = true;
+        case1:
+            //通常攻撃
+            //体当たりにようなモーション
+
+
+
+
+            attackNum = NULL;
+            moveFlg = true;
+            attackFlg = false;
+            
+
+            break;
+
+        case 2:
+
+            //強攻撃
+            //回転して薙ぎ払うようなモーション
+            if (aCount <= 30)
+            {
+                transform_.rotate_.y += 12.0f;
+            }
+            else
+            {
+                aCount = 0;
+                attackNum = NULL;
+                moveFlg = true;
+                attackFlg = false;
+            }
+
+            aCount++;
+
+            break;
         }
+
     }
+
+    
+
+
 
     //////////////////////////　カメラ  /////////////////////////
 
     //プレイヤーの現在位置を取得
     XMFLOAT3 nowPos = GetPosition();
     XMVECTOR vPos = XMLoadFloat3(&nowPos);
-    
+
     //右スティック横方向でカメラをプレイヤー中心に回転させる
     if (Input::GetPadStickR(0).x != NULL)
     {
@@ -286,38 +292,38 @@ void Player::Update()
             angleX += CAMERA_ANGLE_SPEED;
         }
 
-        
+
     }
 
 
     //右スティック縦方向でカメラをプレイヤー中心に円回転させる
     if (Input::GetPadStickR(0).y != NULL)
     {
-        
-      //右スティックを下に倒した
-      if (Input::GetPadStickR(0).y < 0.0f)
-      {
-          angleY += CAMERA_ANGLE_SPEED;
 
-          //上方向の最大値に到達しているかどうか
-        if (angleY > MAX_CAMERA_UP)
+        //右スティックを下に倒した
+        if (Input::GetPadStickR(0).y < 0.0f)
         {
-            angleY = MAX_CAMERA_UP;
+            angleY += CAMERA_ANGLE_SPEED;
+
+            //上方向の最大値に到達しているかどうか
+            if (angleY > MAX_CAMERA_UP)
+            {
+                angleY = MAX_CAMERA_UP;
+            }
         }
-      }
 
-       //右スティックを上に倒した
-       else if (Input::GetPadStickR(0).y > 0.0f)
-       {
-         angleY -= CAMERA_ANGLE_SPEED;
+        //右スティックを上に倒した
+        else if (Input::GetPadStickR(0).y > 0.0f)
+        {
+            angleY -= CAMERA_ANGLE_SPEED;
 
-         //下方向の最大値に到達しているかどうか
-         if (angleY < MAX_CAMERA_DOWN)
-         {
-             angleY = MAX_CAMERA_DOWN;
-         }
-       }
-        
+            //下方向の最大値に到達しているかどうか
+            if (angleY < MAX_CAMERA_DOWN)
+            {
+                angleY = MAX_CAMERA_DOWN;
+            }
+        }
+
     }
 
     //カメラ角度のリセット(スタートボタンでリセット)
@@ -326,7 +332,7 @@ void Player::Update()
         angleX = 0.0f;
         angleY = 0.25f;
     }
-    
+
     //行列を変化
     mRotateX = XMMatrixRotationY(angleX);
     mRotateY = XMMatrixRotationX(angleY);
@@ -337,10 +343,10 @@ void Player::Update()
     //カメラの角度
     XMVECTOR vRotate = XMVector3TransformCoord(vCam, mRotateY);     //縦方向の行列で変形
     vRotate = XMVector3TransformCoord(vRotate, mRotateX);              //横方向の行列で変形
-    
+
     //プレイヤーの動きにカメラを追従させるために移動行列作成
-    XMMATRIX mMove = XMMatrixTranslation(moveCom.x, moveCom.y,moveCom.z);
-    
+    XMMATRIX mMove = XMMatrixTranslation(moveCom.x, moveCom.y, moveCom.z);
+
     //カメラの位置
     XMVECTOR vCamPos = XMVector3TransformCoord(vRotate, mMove) + vPos;
 
@@ -348,10 +354,10 @@ void Player::Update()
     XMVECTOR vFocusUnit = -vCam;
     XMVECTOR vFocus = XMVector3Normalize(vFocusUnit);
     vFocus *= 4.5f;
-    
+
     //焦点の位置
     XMVECTOR vCamFoc = vFocus + vPos;
-    
+
     //型変換
     XMFLOAT3 camPos, camFoc;
     XMStoreFloat3(&camPos, vCamPos);
@@ -370,7 +376,8 @@ void Player::Update()
     if (eStatus == NULL)
     {
         //敵はもう存在しない
- 
+        Sleep(1200);
+
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_CLEAR);
     }
@@ -385,7 +392,7 @@ void Player::Update()
         SAFE_RELEASE(eStatus);
 
     }
-   
+
     //HPがなくなったら
     if (HP <= 0)
     {
@@ -453,7 +460,7 @@ void Player::OnCollision(GameObject* pTarget)
         if (pAttackS_ == false)
         {
             //これ以上その先へは進めなくする
-            XMStoreFloat3(&transform_.position_, prevPos);
+            XMStoreFloat3(&transform_.position_, vPrevPos);
         }
     }
 }

@@ -22,7 +22,6 @@ void PlayScene::Initialize()
 	Instantiate<Wall>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	
 }
 
 //XV

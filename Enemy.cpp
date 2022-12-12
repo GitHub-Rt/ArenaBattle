@@ -2,7 +2,7 @@
 #include "Stage.h"
 #include "Player.h"
 #include "Engine/Model.h"
-#include "Engine/SphereCollider.h"
+#include "Engine/BoxCollider.h"
 #include "Engine/Global.h"
 #include "Engine/SceneManager.h"
 #include "PlayScene.h"
@@ -45,7 +45,7 @@ void Enemy::Initialize()
     transform_.position_.z += 10.0f;
 
     //当たり判定枠
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(2, 5, 3));
     AddCollider(collision);
 }
 
@@ -98,7 +98,7 @@ void Enemy::Update()
     prevPos = XMLoadFloat3(&eCurrentPos);
 
     //プレイヤー座標から敵座標を引く
-    XMVECTOR vMove = XMLoadFloat3(&pCurrentPos) - prevPos;
+    vMove = XMLoadFloat3(&pCurrentPos) - prevPos;
 
     //ベクトルの長さを求める
     XMVECTOR vLength = XMVector3Length(vMove);
@@ -111,7 +111,7 @@ void Enemy::Update()
         XMStoreFloat3(&transform_.position_, prevPos);
 
         //攻撃を行う
-        eAttackS_ = true;
+        //eAttackS_ = true;
     }
     else
     {
@@ -131,7 +131,7 @@ void Enemy::Update()
 
     if (eAttackS_ == true)
     {
-        
+        //体当たりのようなモーション
 
     }
 
@@ -181,11 +181,33 @@ void Enemy::OnCollision(GameObject* pTarget)
                 {
                 //通常攻撃
                 case 1:
-                    HP -= 0.25f;
+                    //HP -= 0.25f;
+
+                    transform_.position_.x -= nextPos.x * 30.0f;
+                    transform_.position_.z -= nextPos.z * 30.0f;
+
                     break;
                 //強攻撃
                 case 2:
-                    HP -= 0.5f;
+                    //HP -= 0.5f;
+
+                    //後方ジャンプ
+                    float checkYG = (transform_.position_.y + HALF_HEIGHT);
+                    transform_.position_.y += initVec;
+                    if (transform_.position_.y > checkYG)
+                    {
+                        //重力を加え続ける
+                        transform_.position_.y += initVec;
+                        initVec = initVec - 0.25f;
+                    }
+                    if (transform_.position_.y < checkYG)
+                    {
+                        transform_.position_.y = checkYG;
+                    }
+
+                    transform_.position_.x -= nextPos.x * 60.0f;
+                    transform_.position_.z -= nextPos.z * 60.0f;
+
                     break;
                 }
             }
