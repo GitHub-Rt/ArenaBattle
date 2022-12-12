@@ -99,6 +99,8 @@ void Enemy::Update()
 
     //プレイヤー座標から敵座標を引く
     vMove = XMLoadFloat3(&pCurrentPos) - prevPos;
+    prevVec = vMove;
+
 
     //ベクトルの長さを求める
     XMVECTOR vLength = XMVector3Length(vMove);
@@ -117,6 +119,8 @@ void Enemy::Update()
     {
         //正規化して移動量をかける
         vMove = XMVector3Normalize(vMove) * amountMove;
+        
+
 
         //型変換
         XMStoreFloat3(&nextPos, vMove);
@@ -126,6 +130,8 @@ void Enemy::Update()
         transform_.position_.z += nextPos.z;
     }
 
+    //内積をもとめて角度をだしてモデルを回転させる
+    XMVector3Dot(prevVec, vMove);
 
     /////////////////////  攻撃   //////////////////////////
 
@@ -191,24 +197,41 @@ void Enemy::OnCollision(GameObject* pTarget)
                 case 2:
                     //HP -= 0.5f;
 
-                    //後方ジャンプ
-                    float checkYG = (transform_.position_.y + HALF_HEIGHT);
-                    transform_.position_.y += initVec;
+                    //後方ジャンプをさせて攻撃を受けたことを表現
+
+                    //ジャンプ前のy座標を獲得
+                    float checkYG = transform_.position_.y + HALF_HEIGHT;
+                    
+                    //y方向に向かうベクトルと平面上で移動するベクトル
+                    XMVECTOR vJump = XMVectorSet(0, 1, 0, 0);
+                    XMVECTOR vFloor = XMVectorSet(nextPos.x, 0, nextPos.z, 0);
+
+                    XMVECTOR vDamege = vJump + vFloor;
+                    vDamege = XMVector3Normalize(vDamege);
+                    vDamege *= 10.0f;
+
+                    XMFLOAT3 damege;
+                    XMStoreFloat3(&damege, vDamege);
+
+                    //移動
+                    transform_.position_.y += damege.y;
+                    transform_.position_.x -= damege.x * 10.0f;
+                    transform_.position_.z -= damege.z * 10.0f;
+
+
                     if (transform_.position_.y > checkYG)
                     {
-                        //重力を加え続ける
-                        transform_.position_.y += initVec;
-                        initVec = initVec - 0.25f;
+                        transform_.position_.y -= 0.5f;
                     }
-                    if (transform_.position_.y < checkYG)
+                    if (transform_.position_.y <= checkYG)
                     {
                         transform_.position_.y = checkYG;
+                        break;
                     }
 
-                    transform_.position_.x -= nextPos.x * 60.0f;
-                    transform_.position_.z -= nextPos.z * 60.0f;
+                    
 
-                    break;
+                   
                 }
             }
             pAcom = NULL;

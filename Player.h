@@ -24,6 +24,7 @@ class Player : public GameObject
     int count_;        //ジャンプカウント
     int attackNum;    //攻撃の種類
     int aCount;       //強攻撃時のカウント管理
+    int eCount;       //回避時のカウント
     float checkYG;     //ジャンプ時の座標保存
     float initVec = JUMPSPEED;  //ジャンプ
     float moveLimit;    //円周にいるかどうか

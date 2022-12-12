@@ -32,7 +32,7 @@ void Player::Initialize()
     assert(hModel_ >= 0);
 
     //当たり判定枠
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.2f);
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
     AddCollider(collision);
 
 }
@@ -134,6 +134,18 @@ void Player::Update()
 
     if (Input::GetPadTrrigerR(0) != NULL)
     {
+        
+        if (eCount < 20)
+        {
+            //回避
+            transform_.position_.x += moveCom.x * 2.5f;
+            transform_.position_.z += moveCom.z * 2.5f;
+            eCount++;
+        }
+        else
+        {
+            eCount = 0;
+        }
 
         attackFlg = false;
         moveFlg = true;
