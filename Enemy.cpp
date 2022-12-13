@@ -55,92 +55,156 @@ void Enemy::Update()
 
 
     
-
-
-    //ステージ情報獲得
-    Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
-    int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
-
-    //レイをステージに飛ばす
-    RayCastData data;
-    data.start = transform_.position_;            //レイの発射位置
-    data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //レイの方向
-    Model::RayCast(hGroundModel, &data);           //レイを発射
-
-    //レイが当たったら
-    if (data.hit)
+    //ダメージモーション中かどうか
+    if (isDamege == false)
     {
-        //位置を下げる
-        transform_.position_.y -= (data.dist - HALF_HEIGHT);
+        //ステージ情報獲得
+        Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
+        int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
 
-    }
+        //レイをステージに飛ばす
+        RayCastData data;
+        data.start = transform_.position_;            //レイの発射位置
+        data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //レイの方向
+        Model::RayCast(hGroundModel, &data);           //レイを発射
 
-    ///////////////////////////　移動  /////////////////////////////
+        //レイが当たったら
+        if (data.hit)
+        {
+            //位置を下げる
+            transform_.position_.y -= (data.dist - HALF_HEIGHT);
 
-
-    //プレイヤー、敵の座標を取得
-    Player* pPlayer = (Player*)FindObject("Player");
-
-    //生きてるかどうかを確認
-    pAlive = pPlayer->PGetAlive();
-    if (pAlive == true)
-    {
-        pCurrentPos = pPlayer->GetPosition();
-    }
-    else
-    {
-        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_OVER);
-    }
-    eCurrentPos = GetPosition();
+        }
 
 
-    prevPos = XMLoadFloat3(&eCurrentPos);
 
-    //プレイヤー座標から敵座標を引く
-    vMove = XMLoadFloat3(&pCurrentPos) - prevPos;
-    prevVec = vMove;
+        ///////////////////////////　移動  /////////////////////////////
 
 
-    //ベクトルの長さを求める
-    XMVECTOR vLength = XMVector3Length(vMove);
-    float length = XMVectorGetX(vLength);
+        //プレイヤー、敵の座標を取得
+        Player* pPlayer = (Player*)FindObject("Player");
 
-    //一定範囲内にいるかどうか
-    if (length <= EP_LENGTH)
-    {
-        //これ以上その先へは進めなくする
-        XMStoreFloat3(&transform_.position_, prevPos);
+        //生きてるかどうかを確認
+        pAlive = pPlayer->PGetAlive();
+        if (pAlive == true)
+        {
+            pAcom = pPlayer->PGetAttack();
+            if (pAcom == NULL)
+            {
+                pPlayer->PSetFalse(pAttackS_);
+            }
+            pCurrentPos = pPlayer->GetPosition();
+        }
+        else
+        {
+            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+            pSceneManager->ChangeScene(SCENE_ID_OVER);
+        }
+        eCurrentPos = GetPosition();
 
-        //攻撃を行う
-        //eAttackS_ = true;
-    }
-    else
-    {
-        //正規化して移動量をかける
-        vMove = XMVector3Normalize(vMove) * amountMove;
+
+        prevPos = XMLoadFloat3(&eCurrentPos);
+
+        //プレイヤー座標から敵座標を引く
+        vMove = XMLoadFloat3(&pCurrentPos) - prevPos;
+        prevVec = vMove;
+
+
+        //ベクトルの長さを求める
+        XMVECTOR vLength = XMVector3Length(vMove);
+        float length = XMVectorGetX(vLength);
+
+        //一定範囲内にいるかどうか
+        if (length <= EP_LENGTH)
+        {
+            //これ以上その先へは進めなくする
+            XMStoreFloat3(&transform_.position_, prevPos);
+
+            //攻撃を行う
+            //eAttackS_ = true;
+        }
+        else
+        {
+            //正規化して移動量をかける
+            vMove = XMVector3Normalize(vMove) * amountMove;
+
+
+
+            //型変換
+            XMStoreFloat3(&nextPos, vMove);
+
+            //移動
+            transform_.position_.x += nextPos.x;
+            transform_.position_.z += nextPos.z;
+        }
+
+        //内積をもとめて角度をだしてモデルを回転させる
+        XMVector3Dot(prevVec, vMove);
+
+        /////////////////////  攻撃   //////////////////////////
+
+        if (eAttackS_ == true)
+        {
+            //体当たりのようなモーション
+
+        }
+
+
+
         
-
-
-        //型変換
-        XMStoreFloat3(&nextPos, vMove);
-
-        //移動
-        transform_.position_.x += nextPos.x;
-        transform_.position_.z += nextPos.z;
     }
 
-    //内積をもとめて角度をだしてモデルを回転させる
-    XMVector3Dot(prevVec, vMove);
-
-    /////////////////////  攻撃   //////////////////////////
-
-    if (eAttackS_ == true)
+    //ダメージを負った
+    else
     {
-        //体当たりのようなモーション
+        switch (pAcom)
+        {
+        case 1:
+            transform_.position_.x -= nextPos.x * 45.0f;
+            transform_.position_.z -= nextPos.z * 45.0f;
 
+            isDamege = false;
+
+            break;
+        case 2:
+            //後方ジャンプをさせて攻撃を受けたことを表現
+
+            //ジャンプ前のy座標を獲得
+            float checkYG = transform_.position_.y + HALF_HEIGHT;
+
+            //y方向に向かうベクトルと平面上で移動するベクトル
+            XMVECTOR vJump = XMVectorSet(0, 1, 0, 0);
+            XMVECTOR vFloor = XMVectorSet(nextPos.x, 0, nextPos.z, 0);
+
+            XMVECTOR vDamege = vJump + vFloor;
+            vDamege = XMVector3Normalize(vDamege);
+            vDamege *= 2.0f;
+
+            XMFLOAT3 damege;
+            XMStoreFloat3(&damege, vDamege);
+
+            //移動(ジャンプ)
+            transform_.position_.y += damege.y;
+            transform_.position_.x -= damege.x * 60.0f;
+            transform_.position_.z -= damege.z * 60.0f;
+
+            //下降
+            if (transform_.position_.y > checkYG)
+            {
+                transform_.position_.y -= 0.5f;
+            }
+            if (transform_.position_.y <= checkYG)
+            {
+                transform_.position_.y = checkYG;
+
+                isDamege = false;
+            }
+            break;
+        }
     }
 
+
+    
 
     //HPがなくなったら
     if (HP <= 0)
@@ -148,7 +212,6 @@ void Enemy::Update()
         HP = MAX_HP;
         KillMe();
     }
-
 }
 
 //描画
@@ -182,59 +245,28 @@ void Enemy::OnCollision(GameObject* pTarget)
             if (pAcom != NULL)
             {
                 //攻撃の種類判別
-                switch(pAcom)
+                switch (pAcom)
                 {
                 //通常攻撃
                 case 1:
                     //HP -= 0.25f;
 
-                    transform_.position_.x -= nextPos.x * 45.0f;
-                    transform_.position_.z -= nextPos.z * 45.0f;
+                    isDamege = true;
 
-                    break;
+                     break;
+
                 //強攻撃
                 case 2:
                     //HP -= 0.5f;
 
-                    //後方ジャンプをさせて攻撃を受けたことを表現
-
-                    //ジャンプ前のy座標を獲得
-                    float checkYG = transform_.position_.y + HALF_HEIGHT;
-                    
-                    //y方向に向かうベクトルと平面上で移動するベクトル
-                    XMVECTOR vJump = XMVectorSet(0, 1, 0, 0);
-                    XMVECTOR vFloor = XMVectorSet(nextPos.x, 0, nextPos.z, 0);
-
-                    XMVECTOR vDamege = vJump + vFloor;
-                    vDamege = XMVector3Normalize(vDamege);
-                    vDamege *= 10.0f;
-
-                    XMFLOAT3 damege;
-                    XMStoreFloat3(&damege, vDamege);
-
-                    //移動
-                    transform_.position_.y += damege.y;
-                    transform_.position_.x -= damege.x * 10.0f;
-                    transform_.position_.z -= damege.z * 10.0f;
+                    isDamege = true;
 
 
-                    if (transform_.position_.y > checkYG)
-                    {
-                        transform_.position_.y -= 0.5f;
-                    }
-                    if (transform_.position_.y <= checkYG)
-                    {
-                        transform_.position_.y = checkYG;
-                        break;
-                    }
-
-                    
-
-                   
+                    break;
                 }
             }
-            pAcom = NULL;
-            pStatus->PSetFalse(pAttackS_);
+            //pStatus->PSetFalse(pAttackS_);
+
         }
         SAFE_RELEASE(pStatus);
     }

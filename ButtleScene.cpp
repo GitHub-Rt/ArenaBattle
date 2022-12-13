@@ -23,11 +23,23 @@ void ButtleScene::Initialize()
 	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
+
 }
 
 //XV
 void ButtleScene::Update()
 {
+	eCount++;
+	if (eCount >= 60)
+	{
+		if (eNum < 4)
+		{
+			//Instantiate<Enemy>(this);
+			eNum++;
+			eCount = 0;
+		}
+
+	}
 }
 
 //•`‰æ
