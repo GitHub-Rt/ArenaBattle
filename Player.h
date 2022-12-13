@@ -15,7 +15,7 @@ class Player : public GameObject
     const FLOAT CAMERA_ANGLE_SPEED = 0.025f; //カメラの旋回スピード
     const FLOAT MAX_CAMERA_UP = 1.0f;      //カメラの上方向の最大値
     const FLOAT MAX_CAMERA_DOWN = 0.0f;     //カメラの下方向の最大値
-    const FLOAT MAX_HP = 45.0f;          //最大HP
+    const FLOAT MAX_HP = 50.0f;          //最大HP
     const FLOAT NOUGHT = 0;             //０の時を表す
     const FLOAT CIRCLE_RANGE = 3600.0f;   //床の移動可能範囲円の半径
 
@@ -26,7 +26,8 @@ class Player : public GameObject
     int aCount;       //強攻撃時のカウント管理
     int eCount;       //回避時のカウント
     float checkYG;     //ジャンプ時の座標保存
-    float initVec = JUMPSPEED;  //ジャンプ
+    float initVec = JUMPSPEED;  //ジャンプ(戦闘時)
+    float initVecNor = JUMPSPEED;           //ジャンプ(非戦闘時)
     float moveLimit;    //円周にいるかどうか
     // ※カメラには初期角度を入れておく
     float angleX = 0.0f;        //カメラの水平方向(横回転) 
@@ -55,7 +56,6 @@ class Player : public GameObject
     bool moveFlg = true;       //プレイヤーの移動管理
     bool aliveFlg;      //生きてるかどうか
     bool eAlive;        //敵が生きているかどうか
-    bool enemyFlg;      //敵が出現したかどうか
 
 
     

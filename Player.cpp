@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Stage.h"
+#include "NormalField.h"
 #include "Wall.h"
 #include "Start.h"
 
@@ -41,29 +42,194 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-
-    //ステージ情報獲得
-    Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
-    int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
-
-    //レイをステージに飛ばす
-    RayCastData data;
-    data.start = transform_.position_;            //レイの発射位置
-    data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //レイの方向
-    Model::RayCast(hGroundModel, &data);           //レイを発射
-
-    //レイが当たったら
-    if (data.hit)
+    Start* pStart = (Start*)FindObject("Start");
+    if (pStart == NULL)
     {
-        //位置を下げる
-        transform_.position_.y -= data.dist - HALF_HEIGHT;
+
+
+        //ステージ情報獲得
+        Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
+        int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+
+        //レイをステージに飛ばす
+        RayCastData data;
+        data.start = transform_.position_;            //レイの発射位置
+        data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //レイの方向
+        Model::RayCast(hGroundModel, &data);           //レイを発射
+
+        //レイが当たったら
+        if (data.hit)
+        {
+            //位置を下げる
+            transform_.position_.y -= data.dist - HALF_HEIGHT;
+
+        }
+
+
+
+
+        //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
+        moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
+
+        if (moveLimit > CIRCLE_RANGE)
+        {
+            //これ以上その先へは進めなくする
+            XMStoreFloat3(&transform_.position_, vPrevPos);
+        }
+
+
+
+        //////////////////////////  ジャンプ処理  ///////////////////////////////
+
+        //Aボタンを押したら
+        if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
+        {
+            //ジャンプ
+            jumpFlg = true; //trueの間はジャンプできない(二段ジャンプ未実装 -> ※検討中)
+
+            //ジャンプ前の座標の保存
+            checkYG = (transform_.position_.y + HALF_HEIGHT);
+        }
+
+
+        if (jumpFlg == true)
+        {
+            transform_.position_.y += initVec;     //速度でY座標を変化 ←　今後変更ジャンプの挙動をもっと自然に
+            initVec = initVec - GRAVITY;
+
+            if (transform_.position_.y > checkYG)
+            {
+                //重力を加え続ける
+                transform_.position_.y += initVec;
+                initVec = initVec - GRAVITY;
+                if (initVec <= 0 && jumpTopFlg == false)
+                {
+                    //ジャンプの頂上で少し停止
+                    jumpTopFlg = true;
+                    Sleep(3);
+                }
+            }
+            if (transform_.position_.y < checkYG)
+            {
+                //再度ジャンプを可能にする(変数の初期化)
+                jumpFlg = false;
+                transform_.position_.y = checkYG;
+                initVec = JUMPSPEED;
+                return;
+            }
+        }
+
+
+
+        ///////////////////////   敵の攻撃    ///////////////////////////////
+
+            //敵の状態確認
+        Enemy* eStatus = (Enemy*)FindObject("Enemy");
+        //存在するかどうかを確認
+        if (eStatus == NULL)
+        {
+            //敵はもう存在しない
+            Sleep(1200);
+
+            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+            pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+        }
+        else
+        {
+            eAttackS_ = eStatus->EGetCondition();
+            if (eAttackS_ == true)
+            {
+                HP -= 0.25f;
+
+
+                //被ダメージモーション
+
+
+                eStatus->ESetFalse(eAttackS_);
+            }
+            SAFE_RELEASE(eStatus);
+
+        }
+
+        //HPがなくなったら
+        if (HP <= 0)
+        {
+            HP = MAX_HP;
+            aliveFlg = false;
+            KillMe();
+        }
+    }
+    else
+    {
+
+        //ステージ情報獲得
+        NormalField* pNormalField = (NormalField*)FindObject("NormalField");    //ステージオブジェクトを探す
+        int hGroundModel = pNormalField->GetModelHandle();    //モデル番号を取得
+
+        //レイをステージに飛ばす
+        RayCastData data;
+        data.start = transform_.position_;            //レイの発射位置
+        data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //レイの方向
+        Model::RayCast(hGroundModel, &data);           //レイを発射
+
+        //レイが当たったら
+        if (data.hit)
+        {
+            //位置を下げる
+            transform_.position_.y -= data.dist - HALF_HEIGHT;
+
+        }
+
+
+        //////////////////////////  ジャンプ処理  ///////////////////////////////
+
+            //Aボタンを押したら
+        if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0) && jumpFlg == false)
+        {
+            //ジャンプ
+            jumpFlg = true; //trueの間はジャンプできない(二段ジャンプ未実装 -> ※検討中)
+
+            //ジャンプ前の座標の保存
+            checkYG = (transform_.position_.y + HALF_HEIGHT);
+        }
+
+
+        if (jumpFlg == true)
+        {
+            transform_.position_.y += initVecNor;     //速度でY座標を変化 ←　今後変更ジャンプの挙動をもっと自然に
+            initVecNor = initVecNor - GRAVITY;
+
+            if (transform_.position_.y > checkYG)
+            {
+                //重力を加え続ける
+                transform_.position_.y += initVecNor;
+                initVecNor = initVecNor - GRAVITY;
+                if (initVecNor <= 0 && jumpTopFlg == false)
+                {
+                    //ジャンプの頂上で少し停止
+                    jumpTopFlg = true;
+                    Sleep(3);
+                }
+            }
+            if (transform_.position_.y < checkYG)
+            {
+                //再度ジャンプを可能にする(変数の初期化)
+                jumpFlg = false;
+                transform_.position_.y = checkYG;
+                initVecNor = JUMPSPEED;
+                return;
+            }
+        }
+
 
     }
 
 
+
+
     //////////////////////   移動処理  (コントローラーのみ対応)    //////////////////////////
 
-    //プレイヤーの移動
+        //プレイヤーの移動
     move = Input::GetPadStickL(0);
 
     //プレイヤーのベクトル
@@ -120,7 +286,7 @@ void Player::Update()
             transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
         }
 
-        
+
 
     }
 
@@ -128,7 +294,7 @@ void Player::Update()
 
     if (Input::GetPadTrrigerR(0) != NULL)
     {
-        
+
         if (eCount < 20)
         {
             //回避
@@ -145,62 +311,11 @@ void Player::Update()
         moveFlg = true;
     }
 
-    //移動可能範囲かどうかの判定(移動可能範囲はStageの部分のみ。Model➡ButtleField.fbx)
-    moveLimit = powf(transform_.position_.x, 2.0f) + powf(transform_.position_.z, 2.0f);
 
-    if (moveLimit > CIRCLE_RANGE)
-    {
-        //これ以上その先へは進めなくする
-        XMStoreFloat3(&transform_.position_, vPrevPos);
-    }
-
-
-
-    //////////////////////////  ジャンプ処理  ///////////////////////////////
-
-    //Aボタンを押したら
-    if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 0))
-    {
-        //ジャンプ
-        jumpFlg = true; //trueの間はジャンプできない(二段ジャンプ未実装 -> ※検討中)
-
-        //ジャンプ前の座標の保存
-        checkYG = (transform_.position_.y + HALF_HEIGHT);
-    }
-
-
-    if (jumpFlg == true)
-    {
-        transform_.position_.y += initVec;     //速度でY座標を変化 ←　今後変更ジャンプの挙動をもっと自然に
-        initVec = initVec - GRAVITY;
-
-        if (transform_.position_.y > checkYG)
-        {
-            //重力を加え続ける
-            transform_.position_.y += initVec;
-            initVec = initVec - GRAVITY;
-            if (initVec <= 0 && jumpTopFlg == false)
-            {
-                //ジャンプの頂上で少し停止
-                jumpTopFlg = true;
-                Sleep(3);
-            }
-        }
-        if (transform_.position_.y < checkYG)
-        {
-            //再度ジャンプを可能にする(変数の初期化)
-            jumpFlg = false;
-            transform_.position_.y = checkYG;
-            initVec = JUMPSPEED;
-            return;
-        }
-    }
-
-
-
+    
     //////////////////////  攻撃処理     //////////////////////
 
-    //いま攻撃を行えるかどうか
+        //いま攻撃を行えるかどうか
     if (attackFlg == false)
     {
         //PadのBボタンが押された
@@ -250,7 +365,7 @@ void Player::Update()
 
             if (aCount < 30)
             {
-               //少し後ろに下がる
+                //少し後ろに下がる
             }
             else if (aCount == 30)
             {
@@ -266,7 +381,7 @@ void Player::Update()
 
 
             aCount++;
-            
+
 
             break;
 
@@ -293,13 +408,10 @@ void Player::Update()
 
     }
 
-    
-
-
 
     //////////////////////////　カメラ  /////////////////////////
 
-    //プレイヤーの現在位置を取得
+       //プレイヤーの現在位置を取得
     XMFLOAT3 nowPos = GetPosition();
     XMVECTOR vPos = XMLoadFloat3(&nowPos);
 
@@ -393,47 +505,6 @@ void Player::Update()
     Camera::SetPosition(camPos);
     Camera::SetTarget(camFoc);
 
-
-    ///////////////////////   敵の攻撃    ///////////////////////////////
-
-    if (enemyFlg == false)
-    {
-        //敵の状態確認
-        Enemy* eStatus = (Enemy*)FindObject("Enemy");
-        //存在するかどうかを確認
-        if (eStatus == NULL)
-        {
-            //敵はもう存在しない
-            Sleep(1200);
-
-            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-            pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-        }
-        else
-        {
-            eAttackS_ = eStatus->EGetCondition();
-            if (eAttackS_ == true)
-            {
-                HP -= 0.25f;
-
-
-                //被ダメージモーション
-
-
-                eStatus->ESetFalse(eAttackS_);
-            }
-            SAFE_RELEASE(eStatus);
-
-        }
-    }
-    //HPがなくなったら
-    if (HP <= 0)
-    {
-        HP = MAX_HP;
-        aliveFlg = false;
-        KillMe();
-    }
-
 }
 
 
@@ -495,11 +566,6 @@ void Player::OnCollision(GameObject* pTarget)
             //これ以上その先へは進めなくする
             XMStoreFloat3(&transform_.position_, vPrevPos);
         }
-    }
-
-    if (pTarget->FindObject("Start"))
-    {
-        enemyFlg = true;
     }
 }
 

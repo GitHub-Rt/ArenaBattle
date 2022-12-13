@@ -7,7 +7,8 @@ enum SCENE_ID
 {
 	SCENE_ID_PLAY = 0,
 	SCENE_ID_CLEAR,
-	SCENE_ID_OVER
+	SCENE_ID_OVER,
+	SCENE_ID_BUTTLE
 };
 
 //-----------------------------------------------------------

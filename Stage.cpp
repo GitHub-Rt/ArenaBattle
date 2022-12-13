@@ -17,8 +17,8 @@ Stage::~Stage()
 //初期化
 void Stage::Initialize()
 {
-    //モデルデータのロード(床モデル)
-    hModel_ = Model::Load("ButtleField.fbx");
+    //モデルデータのロード(バトルフィールド)
+    hModel_ = Model::Load("buttleField.fbx");
     assert(hModel_ >= 0);    
 }
 

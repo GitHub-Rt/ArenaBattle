@@ -31,7 +31,7 @@ class Enemy : public GameObject
     bool eAttackS_; //攻撃判定管理
     bool pAttackS_; //プレイヤーの攻撃状態
     bool pAlive;    //プレイヤーが生きているかどうか
-    bool someFlag;
+
     
 
 public:
@@ -62,6 +62,5 @@ public:
     //敵の状態
     bool EGetCondition();
     void ESetFalse(bool attackFlg_);
-    bool EGetAlive();
     
 };

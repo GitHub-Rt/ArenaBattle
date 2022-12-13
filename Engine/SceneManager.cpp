@@ -8,6 +8,7 @@
 #include "../PlayScene.h"
 #include "../ClearScene.h"
 #include "../GameOverScene.h"
+#include "../ButtleScene.h"
 
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)
@@ -44,6 +45,7 @@ void SceneManager::Update()
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_OVER: Instantiate<GameOverScene>(this); break;
+		case SCENE_ID_BUTTLE:Instantiate<ButtleScene>(this); break;
 
 		}
 		Audio::Initialize();

@@ -1,6 +1,8 @@
 #include "Start.h"
 #include "Engine/Model.h"
 #include "Engine/BoxCollider.h"
+#include "Engine/SceneManager.h"
+
 
 #include "Enemy.h"
 #include "PlayScene.h"
@@ -55,6 +57,7 @@ void Start::OnCollision(GameObject* pTarget)
     //“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
     if (pTarget->FindObject("Player"))
     {
-        KillMe();
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_BUTTLE);
     }
 }

@@ -4,6 +4,7 @@
 #include "Stage.h"
 #include "Wall.h"
 #include "Start.h"
+#include "NormalField.h"
 
 
 //デバッグ用
@@ -21,17 +22,9 @@ void PlayScene::Initialize()
 {
 	//Instantiate<Stage>(this);
 	Instantiate<Wall>(this);
+	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
 	Instantiate<Start>(this);
-
-	Start* pStart = (Start*)FindObject("start");
-	if (pStart == NULL)
-	{
-		Instantiate<Stage>(this);
-		Instantiate<Enemy>(this);
-
-		SAFE_DELETE(pStart);
-	}
 
 	//Instantiate<Enemy>(this);
 }
@@ -39,21 +32,6 @@ void PlayScene::Initialize()
 //更新
 void PlayScene::Update()
 {
-	
-	
-
-	if (eNum < 6)
-	{
-		time++;
-
-		// 3秒たったら…
-		if (time > 180)
-		{
-			//Instantiate<Enemy>(this);	//敵を出現
-			time = 0;		//タイマーのリセット
-			eNum++;			//敵の出現をカウント
-		}
-	}
 }
 
 //描画

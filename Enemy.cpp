@@ -13,7 +13,7 @@
 
 //コンストラクタ
 Enemy::Enemy(GameObject* parent)
-    :GameObject(parent, "Enemy"), hModel_(-1),someFlag(1)
+    :GameObject(parent, "Enemy"), hModel_(-1)
 {
 }
 
@@ -146,7 +146,6 @@ void Enemy::Update()
     if (HP <= 0)
     {
         HP = MAX_HP;
-        someFlag = false;
         KillMe();
     }
 
@@ -258,7 +257,3 @@ void Enemy::ESetFalse(bool attackFlg_)
     eAttackS_ = false;
 }
 
-bool Enemy::EGetAlive()
-{
-    return someFlag;
-}
