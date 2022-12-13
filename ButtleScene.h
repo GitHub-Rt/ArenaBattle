@@ -4,10 +4,11 @@
 
 //■■シーンを管理するクラス
 class ButtleScene : public GameObject
-{
-	int eNum;	//敵の出現数
-	int eCount;	//敵の出現間隔
-	
+{	
+
+	int eNum = 5;	//敵の出現数
+	bool isBoss;	//ボスキャラを出現させたかどうか
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

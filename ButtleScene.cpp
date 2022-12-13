@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "Stage.h"
 #include "NormalField.h"
+#include "EnemyBoss.h"
 
 
 #include "Engine/SceneManager.h"
@@ -22,23 +23,36 @@ void ButtleScene::Initialize()
 	Instantiate<Wall>(this);
 	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
-	Instantiate<Enemy>(this);
 
+	for (int i = 0; i < eNum; i++)
+	{
+		//Instantiate<Enemy>(this);
+	}
+		
+
+	Instantiate<Enemy>(this);
+	
 }
 
 //XV
 void ButtleScene::Update()
 {
-	eCount++;
-	if (eCount >= 60)
+	if (FindObject("Enemy") == nullptr && isBoss == false)
 	{
-		if (eNum < 4)
-		{
-			//Instantiate<Enemy>(this);
-			eNum++;
-			eCount = 0;
-		}
+		isBoss = true;
+		Instantiate<EnemyBoss>(this);
+	}
 
+	if (FindObject("EnemyBoss") == nullptr && isBoss == true)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+	}
+
+	if (FindObject("Player") == nullptr)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_OVER);
 	}
 }
 

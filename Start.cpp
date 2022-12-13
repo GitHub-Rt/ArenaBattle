@@ -27,7 +27,7 @@ void Start::Initialize()
     assert(hModel_ >= 0);
 
 
-    transform_.position_.z = 20.0f;
+    transform_.position_.z = 60.0f;
 
     //“–‚½‚è”»’è
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(5, 60, 5));

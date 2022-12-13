@@ -9,7 +9,7 @@ class Enemy : public GameObject
 {
     //定数宣言
     const FLOAT HALF_HEIGHT = 2.25f;     //オブジェクトの半分の高さ
-    const FLOAT MAX_HP = 1.0f;          //最大HP
+    const FLOAT MAX_HP = 5.0f;          //最大HP
     const FLOAT EP_LENGTH = 4.5f;       //敵とプレイヤー間の距離
 
     int hModel_;    //モデル番号

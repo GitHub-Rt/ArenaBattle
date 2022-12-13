@@ -8,6 +8,11 @@
 #include "NormalField.h"
 #include "Wall.h"
 #include "Start.h"
+#include "EnemyBoss.h"
+
+
+#include <cmath>
+
 
 //デバッグ用
 #include "Engine/Input.h"
@@ -42,6 +47,58 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+    //ボスキャラが出たら円の端まで吹き飛ぶ
+    EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+    if (pBoss != nullptr)
+    {
+
+        if (isBoss == true)
+        {
+
+            moveFlg = false;
+
+            //原点から今のプレイヤーまでのベクトルを用意
+
+            float posX = transform_.position_.x;
+            float posZ = transform_.position_.z;
+
+            XMVECTOR vNowPosXZ = XMVectorSet(posX, 0, posZ, 0);
+            XMVECTOR vNormal = XMVectorSet(-1, 0, -1, 0);
+
+            XMVECTOR vNowPos = vNormal - vNowPosXZ;
+
+            //ベクトルの長さを求める
+
+            vNowPos = XMVector3Length(vNowPos);
+            dis = XMVectorGetX(vNowPos);
+
+            //ベクトルの長さが、バトルフィールドの端までの長さと同じになるまでベクトル方向にプレイヤーを移動させる
+
+            if (powf(dis, 2.0f) < CIRCLE_RANGE)
+            {
+                vNowPos = XMVector3Normalize(vNowPos);
+                XMFLOAT3 nextPos;
+                XMStoreFloat3(&nextPos, vNowPos);
+
+                //移動
+                transform_.position_.x += nextPos.x;
+                transform_.position_.z += nextPos.z;
+            }
+
+            //誤差を計算して比較
+
+            float scope = fabs( powf(dis, 2) - CIRCLE_RANGE );
+
+            if (scope < 100.0f )
+            {
+                isBoss = false;
+                moveFlg = true;
+            }
+            
+        }
+    }
+
+
     Start* pStart = (Start*)FindObject("Start");
     if (pStart == NULL)
     {
@@ -123,18 +180,10 @@ void Player::Update()
 
         ///////////////////////   敵の攻撃    ///////////////////////////////
 
-            //敵の状態確認
+        //敵の状態確認
         Enemy* eStatus = (Enemy*)FindObject("Enemy");
         //存在するかどうかを確認
-        if (eStatus == NULL)
-        {
-            //敵はもう存在しない
-            Sleep(1200);
-
-            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-            pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-        }
-        else
+        if (eStatus != NULL)
         {
             eAttackS_ = eStatus->EGetCondition();
             if (eAttackS_ == true)
@@ -148,7 +197,6 @@ void Player::Update()
                 eStatus->ESetFalse(eAttackS_);
             }
             SAFE_RELEASE(eStatus);
-
         }
 
         //HPがなくなったら

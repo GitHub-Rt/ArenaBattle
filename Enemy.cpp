@@ -8,9 +8,6 @@
 #include "PlayScene.h"
 
 
-#include <cstdlib>
-
-
 //コンストラクタ
 Enemy::Enemy(GameObject* parent)
     :GameObject(parent, "Enemy"), hModel_(-1)
@@ -25,27 +22,15 @@ Enemy::~Enemy()
 //初期化
 void Enemy::Initialize()
 {
-    //乱数の初期化、範囲選択
-    std::srand((unsigned)time(NULL));
-    float randPos = rand() % 10 + 1;
-
     //モデルデータのロード
     hModel_ = Model::Load("enemy.fbx");
     assert(hModel_ >= 0);
 
-    //出現位置
-    if(randPos < 5.0f)
-    {
-        transform_.position_.x -= randPos;
-    }
-    else
-    {
-        transform_.position_.x += randPos - 5.0f;
-    }
-    transform_.position_.z += 10.0f;
+    transform_.position_.x = (float)(rand() % 100 - 50);
+    transform_.position_.z = 15.0f;
 
     //当たり判定枠
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(2, 5, 3));
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(4, 5, 3));
     AddCollider(collision);
 }
 
@@ -95,11 +80,6 @@ void Enemy::Update()
             }
             pCurrentPos = pPlayer->GetPosition();
         }
-        else
-        {
-            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-            pSceneManager->ChangeScene(SCENE_ID_OVER);
-        }
         eCurrentPos = GetPosition();
 
 
@@ -121,7 +101,7 @@ void Enemy::Update()
             XMStoreFloat3(&transform_.position_, prevPos);
 
             //攻撃を行う
-            //eAttackS_ = true;
+            eAttackS_ = true;
         }
         else
         {
@@ -249,7 +229,7 @@ void Enemy::OnCollision(GameObject* pTarget)
                 {
                 //通常攻撃
                 case 1:
-                    //HP -= 0.25f;
+                    HP -= 0.125f;
 
                     isDamege = true;
 
@@ -257,7 +237,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
                 //強攻撃
                 case 2:
-                    //HP -= 0.5f;
+                    HP -= 0.25f;
 
                     isDamege = true;
 
