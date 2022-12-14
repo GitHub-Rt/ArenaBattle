@@ -10,6 +10,9 @@
 
 #include "Engine/SceneManager.h"
 
+//デバッグ用
+#include "Engine/Input.h"
+
 //コンストラクタ
 ButtleScene::ButtleScene(GameObject* parent)
 	: GameObject(parent, "ButtleScene")
@@ -53,6 +56,15 @@ void ButtleScene::Update()
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_OVER);
+	}
+
+
+
+	//デバッグ用
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_BACK, 0))
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_PLAY);
 	}
 }
 

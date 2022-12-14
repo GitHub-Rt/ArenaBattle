@@ -80,6 +80,11 @@ void Enemy::Update()
             }
             pCurrentPos = pPlayer->GetPosition();
         }
+        else if (pAlive == NULL)
+        {
+            //Update‚ð“r’†‚â‚ß‚é
+            Leave();
+        }
         eCurrentPos = GetPosition();
 
 

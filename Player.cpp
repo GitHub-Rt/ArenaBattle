@@ -42,6 +42,8 @@ void Player::Initialize()
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
     AddCollider(collision);
 
+    transform_.position_.z = -45.0f;
+
 }
 
 //更新
@@ -63,9 +65,11 @@ void Player::Update()
             float posZ = transform_.position_.z;
 
             XMVECTOR vNowPosXZ = XMVectorSet(posX, 0, posZ, 0);
-            XMVECTOR vNormal = XMVectorSet(-1, 0, -1, 0);
 
-            XMVECTOR vNowPos = vNormal - vNowPosXZ;
+            XMFLOAT3 origin = XMFLOAT3(0, 0, 0);
+            XMVECTOR vNormal = XMLoadFloat3(&origin);
+
+            XMVECTOR vNowPos = vNowPosXZ - vNormal;
 
             //ベクトルの長さを求める
 
@@ -81,18 +85,22 @@ void Player::Update()
                 XMStoreFloat3(&nextPos, vNowPos);
 
                 //移動
-                transform_.position_.x += nextPos.x;
-                transform_.position_.z += nextPos.z;
-            }
-
-            //誤差を計算して比較
-
-            float scope = fabs( powf(dis, 2) - CIRCLE_RANGE );
-
-            if (scope < 100.0f )
-            {
-                isBoss = false;
-                moveFlg = true;
+                if (transform_.position_.x < 0)
+                {
+                    transform_.position_.x -= nextPos.x * 4.5f;
+                }
+                else
+                {
+                    transform_.position_.x += nextPos.x * 4.5f;
+                }
+                if (transform_.position_.z < 0)
+                {
+                    transform_.position_.z -= nextPos.z * 4.5f;
+                }
+                else
+                {
+                    transform_.position_.z += nextPos.z * 4.5f;
+                }
             }
             
         }
@@ -132,6 +140,12 @@ void Player::Update()
         {
             //これ以上その先へは進めなくする
             XMStoreFloat3(&transform_.position_, vPrevPos);
+
+            if (isBoss == true)
+            {
+                isBoss = false;
+                moveFlg = true;
+            }
         }
 
 
