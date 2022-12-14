@@ -2,6 +2,7 @@
 #include "Engine/Model.h"
 
 #include "Stage.h"
+#include "Bullet.h"
 
 //コンストラクタ
 EnemyBoss::EnemyBoss(GameObject* parent)
@@ -42,6 +43,20 @@ void EnemyBoss::Update()
         transform_.position_.y -= (data.dist - HALF_HEIGHT);
 
     }
+
+
+
+    //////////////////　　攻撃    ///////////////////////
+
+    bulletC++;
+    if (bulletC == 180)
+    {
+        Instantiate<Bullet>(this);
+        bulletC = 0;
+    }
+
+
+
 }
 
 //描画

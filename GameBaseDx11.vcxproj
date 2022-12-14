@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="ButtleScene.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="ButtleScene.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Enemy.h" />

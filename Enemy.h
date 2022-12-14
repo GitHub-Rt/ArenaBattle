@@ -9,8 +9,9 @@ class Enemy : public GameObject
 {
     //定数宣言
     const FLOAT HALF_HEIGHT = 2.25f;     //オブジェクトの半分の高さ
-    const FLOAT MAX_HP = 0.05f;          //最大HP
+    const FLOAT MAX_HP = 5.0f;          //最大HP
     const FLOAT EP_LENGTH = 4.5f;       //敵とプレイヤー間の距離
+    const FLOAT CIRCLE_RANGE = 3600.0f;   //床の移動可能範囲円の半径の2乗
 
     int hModel_;    //モデル番号
     int pAcom;      //アタックの種類を保存
@@ -18,6 +19,7 @@ class Enemy : public GameObject
     
     float HP = MAX_HP;  //敵HP
     float amountMove = 0.125f; //移動量
+    float moveLimit;    //円周にいるかどうか
 
     XMFLOAT3 pCurrentPos;   //プレイヤーの現在位置
     XMFLOAT3 eCurrentPos;   //自分自身(敵)の現在位置

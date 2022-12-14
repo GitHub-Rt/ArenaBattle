@@ -8,6 +8,7 @@
 #include "EnemyBoss.h"
 
 
+
 #include "Engine/SceneManager.h"
 
 //デバッグ用
@@ -33,7 +34,7 @@ void ButtleScene::Initialize()
 	}
 		
 
-	Instantiate<Enemy>(this);
+	//Instantiate<Enemy>(this);
 	
 }
 

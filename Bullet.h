@@ -2,19 +2,16 @@
 #include "Engine/GameObject.h"
 
 //◆◆◆を管理するクラス
-class EnemyBoss : public GameObject
+class Bullet : public GameObject
 {
-    const FLOAT HALF_HEIGHT = 17.0f;
-
     int hModel_;    //モデル番号
-    int bulletC;    //弾攻撃をする間隔
-    
+
 public:
     //コンストラクタ
-    EnemyBoss(GameObject* parent);
+    Bullet(GameObject* parent);
 
     //デストラクタ
-    ~EnemyBoss();
+    ~Bullet();
 
     //初期化
     void Initialize() override;

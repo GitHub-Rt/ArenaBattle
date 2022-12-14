@@ -175,7 +175,7 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 	wc.lpszMenuName = nullptr;						//メニュー（なし）
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	//背景（白）
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);	//背景（黒）
 	RegisterClassEx(&wc);
 
 	//ウィンドウサイズの計算
@@ -191,8 +191,8 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 		WIN_CLASS_NAME,					//ウィンドウクラス名
 		caption,						//タイトルバーに表示する内容
 		WS_OVERLAPPEDWINDOW,			//スタイル（普通のウィンドウ）
-		CW_USEDEFAULT,					//表示位置左（おまかせ）
-		CW_USEDEFAULT,					//表示位置上（おまかせ）
+		100,							//表示位置左（おまかせ）
+		50,								//表示位置上（おまかせ）
 		winRect.right - winRect.left,	//ウィンドウ幅
 		winRect.bottom - winRect.top,	//ウィンドウ高さ
 		nullptr,						//親ウインドウ（なし）
