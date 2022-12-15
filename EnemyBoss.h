@@ -4,10 +4,13 @@
 //◆◆◆を管理するクラス
 class EnemyBoss : public GameObject
 {
-    const FLOAT HALF_HEIGHT = 17.0f;
 
     int hModel_;    //モデル番号
-    int bulletC;    //弾攻撃をする間隔
+    
+    int countB;      //弾攻撃を管理するカウント
+    int bulletC;    //弾攻撃の１発ごとの間隔
+    int bulletNum;  //１回の弾攻撃で出す総個数 (上限数は8)
+    bool isBulletEnd;   //弾攻撃が終わったかどうか
     
 public:
     //コンストラクタ

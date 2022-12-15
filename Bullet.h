@@ -5,6 +5,7 @@
 class Bullet : public GameObject
 {
     int hModel_;    //モデル番号
+    int disNum;    //方向の番号
 
 public:
     //コンストラクタ
@@ -24,4 +25,6 @@ public:
 
     //開放
     void Release() override;
+
+    void SetMove(int num) { disNum = num; }
 };

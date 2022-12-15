@@ -24,8 +24,27 @@ void Bullet::Initialize()
 //更新
 void Bullet::Update()
 {
-    transform_.position_.x += 0.05f;
-    if (transform_.position_.x > 60.0f)
+
+    //方向ごとに進む方向を変化
+    switch (disNum)
+    {
+    case 0:
+        transform_.position_.z -= 0.5f;
+        break;
+    case 1:
+        transform_.position_.z += 0.5f;
+        break;
+    case 2:
+        transform_.position_.x += 0.5f;
+        break;
+    case 3:
+        transform_.position_.x -= 0.5f;
+        break;
+    }
+
+
+    //バトルフィールドよりも外に出たら
+    if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f || transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
     {
         KillMe();
     }
