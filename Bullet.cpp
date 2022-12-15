@@ -1,6 +1,9 @@
 #include "Bullet.h"
 #include "Engine/Model.h"
+#include "Engine/SphereCollider.h"
 
+
+#include "EnemyBoss.h"
 
 //コンストラクタ
 Bullet::Bullet(GameObject* parent)
@@ -19,28 +22,50 @@ void Bullet::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("bullet.fbx");
     assert(hModel_ >= 0);
+
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 3, 0), 3.5f);
+    AddCollider(collision);
 }
 
 //更新
 void Bullet::Update()
 {
+    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+    XMVECTOR vMove = XMLoadFloat3(&move);
+
 
     //方向ごとに進む方向を変化
     switch (disNum)
     {
     case 0:
-        transform_.position_.z -= 0.5f;
+        move.z -= 0.005f;
         break;
     case 1:
-        transform_.position_.z += 0.5f;
+        move.z += 0.005f;
         break;
     case 2:
-        transform_.position_.x += 0.5f;
+        move.x += 0.005f;
         break;
     case 3:
-        transform_.position_.x -= 0.5f;
+        move.x -= 0.005f;
         break;
     }
+
+    //回転したかどうかを取得
+    {
+        EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+        isRotate = pBoss->GetRotate();
+    }
+
+    //回転したら
+    if (isRotate == true)
+    {
+        XMMATRIX mRotateY = XMMatrixRotationY(XMConvertToRadians(30));  //Y軸で30°回転させる行列
+        vMove = XMVector3TransformCoord(vMove, mRotateY);               //ベクトルを行列で変形
+    }
+
+    
+    XMStoreFloat3(&transform_.position_, vPos + vMove);
 
 
     //バトルフィールドよりも外に出たら
