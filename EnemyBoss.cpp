@@ -1,5 +1,6 @@
 #include "EnemyBoss.h"
 #include "Engine/Model.h"
+#include "Engine/BoxCollider.h"
 
 #include "Stage.h"
 #include "Bullet.h"
@@ -21,6 +22,10 @@ void EnemyBoss::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("boss.fbx");
     assert(hModel_ >= 0);
+
+
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(25, 60, 25));
+    AddCollider(collision);
 }
 
 //更新
@@ -53,20 +58,21 @@ void EnemyBoss::Update()
         //弾攻撃の開始を宣言
         isBulletStart = true;
 
+        //弾攻撃が開始になっているかどうか
         if (isBulletStart == true)
         {
-            //回転(30°)
-            transform_.rotate_.y += 0.5f;
+            //回転(90°)
+            transform_.rotate_.y += 1.5f;
             isRotate = true;
 
             countB++;
 
-            //3秒たったら
+            //2秒たったら
             if (countB >= 120)
             {
                 bulletC++;
 
-                //0.5秒ごとに弾を放つ
+                //0.5秒ごとに弾を打つ
                 if (bulletC == 30)
                 {
                     //前方向
@@ -158,26 +164,20 @@ void EnemyBoss::Update()
                         pBulletL->SetMoveNum(left, 3);
                     }
 
-                    //今回の弾攻撃で出した弾の個数を確認
-                    //上限になったら攻撃を終わる
-                    if (bulletNum == 8)
-                    {
-                        bulletNum = 0;
-                        bulletC = 0;
-                        countB = 0;
-                        isBulletStart = false;
-                        isRotate = false;
-                    }
-                    else
-                    {
-                        //それぞれのカウントを管理
-                        bulletC = 0;
-                        bulletNum++;
-
-                    }
-
-
+                    bulletNum++;
+                    bulletC = 0;
                 }
+                
+            }
+
+            //今回の弾攻撃で出した弾の個数を確認
+            //上限になったら攻撃を終わる
+            if (bulletNum == 8)
+            {
+                bulletNum = 0;
+                countB = 0;
+                isBulletStart = false;
+                isRotate = false;
             }
         }
     }

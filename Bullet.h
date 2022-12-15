@@ -7,7 +7,6 @@ class Bullet : public GameObject
     int hModel_;    //モデル番号
     XMFLOAT3 move;  //移動
     int disNum;    //方向の番号
-    bool isRotate;  //敵のボスキャラが回転したかどうか
 
 public:
     //コンストラクタ
@@ -29,4 +28,8 @@ public:
     void Release() override;
 
     void SetMoveNum(XMFLOAT3 move_, int num) { move = move_; disNum = num; }
+
+    //何かに当たった
+    //引数：pTarget 当たった相手
+    void OnCollision(GameObject* pTarget) override;
 };

@@ -1,6 +1,7 @@
 ﻿#include "Engine/Model.h"
 #include "Engine/Input.h"
 #include "Engine/Camera.h"
+#include "Engine/BoxCollider.h"
 #include "Engine/SphereCollider.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -39,8 +40,11 @@ void Player::Initialize()
     assert(hModel_ >= 0);
 
     //当たり判定枠
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 2, 1));
     AddCollider(collision);
+
+    
 
     transform_.position_.z = -45.0f;
 
@@ -419,10 +423,25 @@ void Player::Update()
     //モーション
     if (attackNum != NULL)
     {
+        //それぞれの当たり判定
+        if (attackNum == 1)
+        {
+            SphereCollider* collisionA = new SphereCollider(XMFLOAT3(0, 0, 0), 0.8f);
+            AddCollider(collisionA);
+        }
+        else
+        {
+            SphereCollider* collisionB = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+            AddCollider(collisionB);
+        }
+
         switch (attackNum)
         {
         case 1:
             //通常攻撃
+            
+            
+
             //体当たりにようなモーション
 
             if (aCount < 30)
@@ -450,6 +469,9 @@ void Player::Update()
         case 2:
 
             //強攻撃
+            
+            
+            
             //回転して薙ぎ払うようなモーション
             if (aCount <= 90)
             {
@@ -628,6 +650,13 @@ void Player::OnCollision(GameObject* pTarget)
             //これ以上その先へは進めなくする
             XMStoreFloat3(&transform_.position_, vPrevPos);
         }
+    }
+
+    //弾に当たった時
+    if (pTarget->FindObject("Bullet"))
+    {
+        HP -= 5.0f;
+        pTarget->KillMe();
     }
 }
 

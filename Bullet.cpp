@@ -23,8 +23,9 @@ void Bullet::Initialize()
     hModel_ = Model::Load("bullet.fbx");
     assert(hModel_ >= 0);
 
-    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 3, 0), 3.5f);
+    SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 3.4f, 0), 3.0f);
     AddCollider(collision);
+
 }
 
 //更新
@@ -54,14 +55,13 @@ void Bullet::Update()
     //回転したかどうかを取得
     {
         EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-        isRotate = pBoss->GetRotate();
-    }
 
-    //回転したら
-    if (isRotate == true)
-    {
-        XMMATRIX mRotateY = XMMatrixRotationY(XMConvertToRadians(30));  //Y軸で30°回転させる行列
-        vMove = XMVector3TransformCoord(vMove, mRotateY);               //ベクトルを行列で変形
+        //回転している
+        if (pBoss->GetRotate() == true)
+        {
+            XMMATRIX mRotateY = XMMatrixRotationY(XMConvertToRadians(30));  //Y軸で30°回転させる行列
+            vMove = XMVector3TransformCoord(vMove, mRotateY);               //ベクトルを行列で変形
+        }
     }
 
     
@@ -84,5 +84,10 @@ void Bullet::Draw()
 
 //開放
 void Bullet::Release()
+{
+}
+
+//何かに当たった
+void Bullet::OnCollision(GameObject* pTarget)
 {
 }
