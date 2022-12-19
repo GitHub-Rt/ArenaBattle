@@ -51,6 +51,7 @@ void Bullet::Update()
         move.x -= 0.005f;
         break;
     }
+    move.y = 0;
 
     //‰ñ“]‚µ‚½‚©‚Ç‚¤‚©‚ðŽæ“¾
     {

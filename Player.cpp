@@ -373,6 +373,7 @@ void Player::Update()
             eCount = 0;
         }
 
+        int mainCollider
         attackFlg = false;
         moveFlg = true;
     }
@@ -423,16 +424,28 @@ void Player::Update()
     //モーション
     if (attackNum != NULL)
     {
-        //それぞれの当たり判定
+        SphereCollider* collisionA = new SphereCollider(XMFLOAT3(0, 0, 0), 0.8f);
+        SphereCollider* collisionB = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+
+
+        //それぞれの当たり判定追加
         if (attackNum == 1)
         {
-            SphereCollider* collisionA = new SphereCollider(XMFLOAT3(0, 0, 0), 0.8f);
             AddCollider(collisionA);
         }
-        else
-        {
-            SphereCollider* collisionB = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+        else if(attackNum == 2)
+        {            
             AddCollider(collisionB);
+        }
+        else if (attackNum == 3)
+        {
+            //当たり判定の削除
+            DeleteCollider();
+
+            //次の攻撃又は移動を可能にする
+            attackNum = NULL;
+            moveFlg = true;
+            attackFlg = false;
         }
 
         switch (attackNum)
@@ -455,9 +468,8 @@ void Player::Update()
             else
             {
                 aCount = 0;
-                attackNum = NULL;
-                moveFlg = true;
-                attackFlg = false;
+                attackNum = 3;
+
             }
 
 
@@ -480,9 +492,7 @@ void Player::Update()
             else
             {
                 aCount = 0;
-                attackNum = NULL;
-                moveFlg = true;
-                attackFlg = false;
+                attackNum = 3;
             }
 
             aCount++;
