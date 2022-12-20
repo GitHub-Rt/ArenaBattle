@@ -1,9 +1,11 @@
 #include "EnemyBoss.h"
 #include "Engine/Model.h"
+#include "Engine/Global.h"
 #include "Engine/BoxCollider.h"
 
 #include "Stage.h"
 #include "Bullet.h"
+#include "Player.h"
 
 //コンストラクタ
 EnemyBoss::EnemyBoss(GameObject* parent)
@@ -24,8 +26,9 @@ void EnemyBoss::Initialize()
     assert(hModel_ >= 0);
 
 
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(25, 60, 25));
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, -2), XMFLOAT3(12, 60, 12));
     AddCollider(collision);
+
 }
 
 //更新
@@ -47,6 +50,19 @@ void EnemyBoss::Update()
         //位置を下げる
         transform_.position_.y -= data.dist;
 
+    }
+
+    //プレイヤーの状態の取得
+    if(pAcom == NULL)
+    {
+        Player* pStatus = (Player*)FindObject("Player");
+        pAttackS_ = pStatus->PGetCondition();
+        if (pAttackS_ == true)
+        {
+            //プレイヤーの攻撃番号の取得
+            pAcom = pStatus->PGetAttack();
+        }
+        SAFE_RELEASE(pStatus);
     }
 
 
@@ -72,6 +88,11 @@ void EnemyBoss::Update()
     }
     else
     {
+        //プレイヤーの攻撃をリセット
+        Player* pPlayer = (Player*)FindObject("Player");
+        pPlayer->PSetFalse(pAttackS_);
+        pAcom = NULL;
+
         //ボス敵の攻撃番号の選択
 
         if (isAttack == false)

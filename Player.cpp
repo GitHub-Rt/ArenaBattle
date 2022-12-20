@@ -430,28 +430,6 @@ void Player::Update()
     //モーション
     if (attackNum != NULL)
     {
-        
-
-
-        //それぞれの当たり判定追加
-        if (attackNum == 1)
-        {
-            
-        }
-        else if(attackNum == 2)
-        {            
-            
-        }
-        else if (attackNum == 3)
-        {
-            
-
-            //次の攻撃又は移動を可能にする
-            attackNum = NULL;
-            moveFlg = true;
-            attackFlg = false;
-        }
-
         switch (attackNum)
         {
         case 1:
@@ -502,6 +480,17 @@ void Player::Update()
             aCount++;
 
             break;
+
+
+        case 3:
+
+            //次の攻撃又は移動を可能にする
+            attackNum = NULL;
+            moveFlg = true;
+            attackFlg = false;
+            
+            break;
+
         }
 
     }
@@ -676,11 +665,8 @@ void Player::OnCollision(GameObject* pTarget)
     //ボス敵に当たった時
     if (pTarget->GetObjectName() == "EnemyBoss")
     {
-        if (pAttackS_ == false)
-        {
-            //これ以上その先へは進めなくする
-            XMStoreFloat3(&transform_.position_, vPrevPos);
-        }
+        //これ以上その先へは進めなくする
+        XMStoreFloat3(&transform_.position_, vPrevPos);
     }
 }
 

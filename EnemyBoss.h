@@ -8,8 +8,9 @@ class EnemyBoss : public GameObject
     int hModel_;    //モデル番号
     float HP = 15.0f;   //HP
 
+    //プレイヤー回りに関する変数
     int pAcom;      //プレイヤーアタックの種類を保存
-    
+    bool pAttackS_; //プレイヤーの攻撃状態
 
     //攻撃
 
