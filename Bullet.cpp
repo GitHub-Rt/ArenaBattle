@@ -53,17 +53,17 @@ void Bullet::Update()
     }
     move.y = 0;
 
-    //回転したかどうかを取得
-    {
-        //EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+    ////回転したかどうかを取得
+    //{
+    //    EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
 
-        //回転している
-        //if (pBoss->GetRotate() == true)
-        {
-            XMMATRIX mRotateY = XMMatrixRotationY(XMConvertToRadians(30));  //Y軸で30°回転させる行列
-            vMove = XMVector3TransformCoord(vMove, mRotateY);               //ベクトルを行列で変形
-        }
-    }
+    //    //回転している
+    //    if (pBoss->GetRotate() == true)
+    //    {
+    //        XMMATRIX mRotateY = XMMatrixRotationY(XMConvertToRadians(30));  //Y軸で30°回転させる行列
+    //        vMove = XMVector3TransformCoord(vMove, mRotateY);               //ベクトルを行列で変形
+    //    }
+    //}
 
     
     XMStoreFloat3(&transform_.position_, vPos + vMove);
@@ -91,9 +91,4 @@ void Bullet::Release()
 //何かに当たった
 void Bullet::OnCollision(GameObject* pTarget)
 {
-    //プレイヤーに当たった時
-    if (pTarget->FindObject("Player"))
-    {
-       // KillMe();
-    }
 }

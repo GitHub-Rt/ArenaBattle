@@ -204,7 +204,7 @@ void Player::Update()
 
         ///////////////////////   敵の攻撃    ///////////////////////////////
 
-        //敵の状態確認
+        //ノーマル敵の状態確認
         Enemy* eStatus = (Enemy*)FindObject("Enemy");
         //存在するかどうかを確認
         if (eStatus != NULL)
@@ -667,10 +667,16 @@ void Player::OnCollision(GameObject* pTarget)
     }
 
     //弾に当たった時
-    if (pTarget->FindObject("Bullet"))
+    if (pTarget->GetObjectName() == "Bullet")
     {
         HP -= 5.0f;
         pTarget->KillMe();
+    }
+
+    //ボス敵に当たった時
+    if (pTarget->GetObjectName() == "EnemyBoss")
+    {
+        
     }
 }
 
