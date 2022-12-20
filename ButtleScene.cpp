@@ -34,7 +34,7 @@ void ButtleScene::Initialize()
 	}
 		
 
-	//Instantiate<Enemy>(this);
+	Instantiate<Enemy>(this);
 	
 }
 

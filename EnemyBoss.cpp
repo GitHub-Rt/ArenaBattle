@@ -50,14 +50,61 @@ void EnemyBoss::Update()
     }
 
 
+    //プレイヤーが攻撃しているかどうか
+    if (pAcom != NULL)
+    {
+        switch (pAcom)
+        {
+        case 1:
+            HP -= 0.25f;
+            break;
+        case 2:
+            HP -= 0.5f;
+            break;
+        }
+
+        //体力が0になったら
+        if (HP <= 0)
+        {
+            KillMe();
+        }
+
+    }
+    else
+    {
+        //ボス敵の攻撃番号の選択
+
+        if (isAttack == false)
+        {
+            //ランダムで攻撃を選択
+            //attackNum = rand()
+
+
+            //攻撃フラグ、各番号の攻撃を行う
+
+            isAttack == true;
+
+            switch (attackNum)
+            {
+            case 1:
+                //弾攻撃の開始を宣言
+                isBulletStart = true;
+
+            }
+        }
+        
+        if (attackNum == NULL)
+        {
+            //次の攻撃を可能にする
+            isAttack = false;
+        }
+    }
+
 
     //////////////////　　攻撃    ///////////////////////
 
-    //弾攻撃
+    //弾攻撃(攻撃番号 : 1番)
     {
-        //弾攻撃の開始を宣言
-        isBulletStart = true;
-
         //弾攻撃が開始になっているかどうか
         if (isBulletStart == true)
         {
@@ -176,8 +223,11 @@ void EnemyBoss::Update()
             {
                 bulletNum = 0;
                 countB = 0;
-                isBulletStart = false;
                 isRotate = false;
+
+                //攻撃中であるという情報の破棄
+                isBulletStart = false;  
+                attackNum = NULL;   
             }
         }
     }

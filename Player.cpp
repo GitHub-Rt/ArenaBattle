@@ -657,7 +657,7 @@ void Player::Release()
 void Player::OnCollision(GameObject* pTarget)
 {
     //敵に攻撃時以外で当たったときの処理
-    if (pTarget->FindObject("Enemy") )
+    if (pTarget->GetObjectName() == "Enemy")
     {
         if (pAttackS_ == false)
         {
@@ -676,7 +676,11 @@ void Player::OnCollision(GameObject* pTarget)
     //ボス敵に当たった時
     if (pTarget->GetObjectName() == "EnemyBoss")
     {
-        
+        if (pAttackS_ == false)
+        {
+            //これ以上その先へは進めなくする
+            XMStoreFloat3(&transform_.position_, vPrevPos);
+        }
     }
 }
 

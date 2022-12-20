@@ -6,8 +6,17 @@ class EnemyBoss : public GameObject
 {
 
     int hModel_;    //ƒ‚ƒfƒ‹”Ô†
+    float HP = 15.0f;   //HP
+
+    int pAcom;      //ƒvƒŒƒCƒ„[ƒAƒ^ƒbƒN‚Ìí—Ş‚ğ•Û‘¶
     
-    //’eUŒ‚‚ÉŠÖ‚·‚é•Ï”
+
+    //UŒ‚
+
+    bool isAttack;  //¡UŒ‚’†‚©‚Ç‚¤‚©
+    int attackNum;  //UŒ‚”Ô†‚ğŠi”[
+
+    //’eUŒ‚‚ÉŠÖ‚·‚é•Ï”(UŒ‚”Ô† : 1”Ô)
     int countB;      //’eUŒ‚‘S‘Ì‚ğŠÇ—‚·‚éƒJƒEƒ“ƒg
     int bulletRotateC;  //UŒ‚Œã‚É‰ñ“]‚·‚é‚Æ‚«‚ÌƒJƒEƒ“ƒg
     int bulletC;    //’eUŒ‚‚Ì‚P”­‚²‚Æ‚ÌŠÔŠu
