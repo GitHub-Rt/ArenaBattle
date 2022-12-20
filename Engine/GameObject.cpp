@@ -221,13 +221,6 @@ void GameObject::AddCollider(Collider* collider)
 }
 
 
-//コライダー（衝突判定）を削除する
-void GameObject::DeleteCollider()
-{
-	colliderList_.pop_back();
-}
-
-
 //衝突判定
 void GameObject::Collision(GameObject * pTarget)
 {

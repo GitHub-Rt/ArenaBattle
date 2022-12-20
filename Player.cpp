@@ -44,7 +44,13 @@ void Player::Initialize()
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 2, 1));
     AddCollider(collision);
 
-    
+    //通常攻撃
+    SphereCollider* collisionA = new SphereCollider(XMFLOAT3(0, 0, 0), 0.8f);
+    AddCollider(collisionA);
+
+    //強攻撃
+    SphereCollider* collisionB = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+    AddCollider(collisionB);
 
     transform_.position_.z = -45.0f;
 
@@ -373,7 +379,7 @@ void Player::Update()
             eCount = 0;
         }
 
-        int mainCollider
+        attackNum = 3;
         attackFlg = false;
         moveFlg = true;
     }
@@ -424,23 +430,21 @@ void Player::Update()
     //モーション
     if (attackNum != NULL)
     {
-        SphereCollider* collisionA = new SphereCollider(XMFLOAT3(0, 0, 0), 0.8f);
-        SphereCollider* collisionB = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+        
 
 
         //それぞれの当たり判定追加
         if (attackNum == 1)
         {
-            AddCollider(collisionA);
+            
         }
         else if(attackNum == 2)
         {            
-            AddCollider(collisionB);
+            
         }
         else if (attackNum == 3)
         {
-            //当たり判定の削除
-            DeleteCollider();
+            
 
             //次の攻撃又は移動を可能にする
             attackNum = NULL;
