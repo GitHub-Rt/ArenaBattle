@@ -4,9 +4,11 @@
 //◆◆◆を管理するクラス
 class EnemyBoss : public GameObject
 {
-    int hModel_;    //モデル番号
+    int hModel_[2];    //モデル番号(1 : ノーマル時,2 : 被ダメージ時)
     float HP = 30.0f;   //HP
-
+    float prevHP = HP;  //以前のHP
+    bool isDamage;      //いまダメージを受けているかどうか
+    
     
     //攻撃
 

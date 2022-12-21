@@ -9,8 +9,12 @@
 
 //コンストラクタ
 EnemyBoss::EnemyBoss(GameObject* parent)
-    :GameObject(parent, "EnemyBoss"), hModel_(-1)
+    :GameObject(parent, "EnemyBoss")
 {
+    for (int i = 0; i < 2; i++)
+    {
+        hModel_[i] = -1;
+    }
 }
 
 //デストラクタ
@@ -21,11 +25,15 @@ EnemyBoss::~EnemyBoss()
 //初期化
 void EnemyBoss::Initialize()
 {
-    //モデルデータのロード
-    hModel_ = Model::Load("boss.fbx");
-    assert(hModel_ >= 0);
+    //通常時のモデル
+    hModel_[0] = Model::Load("bossNormal.fbx");
+    assert(hModel_[0] >= 0);
 
+    //被ダメージ時のモデル
+    hModel_[1] = Model::Load("bossDamage.fbx");
+    assert(hModel_[1] >= 0);
 
+    //当たり判定枠
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(18, 20, 18));
     AddCollider(collision);
     
@@ -51,18 +59,40 @@ void EnemyBoss::Update()
         transform_.position_.y -= data.dist;
 
     }
+
+
+
+    //HPが前回よりも低かったら
+    if (HP < prevHP)
+    {
+        //モデルを被ダメ仕様に変更
+        isDamage = true;
+
+        //値の更新
+        prevHP = HP;
+    }
+    else
+    {
+        //モデルを通常仕様に変更
+        isDamage = false;
+    }
     
+    //体力が0になったら
+    if (HP <= 0)
+    {
+        KillMe();
+    }
+
+
 
     
     //ボス敵の攻撃番号の選択
     {
-        
-
         if (isAttack == false)
         {
             //ランダムで攻撃を選択
             srand((unsigned int)time(NULL));    //現在時刻の情報で初期化
-            //attackNum = rand() % 3 + 1;         // 1-3の間で乱数生成
+            attackNum = rand() % 3 + 1;         // 1-3の間で乱数生成
 
 
             //攻撃フラグ、各番号の攻撃を行う
@@ -111,8 +141,21 @@ void EnemyBoss::Update()
                     {
                         Bullet* pBulletF = Instantiate<Bullet>(GetParent());
 
-                        XMFLOAT3 frontRoot = Model::GetBonePosition(hModel_, "FRONT_Root");     //根本
-                        XMFLOAT3 frontTip = Model::GetBonePosition(hModel_, "FRONT_Tip");       //先端
+                        XMFLOAT3 frontRoot;
+                        XMFLOAT3 frontTip;
+
+                        //ダメージを受けているかどうか
+                        if (isDamage == false)
+                        {
+                            frontRoot = Model::GetBonePosition(hModel_[0], "FRONT_Root");     //根本
+                            frontTip = Model::GetBonePosition(hModel_[0], "FRONT_Tip");       //先端
+                        }
+                        else
+                        {
+                            frontRoot = Model::GetBonePosition(hModel_[1], "FRONT_Root");     //根本
+                            frontTip = Model::GetBonePosition(hModel_[1], "FRONT_Tip");       //先端
+                        }
+                        
 
                         XMVECTOR vFrontRoot = XMLoadFloat3(&frontRoot);
                         XMVECTOR vFrontTip = XMLoadFloat3(&frontTip);
@@ -133,8 +176,21 @@ void EnemyBoss::Update()
                     {
                         Bullet* pBulletB = Instantiate<Bullet>(GetParent());
 
-                        XMFLOAT3 backRoot = Model::GetBonePosition(hModel_, "BACK_Root");     //根本
-                        XMFLOAT3 backTip = Model::GetBonePosition(hModel_, "BACK_Tip");       //先端
+                        XMFLOAT3 backRoot;
+                        XMFLOAT3 backTip;
+
+                        //ダメージを受けているかどうか
+                        if (isDamage == false)
+                        {
+                            backRoot = Model::GetBonePosition(hModel_[0], "BACK_Root");     //根本
+                            backTip = Model::GetBonePosition(hModel_[0], "BACK_Tip");       //先端
+                        }
+                        else
+                        {
+                            backRoot = Model::GetBonePosition(hModel_[1], "BACK_Root");     //根本
+                            backTip = Model::GetBonePosition(hModel_[1], "BACK_Tip");       //先端
+                        }
+
 
                         XMVECTOR vBackRoot = XMLoadFloat3(&backRoot);
                         XMVECTOR vBackTip = XMLoadFloat3(&backTip);
@@ -155,8 +211,22 @@ void EnemyBoss::Update()
                     {
                         Bullet* pBulletR = Instantiate<Bullet>(GetParent());
 
-                        XMFLOAT3 rightRoot = Model::GetBonePosition(hModel_, "RIGHT_Root");     //根本
-                        XMFLOAT3 rightTip = Model::GetBonePosition(hModel_, "RIGHT_Tip");       //先端
+                        XMFLOAT3 rightRoot; 
+                        XMFLOAT3 rightTip; 
+
+                        //ダメージを受けているかどうか
+                        if (isDamage == false)
+                        {
+                            rightRoot = Model::GetBonePosition(hModel_[0], "RIGHT_Root");     //根本
+                            rightTip = Model::GetBonePosition(hModel_[0], "RIGHT_Tip");       //先端
+                        }
+                        else
+                        {
+                            rightRoot = Model::GetBonePosition(hModel_[1], "RIGHT_Root");     //根本
+                            rightTip = Model::GetBonePosition(hModel_[1], "RIGHT_Tip");       //先端
+                        }
+
+
 
                         XMVECTOR vRightRoot = XMLoadFloat3(&rightRoot);
                         XMVECTOR vRightTip = XMLoadFloat3(&rightTip);
@@ -178,8 +248,22 @@ void EnemyBoss::Update()
                     {
                         Bullet* pBulletL = Instantiate<Bullet>(GetParent());
 
-                        XMFLOAT3 leftRoot = Model::GetBonePosition(hModel_, "LEFT_Root");     //根本
-                        XMFLOAT3 leftTip = Model::GetBonePosition(hModel_, "LEFT_Tip");       //先端
+                        XMFLOAT3 leftRoot;
+                        XMFLOAT3 leftTip; 
+                        
+                        //ダメージを受けているかどうか
+                        if (isDamage == false)
+                        {
+                            leftRoot = Model::GetBonePosition(hModel_[0], "LEFT_Root");     //根本
+                            leftTip = Model::GetBonePosition(hModel_[0], "LEFT_Tip");       //先端
+                        }
+                        else
+                        {
+                            leftRoot = Model::GetBonePosition(hModel_[1], "LEFT_Root");     //根本
+                            leftTip = Model::GetBonePosition(hModel_[1], "LEFT_Tip");       //先端
+                        }
+                        
+
 
                         XMVECTOR vLeftRoot = XMLoadFloat3(&leftRoot);
                         XMVECTOR vLeftTip = XMLoadFloat3(&leftTip);
@@ -227,8 +311,20 @@ void EnemyBoss::Update()
 //描画
 void EnemyBoss::Draw()
 {
-    Model::SetTransform(hModel_, transform_);
-    Model::Draw(hModel_);
+    //ダメージを受けているかどうか
+    if (isDamage == false)
+    {
+        //受けてない時は通常モデル
+        Model::SetTransform(hModel_[0], transform_);
+        Model::Draw(hModel_[0]);
+    }
+    else
+    {
+        //受けているときは被ダメージモデル
+        Model::SetTransform(hModel_[1], transform_);
+        Model::Draw(hModel_[1]);
+    }
+    
 }
 
 //開放
@@ -263,6 +359,7 @@ void EnemyBoss::OnCollision(GameObject* pTarget)
             //プレイヤーの攻撃の種類ごとにダメージ計算
             if (pAcom != NULL)
             {
+                
                 switch (pAcom)
                 {
                 case 1:
@@ -272,23 +369,6 @@ void EnemyBoss::OnCollision(GameObject* pTarget)
                     HP -= 0.025f;
                     break;
                 }
-
-
-                //プレイヤーの攻撃をリセット
-                Player* pPlayer = (Player*)FindObject("Player");
-                pPlayer->PSetFalse(pAttackS_);
-                if (pAttackS_ == false)
-                {
-                    pAcom = NULL;
-                }
-
-
-                //体力が0になったら
-                if (HP <= 0)
-                {
-                    KillMe();
-                }
-
             }
 
         }
