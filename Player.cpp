@@ -216,6 +216,7 @@ void Player::Update()
 
 
                 //被ダメージモーション
+                
 
 
                 eStatus->ESetFalse(eAttackS_);
@@ -442,10 +443,12 @@ void Player::Update()
             if (aCount < 30)
             {
                 //少し後ろに下がる
+                //transform_.position_ -= prevPos ;
             }
             else if (aCount == 30)
             {
                 //攻撃したときの位置に戻る
+                
             }
             else
             {

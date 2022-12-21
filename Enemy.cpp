@@ -70,7 +70,7 @@ void Enemy::Update()
         Player* pPlayer = (Player*)FindObject("Player");
 
         //生きてるかどうかを確認
-        pAlive = pPlayer->PGetAlive();
+        pAlive = pPlayer->PGetAlive();      //プレイヤーが死んだらここでエラーになる
         if (pAlive == true)
         {
             pAcom = pPlayer->PGetAttack();
