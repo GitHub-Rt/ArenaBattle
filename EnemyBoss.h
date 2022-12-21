@@ -4,14 +4,10 @@
 //◆◆◆を管理するクラス
 class EnemyBoss : public GameObject
 {
-
     int hModel_;    //モデル番号
-    float HP = 15.0f;   //HP
+    float HP = 30.0f;   //HP
 
-    //プレイヤー回りに関する変数
-    int pAcom;      //プレイヤーアタックの種類を保存
-    bool pAttackS_; //プレイヤーの攻撃状態
-
+    
     //攻撃
 
     bool isAttack;  //今攻撃中かどうか
@@ -44,5 +40,9 @@ public:
     //開放
     void Release() override;
 
+    //何かに当たった
+    void OnCollision(GameObject* pTarget) override;
+
+    //回転しているかどうか
     bool GetRotate() { return isRotate; }
 };

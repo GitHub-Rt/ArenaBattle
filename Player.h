@@ -18,6 +18,7 @@ class Player : public GameObject
     const FLOAT MAX_HP = 50.0f;          //最大HP
     const FLOAT NOUGHT = 0;             //０の時を表す
     const FLOAT CIRCLE_RANGE = 3600.0f;   //床の移動可能範囲円の半径の2乗
+    const FLOAT PB_LENGTH = 13.0f;          //敵ボスとプレイヤーの距離
 
     //ローカル変数
     int hModel_;       //モデル番号
@@ -83,7 +84,6 @@ public:
     bool PGetAlive();
 
     //現在位置
-    void SetPosition(XMFLOAT3 position_);
     XMFLOAT3 GetPosition();
 
     //描画

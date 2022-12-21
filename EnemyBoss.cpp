@@ -26,9 +26,9 @@ void EnemyBoss::Initialize()
     assert(hModel_ >= 0);
 
 
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, -2), XMFLOAT3(12, 60, 12));
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(18, 20, 18));
     AddCollider(collision);
-
+    
 }
 
 //更新
@@ -51,54 +51,18 @@ void EnemyBoss::Update()
         transform_.position_.y -= data.dist;
 
     }
+    
 
-    //プレイヤーの状態の取得
-    if(pAcom == NULL)
+    
+    //ボス敵の攻撃番号の選択
     {
-        Player* pStatus = (Player*)FindObject("Player");
-        pAttackS_ = pStatus->PGetCondition();
-        if (pAttackS_ == true)
-        {
-            //プレイヤーの攻撃番号の取得
-            pAcom = pStatus->PGetAttack();
-        }
-        SAFE_RELEASE(pStatus);
-    }
-
-
-    //プレイヤーが攻撃しているかどうか
-    if (pAcom != NULL)
-    {
-        switch (pAcom)
-        {
-        case 1:
-            HP -= 0.25f;
-            break;
-        case 2:
-            HP -= 0.5f;
-            break;
-        }
-
-        //体力が0になったら
-        if (HP <= 0)
-        {
-            KillMe();
-        }
-
-    }
-    else
-    {
-        //プレイヤーの攻撃をリセット
-        Player* pPlayer = (Player*)FindObject("Player");
-        pPlayer->PSetFalse(pAttackS_);
-        pAcom = NULL;
-
-        //ボス敵の攻撃番号の選択
+        
 
         if (isAttack == false)
         {
             //ランダムで攻撃を選択
-            //attackNum = rand()
+            srand((unsigned int)time(NULL));    //現在時刻の情報で初期化
+            //attackNum = rand() % 3 + 1;         // 1-3の間で乱数生成
 
 
             //攻撃フラグ、各番号の攻撃を行う
@@ -270,4 +234,66 @@ void EnemyBoss::Draw()
 //開放
 void EnemyBoss::Release()
 {
+}
+
+
+
+
+
+
+
+
+//何かに当たった
+void EnemyBoss::OnCollision(GameObject* pTarget)
+{
+    //プレイヤーに当たった
+    if (pTarget->GetObjectName() == "Player")
+    {
+        //プレイヤーの状態の取得
+        Player* pStatus = (Player*)FindObject("Player");
+
+        //攻撃しているかどうか
+        bool pAttackS_ = pStatus->PGetCondition();
+        if (pAttackS_ == true)
+        {
+            //プレイヤーの攻撃番号の取得
+            int pAcom = pStatus->PGetAttack();
+
+
+            //プレイヤーの攻撃の種類ごとにダメージ計算
+            if (pAcom != NULL)
+            {
+                switch (pAcom)
+                {
+                case 1:
+                    HP -= 0.0125f;
+                    break;
+                case 2:
+                    HP -= 0.025f;
+                    break;
+                }
+
+
+                //プレイヤーの攻撃をリセット
+                Player* pPlayer = (Player*)FindObject("Player");
+                pPlayer->PSetFalse(pAttackS_);
+                if (pAttackS_ == false)
+                {
+                    pAcom = NULL;
+                }
+
+
+                //体力が0になったら
+                if (HP <= 0)
+                {
+                    KillMe();
+                }
+
+            }
+
+        }
+        SAFE_RELEASE(pStatus);
+
+        
+    }
 }

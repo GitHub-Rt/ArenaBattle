@@ -598,8 +598,11 @@ void Player::Update()
 //プレイヤーの状態
 void Player::PSetFalse(bool attackFlg_)
 {
-    attackFlg_ = false;
-    pAttackS_ = false;
+    if (attackFlg == false)
+    {
+        attackFlg_ = false;
+        pAttackS_ = false;
+    }
 }
 
 bool Player::PGetCondition()
@@ -620,11 +623,6 @@ int Player::PGetAttack()
 
 
 //現在位置
-void Player::SetPosition(XMFLOAT3 position_)
-{
-    position_ = transform_.position_;
-}
-
 XMFLOAT3 Player::GetPosition()
 {
     return transform_.position_;
@@ -662,12 +660,37 @@ void Player::OnCollision(GameObject* pTarget)
         pTarget->KillMe();
     }
 
+
     //ボス敵に当たった時
     if (pTarget->GetObjectName() == "EnemyBoss")
     {
-        //これ以上その先へは進めなくする
-        XMStoreFloat3(&transform_.position_, vPrevPos);
+        
+        //原点から今のプレイヤーまでのベクトルを用意
+
+        //プレイヤーの現在位置をベクトルに
+        float posX = transform_.position_.x;
+        float posZ = transform_.position_.z;
+        XMVECTOR vNowPosXZ = XMVectorSet(posX, 0, posZ, 0);
+
+        //敵ボスキャラ(原点)をベクトルに
+        XMFLOAT3 origin = XMFLOAT3(0, 0, 0);
+        XMVECTOR vNormal = XMLoadFloat3(&origin);
+
+        XMVECTOR vNowPos = vNowPosXZ - vNormal;
+
+        //ベクトルの長さを求める
+        vNowPos = XMVector3Length(vNowPos);
+        dis = XMVectorGetX(vNowPos);
+
+        //敵ボスキャラとの距離より短かったら
+        if (dis < PB_LENGTH)
+        {
+            //これ以上その先へは進めなくする
+            XMStoreFloat3(&transform_.position_, vPrevPos);
+        }
+
     }
+
 }
 
 bool Player::PGetAlive() 
