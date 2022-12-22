@@ -21,7 +21,7 @@ class Player : public GameObject
     const FLOAT PB_LENGTH = 13.0f;          //敵ボスとプレイヤーの距離
 
     //ローカル変数
-    int hModel_;       //モデル番号
+    int hModel_[2];       //モデル番号 ( 0 : Normal, 1 : Damege)
     int count_;        //ジャンプカウント
     int attackNum;    //攻撃の種類
     int aCount;       //強攻撃時のカウント管理
@@ -39,6 +39,7 @@ class Player : public GameObject
 
 
     float HP = MAX_HP; //体力
+    float prevHP = HP;  //前回の体力
 
 
     XMVECTOR vPrevPos;       //前回いたポジションを保存(XMVECTOR)
@@ -59,6 +60,7 @@ class Player : public GameObject
     bool aliveFlg;      //生きてるかどうか
     bool eAlive;        //敵が生きているかどうか
     bool isBoss = true;        //ボスキャラの行動によって飛ばされる判定管理
+    bool isDamage;      //ダメージを受けているかどうか
 
 
     

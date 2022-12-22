@@ -70,23 +70,30 @@ void Enemy::Update()
         Player* pPlayer = (Player*)FindObject("Player");
 
         //生きてるかどうかを確認
-        pAlive = pPlayer->PGetAlive();      //プレイヤーが死んだらここでエラーになる
-        if (pAlive == true)
+        if (pPlayer == nullptr)
         {
-            pAcom = pPlayer->PGetAttack();
-            if (pAcom == NULL)
-            {
-                pPlayer->PSetFalse(pAttackS_);
-            }
-            pCurrentPos = pPlayer->GetPosition();
-        }
-        else if (pAlive == NULL)
-        {
-            //Updateを途中やめる
+            //Updateを途中でやめる
             Leave();
         }
+        else
+        {
+            //生きている
+            pAlive = pPlayer->PGetAlive();
+            if (pAlive == true)
+            {
+                //攻撃状況を把握(攻撃していなかったら...)
+                pAcom = pPlayer->PGetAttack();
+                if (pAcom == NULL)
+                {
+                    //攻撃番号を初期化
+                    pPlayer->PSetFalse(pAttackS_);
+                }
+                //プレイヤーの位置取得
+                pCurrentPos = pPlayer->GetPosition();
+            }
+        }
+        //敵自身の位置取得
         eCurrentPos = GetPosition();
-
 
         prevPos = XMLoadFloat3(&eCurrentPos);
 
@@ -226,7 +233,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 {
     //当たったときの処理
     //プレイヤーに当たったとき
-    if (pTarget->FindObject("Player"))
+    if (pTarget->GetObjectName() == "Player")
     {
         
         //プレイヤーの状態確認

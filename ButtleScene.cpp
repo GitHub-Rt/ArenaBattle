@@ -30,11 +30,11 @@ void ButtleScene::Initialize()
 
 	for (int i = 0; i < eNum; i++)
 	{
-		//Instantiate<Enemy>(this);
+		Instantiate<Enemy>(this);
 	}
 		
 
-	Instantiate<Enemy>(this);
+	//Instantiate<Enemy>(this);
 	
 }
 
