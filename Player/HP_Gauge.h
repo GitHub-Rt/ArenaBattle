@@ -4,7 +4,7 @@
 
 class HP_Gauge : public GameObject
 {
-    float HP = 100.0f;     //初期HP(画像横:300)
+    float HP = 300.0f;     //初期HP(画像横:300)
 	float HP_Remaining = HP;	//残りのHP量
 	float Damage_amount;	//ダメージ量
     float checkHP;          //描画時のHP管理
