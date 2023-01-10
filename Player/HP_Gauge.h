@@ -23,14 +23,24 @@ public:
     /// ダメージ量を格納
     /// </summary>
     /// <param name="damage"></param>
-    void SetDamage(int damage);
+    void SetDamage(float damage);
+
+
+#ifdef _DEBUG
+    /// <summary>
+    /// 残り体力を格納
+    /// </summary>
+    /// <param name="HP"></param>
+    void SetHP(float HP);
+
+#endif
 
 
     /// <summary>
     /// 残り体力を計算
     /// </summary>
     /// <returns>残り体力量(FLOAT)</returns>
-    float PercentCalc(float HP_Remaining,float Damage_amount);
+    float Calculation();
 
     /// <summary>
     /// HPゲージを表示

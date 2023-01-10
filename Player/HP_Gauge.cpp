@@ -2,7 +2,6 @@
 #include "../Engine/Image.h"
 
 
-//コンストラクタ
 HP_Gauge::HP_Gauge(GameObject* parent)
     :GameObject(parent, "HP_Gauge")
 {
@@ -13,12 +12,12 @@ HP_Gauge::HP_Gauge(GameObject* parent)
     }
 }
 
-//デストラクタ
+
 HP_Gauge::~HP_Gauge()
 {
 }
 
-//初期化
+
 void HP_Gauge::Initialize()
 {
     //画像データのロード
@@ -30,16 +29,17 @@ void HP_Gauge::Initialize()
 
     hPict_[2] = Image::Load("HP_Damage.jpg");
     assert(hPict_ >= 0);
+
 }
 
-//更新
 void HP_Gauge::Update()
 {
 
     //ダメージを受けた
     if (isDamage )
     {
-
+       HP_Remaining = Calculation();
+       Damage_amount = 0.0f;
     }
 }
 
@@ -50,22 +50,31 @@ void HP_Gauge::Draw()
 
 
 
-//開放
+
 void HP_Gauge::Release()
 {
 }
 
 
-void HP_Gauge::SetDamage(int damage)
+void HP_Gauge::SetDamage(float damage)
 {
     Damage_amount = damage;
     isDamage = true;
 }
 
 
-float HP_Gauge::PercentCalc(float HP_Remaining, float Damage_amount)
+#ifdef _DEBUG
+void HP_Gauge::SetHP(float HP)
 {
+    HP_Remaining = HP;
+}
 
+#endif
+
+float HP_Gauge::Calculation()
+{
+    isDamage = false;
+    return (HP_Remaining - Damage_amount);
 }
 
 
@@ -74,8 +83,6 @@ void HP_Gauge::HPDraw(float HP_Remaining)
     //体力フレーム部分を描画
     Image::SetTransform(hPict_[0], transform_);
     Image::Draw(hPict_[0]);
-
-
 
     if (checkHP <= HP_Remaining)
     {
