@@ -1,23 +1,23 @@
-﻿#include "Engine/Model.h"
-#include "Engine/Input.h"
-#include "Engine/Camera.h"
-#include "Engine/BoxCollider.h"
-#include "Engine/SphereCollider.h"
+﻿#include "../Engine/Model.h"
+#include "../Engine/Input.h"
+#include "../Engine/Camera.h"
+#include "../Engine/BoxCollider.h"
+#include "../Engine/SphereCollider.h"
 #include "Player.h"
-#include "Enemy.h"
-#include "Stage.h"
-#include "NormalField.h"
-#include "Wall.h"
-#include "Start.h"
-#include "EnemyBoss.h"
+#include "../Enemy/Enemy.h"
+#include "../Stage/Stage.h"
+#include "../Stage/NormalField.h"
+#include "../Stage/Wall.h"
+#include "../Stage/Start.h"
+#include "../Enemy/Boss/EnemyBoss.h"
 
 
 #include <cmath>
 
 
 //デバッグ用
-#include "Engine/Input.h"
-#include "Engine/SceneManager.h"
+#include "../Engine/Input.h"
+#include "../Scene/SceneManager.h"
 
 
 
@@ -67,7 +67,12 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
-
+#ifdef _DEBUG
+    if (isDying == true)
+    {
+        HP = 0.005f;
+    }
+#endif
 
     //////////////////////   移動処理  (コントローラーのみ対応)    //////////////////////////
 
@@ -125,7 +130,7 @@ void Player::Update()
         //モデル自身の回転
         if (moveCom.x != 0 || moveCom.z != 0)
         {
-            transform_.rotate_.y = atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
+            transform_.rotate_.y = (float) atan2(moveCom.x, moveCom.z) * 180.0 / 3.14;
         }
     }
 
@@ -525,6 +530,12 @@ void Player::Update()
             eAttackS_ = eStatus->EGetCondition();
             if (eAttackS_ == true)
             {
+#ifdef _DEBUG
+                if (isInv == true)
+                {
+                    HP += 0.25f;
+                }
+#endif
                 HP -= 0.25f;
 
                 eStatus->ESetFalse(eAttackS_);
@@ -698,6 +709,12 @@ void Player::OnCollision(GameObject* pTarget)
     //弾に当たった時
     if (pTarget->GetObjectName() == "Bullet")
     {
+#ifdef _DEBUG
+        if (isInv == true)
+        { 
+            HP += 5.0f;
+        }
+#endif
         HP -= 5.0f;
         pTarget->KillMe();
     }

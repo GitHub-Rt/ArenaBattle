@@ -1,18 +1,16 @@
 #pragma once
-#include "Engine/GameObject.h"
+#include "../Engine/GameObject.h"
 
 
-//■■シーンを管理するクラス
-class ButtleScene : public GameObject
-{	
-
-	int eNum = 5;	//敵の出現数
-	bool isBoss;	//ボスキャラを出現させたかどうか
+//クリアシーンを管理するクラス
+class ClearScene : public GameObject
+{
+	int hPict_;    //画像番号
 
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	ButtleScene(GameObject* parent);
+	ClearScene(GameObject* parent);
 
 	//初期化
 	void Initialize() override;

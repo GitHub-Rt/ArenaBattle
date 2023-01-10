@@ -24,6 +24,21 @@
       <UniqueIdentifier>{47a6a3f5-8cfd-436b-8d58-beccd108f3f3}</UniqueIdentifier>
       <Extensions>hlsl</Extensions>
     </Filter>
+    <Filter Include="03Scene">
+      <UniqueIdentifier>{c99495af-44c6-4730-8bf4-5d99e255c994}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Stage">
+      <UniqueIdentifier>{1ab9b027-4c7a-4c13-b71f-846c573b4191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05Enemy">
+      <UniqueIdentifier>{da4c9797-638d-4630-b9ed-1144d97cb646}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06Player">
+      <UniqueIdentifier>{58f43599-1e72-441a-a268-8d61375394f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05Enemy\01Boss">
+      <UniqueIdentifier>{6b7d8d96-a904-4c87-ada7-443e604eb9b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -71,9 +86,6 @@
     <ClCompile Include="Engine\Main.cpp">
       <Filter>01Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SceneManager.cpp">
-      <Filter>01Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Texture.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
@@ -86,18 +98,45 @@
     <ClCompile Include="Engine\Text.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="ClearScene.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="GameOverScene.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="Wall.cpp" />
-    <ClCompile Include="Start.cpp" />
-    <ClCompile Include="ButtleScene.cpp" />
-    <ClCompile Include="NormalField.cpp" />
-    <ClCompile Include="EnemyBoss.cpp" />
-    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Scene\ButtleScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ClearScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameOverScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\PlayScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\NormalField.cpp">
+      <Filter>04Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Stage.cpp">
+      <Filter>04Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Start.cpp">
+      <Filter>04Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall.cpp">
+      <Filter>04Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Enemy.cpp">
+      <Filter>05Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Boss\Bullet.cpp">
+      <Filter>05Enemy\01Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Boss\EnemyBoss.cpp">
+      <Filter>05Enemy\01Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Player.cpp">
+      <Filter>06Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -145,9 +184,6 @@
     <ClInclude Include="Engine\Global.h">
       <Filter>01Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SceneManager.h">
-      <Filter>01Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Texture.h">
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
@@ -160,18 +196,45 @@
     <ClInclude Include="Engine\Text.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="ClearScene.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="GameOverScene.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayScene.h" />
-    <ClInclude Include="Stage.h" />
-    <ClInclude Include="Wall.h" />
-    <ClInclude Include="Start.h" />
-    <ClInclude Include="ButtleScene.h" />
-    <ClInclude Include="NormalField.h" />
-    <ClInclude Include="EnemyBoss.h" />
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Scene\ButtleScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ClearScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameOverScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PlayScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\NormalField.h">
+      <Filter>04Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Stage.h">
+      <Filter>04Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Start.h">
+      <Filter>04Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall.h">
+      <Filter>04Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Enemy.h">
+      <Filter>05Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Boss\Bullet.h">
+      <Filter>05Enemy\01Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Boss\EnemyBoss.h">
+      <Filter>05Enemy\01Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Player.h">
+      <Filter>06Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

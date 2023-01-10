@@ -1,25 +1,25 @@
-#include "GameOverScene.h"
-#include "Engine/SceneManager.h"
+#include "ClearScene.h"
+#include "SceneManager.h"
+#include "../Engine/Image.h"
 
-#include "Engine/Image.h"
-#include "Engine/Input.h"
+#include "../Engine/Input.h"
 
 //コンストラクタ
-GameOverScene::GameOverScene(GameObject* parent)
-	: GameObject(parent, "GameOverScene"), hPict_(-1)
+ClearScene::ClearScene(GameObject* parent)
+	: GameObject(parent, "ClearScene"), hPict_(-1)
 {
 }
 
 //初期化
-void GameOverScene::Initialize()
+void ClearScene::Initialize()
 {
 	//画像データのロード
-	hPict_ = Image::Load("GameOver.jpg");
+	hPict_ = Image::Load("GameClear.jpg");
 	assert(hPict_ >= 0);
 }
 
 //更新
-void GameOverScene::Update()
+void ClearScene::Update()
 {
 	//スタートボタンが押されたらプレイシーンへ
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0))
@@ -30,13 +30,13 @@ void GameOverScene::Update()
 }
 
 //描画
-void GameOverScene::Draw()
+void ClearScene::Draw()
 {
 	Image::SetTransform(hPict_, transform_);
 	Image::Draw(hPict_);
 }
 
 //開放
-void GameOverScene::Release()
+void ClearScene::Release()
 {
 }

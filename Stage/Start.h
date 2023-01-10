@@ -1,18 +1,17 @@
 #pragma once
-#include "Engine/GameObject.h"
+#include "../Engine/GameObject.h"
 
-//ステージを管理するクラス
-class NormalField : public GameObject
+//バトルスタートモデルを管理するクラス
+class Start : public GameObject
 {
     int hModel_;    //モデル番号
-
-
+    
 public:
     //コンストラクタ
-    NormalField(GameObject* parent);
+    Start(GameObject* parent);
 
     //デストラクタ
-    ~NormalField();
+    ~Start();
 
     //初期化
     void Initialize() override;
@@ -26,7 +25,7 @@ public:
     //開放
     void Release() override;
 
-    int GetModelHandle() { return hModel_; }
-
-
+    //何かに当たった
+    //引数：pTarget 当たった相手
+    void OnCollision(GameObject* pTarget) override;
 };

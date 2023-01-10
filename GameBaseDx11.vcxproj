@@ -125,11 +125,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="ButtleScene.cpp" />
-    <ClCompile Include="ClearScene.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyBoss.cpp" />
+    <ClCompile Include="Enemy\Boss\Bullet.cpp" />
+    <ClCompile Include="Enemy\Boss\EnemyBoss.cpp" />
+    <ClCompile Include="Enemy\Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
@@ -144,26 +142,26 @@
     <ClCompile Include="Engine\Main.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\RootObject.cpp" />
-    <ClCompile Include="Engine\SceneManager.cpp" />
     <ClCompile Include="Engine\SphereCollider.cpp" />
     <ClCompile Include="Engine\Sprite.cpp" />
     <ClCompile Include="Engine\Text.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
-    <ClCompile Include="GameOverScene.cpp" />
-    <ClCompile Include="NormalField.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="Start.cpp" />
-    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="Player\Player.cpp" />
+    <ClCompile Include="Scene\ButtleScene.cpp" />
+    <ClCompile Include="Scene\ClearScene.cpp" />
+    <ClCompile Include="Scene\GameOverScene.cpp" />
+    <ClCompile Include="Scene\PlayScene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Stage\NormalField.cpp" />
+    <ClCompile Include="Stage\Stage.cpp" />
+    <ClCompile Include="Stage\Start.cpp" />
+    <ClCompile Include="Stage\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="ButtleScene.h" />
-    <ClInclude Include="ClearScene.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyBoss.h" />
+    <ClInclude Include="Enemy\Boss\Bullet.h" />
+    <ClInclude Include="Enemy\Boss\EnemyBoss.h" />
+    <ClInclude Include="Enemy\Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
     <ClInclude Include="Engine\Camera.h" />
@@ -178,19 +176,21 @@
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\RootObject.h" />
-    <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\SphereCollider.h" />
     <ClInclude Include="Engine\Sprite.h" />
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
-    <ClInclude Include="GameOverScene.h" />
-    <ClInclude Include="NormalField.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayScene.h" />
-    <ClInclude Include="Stage.h" />
-    <ClInclude Include="Start.h" />
-    <ClInclude Include="Wall.h" />
+    <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Scene\ButtleScene.h" />
+    <ClInclude Include="Scene\ClearScene.h" />
+    <ClInclude Include="Scene\GameOverScene.h" />
+    <ClInclude Include="Scene\PlayScene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Stage\NormalField.h" />
+    <ClInclude Include="Stage\Stage.h" />
+    <ClInclude Include="Stage\Start.h" />
+    <ClInclude Include="Stage\Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">

@@ -1,19 +1,21 @@
 #include "ButtleScene.h"
 
-#include "Player.h"
-#include "Wall.h"
-#include "Enemy.h"
-#include "Stage.h"
-#include "NormalField.h"
-#include "EnemyBoss.h"
+#include "../Player/Player.h"
+#include "../Stage/Wall.h"
+#include "../Enemy/Enemy.h"
+#include "../Stage/Stage.h"
+#include "../Stage/NormalField.h"
+#include "../Enemy/Boss/EnemyBoss.h"
 
 
 
-#include "Engine/SceneManager.h"
+#include "SceneManager.h"
 
-//デバッグ用
-#include "Engine/Input.h"
+#ifdef _DEBUG
 
+#include "../Engine/Input.h"
+
+#endif
 //コンストラクタ
 ButtleScene::ButtleScene(GameObject* parent)
 	: GameObject(parent, "ButtleScene")
@@ -60,13 +62,31 @@ void ButtleScene::Update()
 	}
 
 
+#ifdef _DEBUG
 
-	//デバッグ用
+	//プレイシーンへ戻る(Backボタン)
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_BACK, 0))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_PLAY);
 	}
+
+
+	//プレイヤーを無敵状態にする(Start,Backボタン同時)
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0) && Input::IsPadButtonDown(XINPUT_GAMEPAD_BACK, 0))
+	{
+		Player* pPlayer = (Player*)FindObject("Player");
+		pPlayer->SetInvincible();
+	}
+
+	//プレイヤーの体力をぎりぎりにする(Startボタン)
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0))
+	{
+		Player* pPlayer = (Player*)FindObject("Player");
+		pPlayer->SetDying();
+	}
+
+#endif
 }
 
 //描画

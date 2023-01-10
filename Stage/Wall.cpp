@@ -1,6 +1,6 @@
 #include "Wall.h"
 #include "Stage.h"
-#include "Engine/Model.h"
+#include "../Engine/Model.h"
 
 //コンストラクタ
 Wall::Wall(GameObject* parent)

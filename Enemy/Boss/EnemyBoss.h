@@ -1,11 +1,14 @@
 #pragma once
-#include "Engine/GameObject.h"
+#include "../../Engine/GameObject.h"
 
-//◆◆◆を管理するクラス
+//敵ボスを管理するクラス
 class EnemyBoss : public GameObject
 {
+    //定数定義
+    const FLOAT MAX_HP = 30.0f; //最大HP
+
     int hModel_[2];    //モデル番号(1 : ノーマル時,2 : 被ダメージ時)
-    float HP = 30.0f;   //HP
+    float HP = MAX_HP;   //HP
     float prevHP = HP;  //以前のHP
     bool isDamage;      //いまダメージを受けているかどうか
     

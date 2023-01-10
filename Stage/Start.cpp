@@ -1,11 +1,11 @@
 #include "Start.h"
-#include "Engine/Model.h"
-#include "Engine/BoxCollider.h"
-#include "Engine/SceneManager.h"
+#include "../Engine/Model.h"
+#include "../Engine/BoxCollider.h"
+#include "../Scene/SceneManager.h"
 
 
-#include "Enemy.h"
-#include "PlayScene.h"
+#include "../Enemy/Enemy.h"
+#include "../Scene/PlayScene.h"
 #include "Stage.h"
 
 //コンストラクタ

@@ -1,15 +1,12 @@
 #include "PlayScene.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Stage.h"
-#include "Wall.h"
-#include "Start.h"
-#include "NormalField.h"
+#include "../Player/Player.h"
+#include "../Enemy/Enemy.h"
+#include "../Stage/Stage.h"
+#include "../Stage/Wall.h"
+#include "../Stage/Start.h"
+#include "../Stage/NormalField.h"
 
-
-//デバッグ用
-#include "Engine/Input.h"
-#include "Engine/SceneManager.h"
+#include "SceneManager.h"
 
 //コンストラクタ
 PlayScene::PlayScene(GameObject* parent)

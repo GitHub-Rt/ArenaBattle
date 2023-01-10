@@ -1,14 +1,14 @@
 #include "sceneManager.h"
 
 
-#include "Model.h"
-#include "Image.h"
-#include "Audio.h"
+#include "../Engine/Model.h"
+#include "../Engine/Image.h"
+#include "../Engine/Audio.h"
 
-#include "../PlayScene.h"
-#include "../ClearScene.h"
-#include "../GameOverScene.h"
-#include "../ButtleScene.h"
+#include "PlayScene.h"
+#include "ClearScene.h"
+#include "GameOverScene.h"
+#include "ButtleScene.h"
 
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)

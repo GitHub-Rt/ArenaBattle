@@ -1,5 +1,5 @@
 #include "Stage.h"
-#include "Engine/Model.h"
+#include "../Engine/Model.h"
 
 
 //コンストラクタ

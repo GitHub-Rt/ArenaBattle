@@ -1,18 +1,18 @@
 #pragma once
-#include "Engine/GameObject.h"
+#include "../Engine/GameObject.h"
 
-//ステージを管理するクラス
-class Stage : public GameObject
+//壁を管理するクラス
+class Wall : public GameObject
 {
     int hModel_;    //モデル番号
 
 
 public:
     //コンストラクタ
-    Stage(GameObject* parent);
+    Wall(GameObject* parent);
 
     //デストラクタ
-    ~Stage();
+    ~Wall();
 
     //初期化
     void Initialize() override;
@@ -25,8 +25,5 @@ public:
 
     //開放
     void Release() override;
-
-    int GetModelHandle() { return hModel_; }
-
-    
 };
+

@@ -1,17 +1,19 @@
 #pragma once
-#include "Engine/GameObject.h"
+#include "../../Engine/GameObject.h"
 
-//◆◆◆を管理するクラス
-class Start : public GameObject
+//敵ボスの弾を管理するクラス
+class Bullet : public GameObject
 {
     int hModel_;    //モデル番号
-    
+    XMFLOAT3 move;  //移動
+    int disNum;    //方向の番号
+
 public:
     //コンストラクタ
-    Start(GameObject* parent);
+    Bullet(GameObject* parent);
 
     //デストラクタ
-    ~Start();
+    ~Bullet();
 
     //初期化
     void Initialize() override;
@@ -24,6 +26,8 @@ public:
 
     //開放
     void Release() override;
+
+    void SetMoveNum(XMFLOAT3 move_, int num) { move = move_; disNum = num; }
 
     //何かに当たった
     //引数：pTarget 当たった相手

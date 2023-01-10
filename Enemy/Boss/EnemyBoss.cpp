@@ -1,11 +1,11 @@
 #include "EnemyBoss.h"
-#include "Engine/Model.h"
-#include "Engine/Global.h"
-#include "Engine/BoxCollider.h"
+#include "../../Engine/Model.h"
+#include "../../Engine/Global.h"
+#include "../../Engine/BoxCollider.h"
 
-#include "Stage.h"
+#include "../../Stage/Stage.h"
 #include "Bullet.h"
-#include "Player.h"
+#include "../../Player/Player.h"
 
 //コンストラクタ
 EnemyBoss::EnemyBoss(GameObject* parent)
