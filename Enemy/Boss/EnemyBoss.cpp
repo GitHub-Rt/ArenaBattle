@@ -92,8 +92,8 @@ void EnemyBoss::Update()
         {
             //ランダムで攻撃を選択
             srand((unsigned int)time(NULL));    //現在時刻の情報で初期化
-            attackNum = rand() % 3 + 1;         // 1-3の間で乱数生成
-
+            int count = rand() % 3 + 1;         // 1-3の間で乱数生成
+            attackNum = (State)count;           
 
             //攻撃フラグ、各番号の攻撃を行う
 
@@ -108,7 +108,7 @@ void EnemyBoss::Update()
             }
         }
         
-        if (attackNum == NULL)
+        if (attackNum == NoAttack)
         {
             //次の攻撃を可能にする
             isAttack = false;
@@ -296,7 +296,7 @@ void EnemyBoss::Update()
 
                 //攻撃中であるという情報の破棄
                 isBulletStart = false;  
-                attackNum = NULL;   
+                attackNum = NoAttack;   
             }
         }
     }

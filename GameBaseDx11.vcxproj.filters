@@ -137,6 +137,9 @@
     <ClCompile Include="Player\Player.cpp">
       <Filter>06Player</Filter>
     </ClCompile>
+    <ClCompile Include="Player\HP_Gauge.cpp">
+      <Filter>06Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -233,6 +236,9 @@
       <Filter>05Enemy\01Boss</Filter>
     </ClInclude>
     <ClInclude Include="Player\Player.h">
+      <Filter>06Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\HP_Gauge.h">
       <Filter>06Player</Filter>
     </ClInclude>
   </ItemGroup>

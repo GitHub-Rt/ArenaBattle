@@ -1,6 +1,7 @@
 #include "ButtleScene.h"
 
 #include "../Player/Player.h"
+#include "../Player/HP_Gauge.h"
 #include "../Stage/Wall.h"
 #include "../Enemy/Enemy.h"
 #include "../Stage/Stage.h"
@@ -29,6 +30,7 @@ void ButtleScene::Initialize()
 	Instantiate<Wall>(this);
 	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
+	//Instantiate<HP_Gauge>(this);
 
 	for (int i = 0; i < eNum; i++)
 	{

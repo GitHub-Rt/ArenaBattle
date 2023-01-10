@@ -14,11 +14,22 @@ class EnemyBoss : public GameObject
     
     
     //UŒ‚
+    enum State
+    {
+        NoAttack = 0,   //–¢UŒ‚
+        BulletAttack,   //’eUŒ‚
+        RotationAttack, //‰ñ“]ˆÚ“®UŒ‚
+        SpecialAttack,   //“ÁêUŒ‚(c‚è‘Ì—Í‚ª30%Ø‚Á‚½‚ç”­“®) ‘S‘Ì”š”­(ƒvƒŒƒCƒ„[‚Ì‘Ì—Í‘S‘Ì‚Ì3Š„ƒ_ƒ[ƒW‚ğ—^‚¦‚é)
+        WavesAttack,    //”góUŒ‚ (“ÁêUŒ‚Œã‚©‚ç)
+        JumpAttack      //ƒWƒƒƒ“ƒvUŒ‚ (“ÁêUŒ‚Œã‚©‚ç)
+        
+    };
+
 
     bool isAttack;  //¡UŒ‚’†‚©‚Ç‚¤‚©
-    int attackNum;  //UŒ‚”Ô†‚ğŠi”[
+    State attackNum;  //UŒ‚”Ô†‚ğŠi”[
 
-    //’eUŒ‚‚ÉŠÖ‚·‚é•Ï”(UŒ‚”Ô† : 1”Ô)
+    //’eUŒ‚‚ÉŠÖ‚·‚é•Ï”
     int countB;      //’eUŒ‚‘S‘Ì‚ğŠÇ—‚·‚éƒJƒEƒ“ƒg
     int bulletRotateC;  //UŒ‚Œã‚É‰ñ“]‚·‚é‚Æ‚«‚ÌƒJƒEƒ“ƒg
     int bulletC;    //’eUŒ‚‚Ì‚P”­‚²‚Æ‚ÌŠÔŠu

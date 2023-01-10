@@ -28,6 +28,7 @@ Player::Player(GameObject* parent)
     for (int i = 0; i < 2; i++)
     {
         hModel_[i] = -1;
+        
     }
 }
 
@@ -46,6 +47,8 @@ void Player::Initialize()
     hModel_[1] = Model::Load("player_Damage.fbx");
     assert(hModel_[1] >= 0);
 
+
+    
 
     //当たり判定枠
 

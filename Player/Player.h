@@ -22,6 +22,7 @@ class Player : public GameObject
 
     //ローカル変数
     int hModel_[2];       //モデル番号 ( 0 : Normal, 1 : Damege)
+    
     int count_;        //ジャンプカウント
     int attackNum;    //攻撃の種類
     int aCount;       //強攻撃時のカウント管理
