@@ -6,7 +6,7 @@
 class ButtleScene : public GameObject
 {	
 
-	int eNum = 5;	//敵の出現数
+	int eNum = 3;	//敵の出現数
 	bool isBoss;	//ボスキャラを出現させたかどうか
 
 public:

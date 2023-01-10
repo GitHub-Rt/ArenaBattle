@@ -545,8 +545,8 @@ void Player::Update()
 #endif
                 HP -= 0.25f;
 
-                HP_Gauge* pGauge = (HP_Gauge*)FindObject("HP_Gauge");
-                pGauge->SetDamage(0.25f);
+                /*HP_Gauge* pGauge = (HP_Gauge*)FindObject("HP_Gauge");
+                pGauge->SetDamage(0.25f);*/
 
                 eStatus->ESetFalse(eAttackS_);
             }
@@ -727,8 +727,8 @@ void Player::OnCollision(GameObject* pTarget)
 #endif
         HP -= 5.0f;
 
-        HP_Gauge* pGauge = (HP_Gauge*)FindObject("HP_Gauge");
-        pGauge->SetDamage(5.0f);
+        /*HP_Gauge* pGauge = (HP_Gauge*)FindObject("HP_Gauge");
+        pGauge->SetDamage(5.0f);*/
 
 
         pTarget->KillMe();
