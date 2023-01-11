@@ -1,39 +1,89 @@
 #include "HP_Gauge.h"
 
 
-HP_Gauge::HP_Gauge(Sprite* backGroudTex, Transform* pixcelTras, float maxValue, float startValue,float width_)
+HP_Gauge::HP_Gauge(GameObject* parent)
+	:GameObject(parent, "Player")
+{
+
+}
+
+HP_Gauge::~HP_Gauge()
+{
+
+}
+
+
+void HP_Gauge::Initialize()
+{
+	Sprite* sp1 = new Sprite;
+	Sprite* sp2 = new Sprite;
+	Transform* tf = new Transform;
+	tf->position_.x = 0;
+	tf->position_.y = 0;
+	tf->position_.z = 0;
+
+	//ƒQ[ƒW‚Ì‰Šú‰»
+	sp1->Load("HP_GaugeFrame.jpg");
+	sp2->Load("HP_Gauge.jpg");
+
+	float width = 300.0f;
+
+	RECT rc = { 0,0,300,400 };
+
+	SetGauge(sp1, sp2, tf, 100, 100, width, rc);
+}
+
+void HP_Gauge::Update()
+{
+	
+
+	if (isDamage)
+	{
+		width = CalcHP();
+		isDamage = false;
+	}
+}
+
+
+void HP_Gauge::Draw()
+{
+	//ƒQ[ƒW˜g‚ð•`‰æ
+	backGround->Draw(*pixcel, rc, 0.0f);
+
+	//ƒQ[ƒW‚Ì’†g‚ð•`‰æ
+	ground->Draw(*pixcel, RECT{ 0,0,(long)width,0 }, 0.0f);
+
+}
+
+
+void HP_Gauge::Release ()
+{
+
+}
+
+
+
+void HP_Gauge::SetGauge(Sprite* backGroudTex,Sprite* ground_, Transform* pixcelTras, float maxValue, float startValue,float width_,RECT rc_)
 {
 	backGround = backGroudTex;
+	ground = ground_;
 	pixcel = pixcelTras;
 	maxValue = maxValue;
 	currentVal = startValue;
 	width = width_;
+	rc = rc_;
 }
 
 void HP_Gauge::SetDamage(float damage)
 {
+	isDamage = true;
 	damageVal = damage;
 }
 
-void HP_Gauge::Load()
-{
-	Sprite* sp = new Sprite;
-	Transform* tf = new Transform;
-
-	//ƒQ[ƒW‚Ì‰Šú‰»
-	sp->Load("HP_GaugeFrame.jpg");
-
-	
-	float width = 300.0f;
-
-	HP_Gauge(sp, tf, 100, 100, width);
-}
-
-void HP_Gauge::Draw(Sprite* sp)
+float HP_Gauge::CalcHP()
 {
 	//ƒQ[ƒW—Ê‚ðŒvŽZ
 	float checkWidth = (currentVal / maxValue) * width;
 
-	//ƒQ[ƒW‚Ì’†g‚ð•`‰æ
-	sp->Draw(pixcelTras,)
+	return checkWidth;
 }

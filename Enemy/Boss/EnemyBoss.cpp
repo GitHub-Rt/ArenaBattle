@@ -1,4 +1,4 @@
-#include "EnemyBoss.h"
+ï»¿#include "EnemyBoss.h"
 #include "../../Engine/Model.h"
 #include "../../Engine/Global.h"
 #include "../../Engine/BoxCollider.h"
@@ -7,7 +7,7 @@
 #include "Bullet.h"
 #include "../../Player/Player.h"
 
-//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 EnemyBoss::EnemyBoss(GameObject* parent)
     :GameObject(parent, "EnemyBoss")
 {
@@ -17,67 +17,67 @@ EnemyBoss::EnemyBoss(GameObject* parent)
     }
 }
 
-//ƒfƒXƒgƒ‰ƒNƒ^
+//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 EnemyBoss::~EnemyBoss()
 {
 }
 
-//‰Šú‰»
+//åˆæœŸåŒ–
 void EnemyBoss::Initialize()
 {
-    //’Êí‚Ìƒ‚ƒfƒ‹
+    //é€šå¸¸æ™‚ã®ãƒ¢ãƒ‡ãƒ«
     hModel_[0] = Model::Load("bossNormal.fbx");
     assert(hModel_[0] >= 0);
 
-    //”íƒ_ƒ[ƒW‚Ìƒ‚ƒfƒ‹
+    //è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸æ™‚ã®ãƒ¢ãƒ‡ãƒ«
     hModel_[1] = Model::Load("bossDamage.fbx");
     assert(hModel_[1] >= 0);
 
-    //“–‚½‚è”»’è˜g
+    //å½“ãŸã‚Šåˆ¤å®šæ 
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(18, 20, 18));
     AddCollider(collision);
     
 }
 
-//XV
+//æ›´æ–°
 void EnemyBoss::Update()
 {
-    //ƒXƒe[ƒWî•ñŠl“¾
-    Stage* pStage = (Stage*)FindObject("Stage");    //ƒXƒe[ƒWƒIƒuƒWƒFƒNƒg‚ğ’T‚·
-    int hGroundModel = pStage->GetModelHandle();    //ƒ‚ƒfƒ‹”Ô†‚ğæ“¾
+    //ã‚¹ãƒ†ãƒ¼ã‚¸æƒ…å ±ç²å¾—
+    Stage* pStage = (Stage*)FindObject("Stage");    //ã‚¹ãƒ†ãƒ¼ã‚¸ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¢ã™
+    int hGroundModel = pStage->GetModelHandle();    //ãƒ¢ãƒ‡ãƒ«ç•ªå·ã‚’å–å¾—
 
-    //ƒŒƒC‚ğƒXƒe[ƒW‚É”ò‚Î‚·
+    //ãƒ¬ã‚¤ã‚’ã‚¹ãƒ†ãƒ¼ã‚¸ã«é£›ã°ã™
     RayCastData data;
-    data.start = transform_.position_;            //ƒŒƒC‚Ì”­ËˆÊ’u
-    data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //ƒŒƒC‚Ì•ûŒü
-    Model::RayCast(hGroundModel, &data);           //ƒŒƒC‚ğ”­Ë
+    data.start = transform_.position_;            //ãƒ¬ã‚¤ã®ç™ºå°„ä½ç½®
+    data.dir = XMFLOAT3(0.0f, -1.0f, 0.0f);       //ãƒ¬ã‚¤ã®æ–¹å‘
+    Model::RayCast(hGroundModel, &data);           //ãƒ¬ã‚¤ã‚’ç™ºå°„
 
-    //ƒŒƒC‚ª“–‚½‚Á‚½‚ç
+    //ãƒ¬ã‚¤ãŒå½“ãŸã£ãŸã‚‰
     if (data.hit)
     {
-        //ˆÊ’u‚ğ‰º‚°‚é
+        //ä½ç½®ã‚’ä¸‹ã’ã‚‹
         transform_.position_.y -= data.dist;
 
     }
 
 
 
-    //HP‚ª‘O‰ñ‚æ‚è‚à’á‚©‚Á‚½‚ç
+    //HPãŒå‰å›ã‚ˆã‚Šã‚‚ä½ã‹ã£ãŸã‚‰
     if (HP < prevHP)
     {
-        //ƒ‚ƒfƒ‹‚ğ”íƒ_ƒd—l‚É•ÏX
+        //ãƒ¢ãƒ‡ãƒ«ã‚’è¢«ãƒ€ãƒ¡ä»•æ§˜ã«å¤‰æ›´
         isDamage = true;
 
-        //’l‚ÌXV
+        //å€¤ã®æ›´æ–°
         prevHP = HP;
     }
     else
     {
-        //ƒ‚ƒfƒ‹‚ğ’Êíd—l‚É•ÏX
+        //ãƒ¢ãƒ‡ãƒ«ã‚’é€šå¸¸ä»•æ§˜ã«å¤‰æ›´
         isDamage = false;
     }
     
-    //‘Ì—Í‚ª0‚É‚È‚Á‚½‚ç
+    //ä½“åŠ›ãŒ0ã«ãªã£ãŸã‚‰
     if (HP <= 0)
     {
         KillMe();
@@ -86,74 +86,110 @@ void EnemyBoss::Update()
 
 
     
-    //ƒ{ƒX“G‚ÌUŒ‚”Ô†‚Ì‘I‘ğ
+    //ãƒœã‚¹æ•µã®æ”»æ’ƒç•ªå·ã®é¸æŠ
     {
         if (isAttack == false)
         {
-            //ƒ‰ƒ“ƒ_ƒ€‚ÅUŒ‚‚ğ‘I‘ğ
-            srand((unsigned int)time(NULL));    //Œ»İ‚Ìî•ñ‚Å‰Šú‰»
-            int count = rand() % 3 + 1;         // 1-3‚ÌŠÔ‚Å—”¶¬
+
+            //ãƒ©ãƒ³ãƒ€ãƒ ã§æ”»æ’ƒã‚’é¸æŠ
+            srand((unsigned int)time(NULL));    //ç¾åœ¨æ™‚åˆ»ã®æƒ…å ±ã§åˆæœŸåŒ–
+
+            int count;
+
+            if (isSpacial == false)
+            {
+                count = rand() % 2 + 1;         // 1-2ã®é–“ã§ä¹±æ•°ç”Ÿæˆ
+            }
+            else
+            {
+                count = rand() % 4 + 1;         // 1-4ã®é–“ã§ä¹±æ•°ç”Ÿæˆ
+            }
             attackNum = (State)count;           
 
-            //UŒ‚ƒtƒ‰ƒOAŠe”Ô†‚ÌUŒ‚‚ğs‚¤
+            //æ”»æ’ƒãƒ•ãƒ©ã‚°ã€å„ç•ªå·ã®æ”»æ’ƒã‚’è¡Œã†
 
             isAttack == true;
 
             switch (attackNum)
             {
-            case 1:
-                //’eUŒ‚‚ÌŠJn‚ğéŒ¾
-                isBulletStart = true;
+            default:
+                isAttack = true;
+                break;
 
+            case NoAttack:
+                //æ¬¡ã®æ”»æ’ƒã‚’å¯èƒ½ã«ã™ã‚‹
+                isAttack = false;
+                break;
+
+            case BulletAttack:
+                //å¼¾æ”»æ’ƒã®é–‹å§‹ã‚’å®£è¨€
+                isBulletStart = true;
+                break;
+
+            case RotationAttack:
+                //å›è»¢æ”»æ’ƒã®é–‹å§‹ã‚’å®£è¨€
+                isRotationStart = true;
+                break;
+
+            case WavesAttack:
+                //æ³¢çŠ¶æ”»æ’ƒã®é–‹å§‹ã‚’å®£è¨€
+                isWavesStart = true;
+                break;
+
+            case JumpAttack:
+                //ã‚¸ãƒ£ãƒ³ãƒ—æ”»æ’ƒã®é–‹å§‹ã‚’å®£è¨€
+                isJumpStart = true;
+                break;
             }
-        }
-        
-        if (attackNum == NoAttack)
-        {
-            //Ÿ‚ÌUŒ‚‚ğ‰Â”\‚É‚·‚é
-            isAttack = false;
+
+            
+            if (HP < (MAX_HP / 10) * 3)
+            {
+                //ç‰¹æ®Šæ”»æ’ƒã®é–‹å§‹ã‚’å®£è¨€
+                isSpacial = true;
+            }
         }
     }
 
 
-    //////////////////@@UŒ‚    ///////////////////////
+    //////////////////ã€€ã€€æ”»æ’ƒ    ///////////////////////
 
-    //’eUŒ‚(UŒ‚”Ô† : 1”Ô)
+    //å¼¾æ”»æ’ƒ(æ”»æ’ƒç•ªå· : 1ç•ª)
     {
-        //’eUŒ‚‚ªŠJn‚É‚È‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
+        //å¼¾æ”»æ’ƒãŒé–‹å§‹ã«ãªã£ã¦ã„ã‚‹ã‹ã©ã†ã‹
         if (isBulletStart == true)
         {
-            //‰ñ“](90‹)
+            //å›è»¢(90Â°)
             transform_.rotate_.y += 1.5f;
             isRotate = true;
 
             countB++;
 
-            //2•b‚½‚Á‚½‚ç
+            //2ç§’ãŸã£ãŸã‚‰
             if (countB >= 120)
             {
                 bulletC++;
 
-                //0.5•b‚²‚Æ‚É’e‚ğ‘Å‚Â
+                //0.5ç§’ã”ã¨ã«å¼¾ã‚’æ‰“ã¤
                 if (bulletC == 30)
                 {
-                    //‘O•ûŒü
+                    //å‰æ–¹å‘
                     {
                         Bullet* pBulletF = Instantiate<Bullet>(GetParent());
 
                         XMFLOAT3 frontRoot;
                         XMFLOAT3 frontTip;
 
-                        //ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚é‚©‚Ç‚¤‚©
+                        //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹ã©ã†ã‹
                         if (isDamage == false)
                         {
-                            frontRoot = Model::GetBonePosition(hModel_[0], "FRONT_Root");     //ª–{
-                            frontTip = Model::GetBonePosition(hModel_[0], "FRONT_Tip");       //æ’[
+                            frontRoot = Model::GetBonePosition(hModel_[0], "FRONT_Root");     //æ ¹æœ¬
+                            frontTip = Model::GetBonePosition(hModel_[0], "FRONT_Tip");       //å…ˆç«¯
                         }
                         else
                         {
-                            frontRoot = Model::GetBonePosition(hModel_[1], "FRONT_Root");     //ª–{
-                            frontTip = Model::GetBonePosition(hModel_[1], "FRONT_Tip");       //æ’[
+                            frontRoot = Model::GetBonePosition(hModel_[1], "FRONT_Root");     //æ ¹æœ¬
+                            frontTip = Model::GetBonePosition(hModel_[1], "FRONT_Tip");       //å…ˆç«¯
                         }
                         
 
@@ -172,23 +208,23 @@ void EnemyBoss::Update()
                         pBulletF->SetMoveNum(front, 0);
                     }
 
-                    //Œã•ûŒü
+                    //å¾Œæ–¹å‘
                     {
                         Bullet* pBulletB = Instantiate<Bullet>(GetParent());
 
                         XMFLOAT3 backRoot;
                         XMFLOAT3 backTip;
 
-                        //ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚é‚©‚Ç‚¤‚©
+                        //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹ã©ã†ã‹
                         if (isDamage == false)
                         {
-                            backRoot = Model::GetBonePosition(hModel_[0], "BACK_Root");     //ª–{
-                            backTip = Model::GetBonePosition(hModel_[0], "BACK_Tip");       //æ’[
+                            backRoot = Model::GetBonePosition(hModel_[0], "BACK_Root");     //æ ¹æœ¬
+                            backTip = Model::GetBonePosition(hModel_[0], "BACK_Tip");       //å…ˆç«¯
                         }
                         else
                         {
-                            backRoot = Model::GetBonePosition(hModel_[1], "BACK_Root");     //ª–{
-                            backTip = Model::GetBonePosition(hModel_[1], "BACK_Tip");       //æ’[
+                            backRoot = Model::GetBonePosition(hModel_[1], "BACK_Root");     //æ ¹æœ¬
+                            backTip = Model::GetBonePosition(hModel_[1], "BACK_Tip");       //å…ˆç«¯
                         }
 
 
@@ -207,62 +243,62 @@ void EnemyBoss::Update()
                         pBulletB->SetMoveNum(back, 1);
                     }
 
-                    //‰E•ûŒü
+                    //å³æ–¹å‘
                     {
-                        Bullet* pBulletR = Instantiate<Bullet>(GetParent());
+                    Bullet* pBulletR = Instantiate<Bullet>(GetParent());
 
-                        XMFLOAT3 rightRoot; 
-                        XMFLOAT3 rightTip; 
+                    XMFLOAT3 rightRoot;
+                    XMFLOAT3 rightTip;
 
-                        //ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚é‚©‚Ç‚¤‚©
-                        if (isDamage == false)
-                        {
-                            rightRoot = Model::GetBonePosition(hModel_[0], "RIGHT_Root");     //ª–{
-                            rightTip = Model::GetBonePosition(hModel_[0], "RIGHT_Tip");       //æ’[
-                        }
-                        else
-                        {
-                            rightRoot = Model::GetBonePosition(hModel_[1], "RIGHT_Root");     //ª–{
-                            rightTip = Model::GetBonePosition(hModel_[1], "RIGHT_Tip");       //æ’[
-                        }
-
-
-
-                        XMVECTOR vRightRoot = XMLoadFloat3(&rightRoot);
-                        XMVECTOR vRightTip = XMLoadFloat3(&rightTip);
-
-                        XMVECTOR vRight = vRightTip - vRightRoot;
-
-                        vRight = XMVector3Normalize(vRight);
-                        vRight *= 0.5f;
-
-                        XMFLOAT3 right;
-                        XMStoreFloat3(&right, vRight);
-
-
-                        pBulletR->SetPosition(rightTip);
-                        pBulletR->SetMoveNum(right, 2);
+                    //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹ã©ã†ã‹
+                    if (isDamage == false)
+                    {
+                        rightRoot = Model::GetBonePosition(hModel_[0], "RIGHT_Root");     //æ ¹æœ¬
+                        rightTip = Model::GetBonePosition(hModel_[0], "RIGHT_Tip");       //å…ˆç«¯
+                    }
+                    else
+                    {
+                        rightRoot = Model::GetBonePosition(hModel_[1], "RIGHT_Root");     //æ ¹æœ¬
+                        rightTip = Model::GetBonePosition(hModel_[1], "RIGHT_Tip");       //å…ˆç«¯
                     }
 
-                    //¶•ûŒü
+
+
+                    XMVECTOR vRightRoot = XMLoadFloat3(&rightRoot);
+                    XMVECTOR vRightTip = XMLoadFloat3(&rightTip);
+
+                    XMVECTOR vRight = vRightTip - vRightRoot;
+
+                    vRight = XMVector3Normalize(vRight);
+                    vRight *= 0.5f;
+
+                    XMFLOAT3 right;
+                    XMStoreFloat3(&right, vRight);
+
+
+                    pBulletR->SetPosition(rightTip);
+                    pBulletR->SetMoveNum(right, 2);
+                    }
+
+                    //å·¦æ–¹å‘
                     {
                         Bullet* pBulletL = Instantiate<Bullet>(GetParent());
 
                         XMFLOAT3 leftRoot;
-                        XMFLOAT3 leftTip; 
-                        
-                        //ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚é‚©‚Ç‚¤‚©
+                        XMFLOAT3 leftTip;
+
+                        //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹ã©ã†ã‹
                         if (isDamage == false)
                         {
-                            leftRoot = Model::GetBonePosition(hModel_[0], "LEFT_Root");     //ª–{
-                            leftTip = Model::GetBonePosition(hModel_[0], "LEFT_Tip");       //æ’[
+                            leftRoot = Model::GetBonePosition(hModel_[0], "LEFT_Root");     //æ ¹æœ¬
+                            leftTip = Model::GetBonePosition(hModel_[0], "LEFT_Tip");       //å…ˆç«¯
                         }
                         else
                         {
-                            leftRoot = Model::GetBonePosition(hModel_[1], "LEFT_Root");     //ª–{
-                            leftTip = Model::GetBonePosition(hModel_[1], "LEFT_Tip");       //æ’[
+                            leftRoot = Model::GetBonePosition(hModel_[1], "LEFT_Root");     //æ ¹æœ¬
+                            leftTip = Model::GetBonePosition(hModel_[1], "LEFT_Tip");       //å…ˆç«¯
                         }
-                        
+
 
 
                         XMVECTOR vLeftRoot = XMLoadFloat3(&leftRoot);
@@ -283,24 +319,43 @@ void EnemyBoss::Update()
                     bulletNum++;
                     bulletC = 0;
                 }
-                
+
             }
 
-            //¡‰ñ‚Ì’eUŒ‚‚Åo‚µ‚½’e‚ÌŒÂ”‚ğŠm”F
-            //ãŒÀ‚É‚È‚Á‚½‚çUŒ‚‚ğI‚í‚é
+            //ä»Šå›ã®å¼¾æ”»æ’ƒã§å‡ºã—ãŸå¼¾ã®å€‹æ•°ã‚’ç¢ºèª
+            //ä¸Šé™ã«ãªã£ãŸã‚‰æ”»æ’ƒã‚’çµ‚ã‚ã‚‹
             if (bulletNum == 8)
             {
                 bulletNum = 0;
                 countB = 0;
                 isRotate = false;
 
-                //UŒ‚’†‚Å‚ ‚é‚Æ‚¢‚¤î•ñ‚Ì”jŠü
-                isBulletStart = false;  
-                attackNum = NoAttack;   
+                //æ”»æ’ƒä¸­ã§ã‚ã‚‹ã¨ã„ã†æƒ…å ±ã®ç ´æ£„
+                isBulletStart = false;
+                attackNum = NoAttack;
             }
         }
     }
 
+    //å›è»¢ç§»å‹•æ”»æ’ƒ(æ¸¦å·»ä¸Šã«ç§»å‹•ã—ã¦ã€ã¾ãŸä¸­å¿ƒã«æˆ»ã£ã¦ãã‚‹)
+    {
+
+    }
+
+    //æ³¢çŠ¶æ”»æ’ƒ(ãƒ‰ãƒ¼ãƒŠãƒ„å‹ã§æ”»æ’ƒã‚’4å›è¡Œã†)
+    {
+
+    }
+
+    //ã‚¸ãƒ£ãƒ³ãƒ—æ”»æ’ƒ(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒã‚¸ã‚·ãƒ§ãƒ³ã«å‘ã‹ã£ã¦è½ä¸‹æ”»æ’ƒã‚’3å›è¡Œã†ã€‚ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å½“ãŸã£ãŸã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å¹ãé£›ã°ã™)
+    {
+
+    }
+
+    //ç‰¹æ®Šæ”»æ’ƒ(å…¨ä½“çˆ†ç™ºâ¡ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸Šç©ºã«é£›ã°ã—ã€å…¨ä½“ä½“åŠ›ã®3å‰²ã‚’å¥ªã†)
+    {
+
+    }
 
 
 
@@ -308,26 +363,26 @@ void EnemyBoss::Update()
 
 }
 
-//•`‰æ
+//æç”»
 void EnemyBoss::Draw()
 {
-    //ƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹ã©ã†ã‹
     if (isDamage == false)
     {
-        //ó‚¯‚Ä‚È‚¢‚Í’Êíƒ‚ƒfƒ‹
+        //å—ã‘ã¦ãªã„æ™‚ã¯é€šå¸¸ãƒ¢ãƒ‡ãƒ«
         Model::SetTransform(hModel_[0], transform_);
         Model::Draw(hModel_[0]);
     }
     else
     {
-        //ó‚¯‚Ä‚¢‚é‚Æ‚«‚Í”íƒ_ƒ[ƒWƒ‚ƒfƒ‹
+        //å—ã‘ã¦ã„ã‚‹ã¨ãã¯è¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ¢ãƒ‡ãƒ«
         Model::SetTransform(hModel_[1], transform_);
         Model::Draw(hModel_[1]);
     }
     
 }
 
-//ŠJ•ú
+//é–‹æ”¾
 void EnemyBoss::Release()
 {
 }
@@ -339,24 +394,24 @@ void EnemyBoss::Release()
 
 
 
-//‰½‚©‚É“–‚½‚Á‚½
+//ä½•ã‹ã«å½“ãŸã£ãŸ
 void EnemyBoss::OnCollision(GameObject* pTarget)
 {
-    //ƒvƒŒƒCƒ„[‚É“–‚½‚Á‚½
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å½“ãŸã£ãŸ
     if (pTarget->GetObjectName() == "Player")
     {
-        //ƒvƒŒƒCƒ„[‚Ìó‘Ô‚Ìæ“¾
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®çŠ¶æ…‹ã®å–å¾—
         Player* pStatus = (Player*)FindObject("Player");
 
-        //UŒ‚‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+        //æ”»æ’ƒã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
         bool pAttackS_ = pStatus->PGetCondition();
         if (pAttackS_ == true)
         {
-            //ƒvƒŒƒCƒ„[‚ÌUŒ‚”Ô†‚Ìæ“¾
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒç•ªå·ã®å–å¾—
             int pAcom = pStatus->PGetAttack();
 
 
-            //ƒvƒŒƒCƒ„[‚ÌUŒ‚‚Ìí—Ş‚²‚Æ‚Éƒ_ƒ[ƒWŒvZ
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒã®ç¨®é¡ã”ã¨ã«ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—
             if (pAcom != NULL)
             {
                 
