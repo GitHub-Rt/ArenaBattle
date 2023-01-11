@@ -30,7 +30,7 @@ void ButtleScene::Initialize()
 	Instantiate<Wall>(this);
 	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
-	//Instantiate<HP_Gauge>(this);
+	Instantiate<HP_Gauge>(this);
 
 	for (int i = 0; i < eNum; i++)
 	{

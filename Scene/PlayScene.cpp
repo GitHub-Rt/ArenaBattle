@@ -1,5 +1,6 @@
 #include "PlayScene.h"
 #include "../Player/Player.h"
+#include "../Player/HP_Gauge.h"
 #include "../Enemy/Enemy.h"
 #include "../Stage/Stage.h"
 #include "../Stage/Wall.h"
@@ -22,6 +23,7 @@ void PlayScene::Initialize()
 	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
 	Instantiate<Start>(this);
+	Instantiate<HP_Gauge>(this);
 
 	//Instantiate<Enemy>(this);
 }

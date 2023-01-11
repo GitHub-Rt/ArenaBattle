@@ -1,51 +1,21 @@
 #pragma once
-#include "../Engine/GameObject.h"
+#include "../Engine/Image.h"
+#include "../Engine/Transform.h"
 
-
-class HP_Gauge : public GameObject
+class HP_Gauge
 {
-    float HP = 300.0f;     //初期HP(画像横:300)
-	float HP_Remaining = HP;	//残りのHP量
-	float Damage_amount;	//ダメージ量
-    float checkHP;          //描画時のHP管理
-	int hPict_[3];    //画像番号( 0 : frame, 1 : HP, 2 : Damage) 
-    bool isDamage;      //ダメージを受けたかどうか
+	Sprite* backGround;	//ゲージ枠
+	Transform* pixcel;		//位置
+	float maxValue;		//最大値
+	float damageVal;	//ダメージ量
+	float currentVal;	//現在体力量
+	float width;		//幅
+
 
 public:
-    HP_Gauge(GameObject* parent);  
-    ~HP_Gauge();    
-    void Initialize() override;   
-    void Update() override;      
-    void Draw() override;
-    void Release() override;
+	HP_Gauge(Sprite* backGroudTex, Transform* pixcelTras, float maxValue, float startValue,float width_);
+	void SetDamage(float damage);
+	void Load();
+	void Draw(Sprite* sp);
 
-    /// <summary>
-    /// ダメージ量を格納
-    /// </summary>
-    /// <param name="damage"></param>
-    void SetDamage(float damage);
-
-
-#ifdef _DEBUG
-    /// <summary>
-    /// 残り体力を格納
-    /// </summary>
-    /// <param name="HP"></param>
-    void SetHP(float HP);
-
-#endif
-
-
-    /// <summary>
-    /// 残り体力を計算
-    /// </summary>
-    /// <returns>残り体力量(FLOAT)</returns>
-    float Calculation();
-
-    /// <summary>
-    /// HPゲージを表示
-    /// </summary>
-    /// <param name="HP_Remaining"></param>
-    void HPDraw(float HP_Remaining);
 };
-
