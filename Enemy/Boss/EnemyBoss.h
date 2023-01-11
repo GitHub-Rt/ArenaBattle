@@ -6,6 +6,7 @@ class EnemyBoss : public GameObject
 {
     //定数定義
     const FLOAT MAX_HP = 50.0f; //最大HP
+    const FLOAT CIRCLE_RANGE = 3600.0f;         //床の移動可能範囲円の半径の2乗
 
     int hModel_[2];    //モデル番号(1 : ノーマル時,2 : 被ダメージ時)
     float HP = MAX_HP;   //HP
@@ -18,7 +19,7 @@ class EnemyBoss : public GameObject
     {
         NoAttack = 0,   //未攻撃
         BulletAttack,   //弾攻撃  1
-        RotationAttack, //回転移動攻撃  2
+        RotationAttack, //渦巻移動攻撃  2
         WavesAttack,    //波状攻撃 (特殊攻撃後から)  3
         JumpAttack,     //ジャンプ攻撃 (特殊攻撃後から)  4
         SpecialAttack   //特殊攻撃(残り体力が30%切ったら発動) 全体爆発(プレイヤーの体力全体の3割ダメージを与える)
@@ -38,9 +39,12 @@ class EnemyBoss : public GameObject
     bool isRotate;      //回転したかどうか
 
 
-    //回転攻撃に関する変数
+    //渦巻攻撃に関する変数
     bool isRotationStart;   //回転攻撃を開始したかどうか
-
+    bool isEndLine;         //移動可能範囲の端まで行ったかどうか
+    float radius = 1.5f;   //半径の初期値
+    float angle = 0.05f;    //変化の角度
+    XMFLOAT3 firstPos = { 0,0,0 };  //最初のポジション
 
     //波状攻撃に関する変数
     bool isWavesStart;      //波状攻撃を開始したかどうか
@@ -77,4 +81,13 @@ public:
 
     //回転しているかどうか
     bool GetRotate() { return isRotate; }
+
+
+
+
+#if _DEBUG
+
+    int GetAttackPattern() { return attackNum; }
+
+#endif
 };

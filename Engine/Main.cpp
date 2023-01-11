@@ -12,6 +12,10 @@
 #include "Input.h"
 #include "Audio.h"
 
+#include "../imgui/imgui_impl_dx11.h"
+#include "../imgui/imgui_impl_win32.h"
+
+
 #pragma comment(lib,"Winmm.lib")
 
 //定数宣言
@@ -47,6 +51,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
+
+	{//GUI初期化
+#if _DEBUG
+		//IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		ImFontConfig config;
+		config.MergeMode = true;
+		io.Fonts->AddFontDefault();
+		io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+		ImGui::StyleColorsDark();
+		ImGui_ImplWin32_Init(hWnd);
+		ImGui_ImplDX11_Init(Direct3D::pDevice_, Direct3D::pContext_);
+		ImGui::SetNextWindowSize(ImVec2(320, 100));
+#endif
+	}
+
+
 
 	//カメラを準備
 	Camera::Initialize();
@@ -105,6 +127,44 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//指定した時間（FPSを60に設定した場合は60分の1秒）経過していたら更新処理
 			if ((nowTime - lastUpdateTime) * fpsLimit > 1000.0f)
 			{
+#if _DEBUG
+				ImGui_ImplDX11_NewFrame();
+				ImGui_ImplWin32_NewFrame();
+				ImGui::NewFrame();
+
+				//{
+				//	static float f = 0.0f;
+				//	static int counter = 0;
+
+				//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+				//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+				//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+
+				//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+
+				//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+				//		counter++;
+				//	ImGui::SameLine();
+				//	ImGui::Text("counter = %d", counter);
+
+				//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				//	ImGui::End();
+				//}
+				//if (show_another_window)
+				//{
+				//	ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+				//	ImGui::Text("Hello from another window!");
+				//	if (ImGui::Button("Close Me"))
+				//		show_another_window = false;
+				//	ImGui::End();
+				//}
+#endif
+
+
+
+
+
 				//時間計測関連
 				lastUpdateTime = nowTime;	//現在の時間（最後に画面を更新した時間）を覚えておく
 				FPS++;						//画面更新回数をカウントする
@@ -120,17 +180,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				pRootObject->UpdateSub();
 
 				//カメラを更新
-				Camera::Update();
-
-
-
-
+				Camera::Update();	
+				
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
 
 				//全オブジェクトを描画
 				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->DrawSub();
+
+				ImGui::Render();
+				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 				//描画終了
 				Direct3D::EndDraw();
@@ -151,6 +211,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();
+	ImGui_ImplDX11_Shutdown();
+	ImGui::DestroyContext();
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();
@@ -208,9 +270,15 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 }
 
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
 //ウィンドウプロシージャ（何かあった時によばれる関数）
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+		return true;
+
 	switch (msg)
 	{
 	//ウィンドウを閉じた

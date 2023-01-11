@@ -12,6 +12,9 @@
 
 #include "SceneManager.h"
 
+#include "../imgui/imguiObject.h"
+
+
 #ifdef _DEBUG
 
 #include "../Engine/Input.h"
@@ -34,11 +37,13 @@ void ButtleScene::Initialize()
 
 	for (int i = 0; i < eNum; i++)
 	{
-		Instantiate<Enemy>(this);
+		//Instantiate<Enemy>(this);
 	}
 		
 
 	//Instantiate<Enemy>(this);
+
+	Instantiate<imguiObject>(this);
 	
 }
 
@@ -73,6 +78,13 @@ void ButtleScene::Update()
 		pSceneManager->ChangeScene(SCENE_ID_PLAY);
 	}
 
+	//プレイヤーの体力をぎりぎりにする(Startボタン)
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0))
+	{
+		Player* pPlayer = (Player*)FindObject("Player");
+		pPlayer->SetDying();
+	}
+
 
 	//プレイヤーを無敵状態にする(Start,Backボタン同時)
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0) && Input::IsPadButtonDown(XINPUT_GAMEPAD_BACK, 0))
@@ -81,12 +93,7 @@ void ButtleScene::Update()
 		pPlayer->SetInvincible();
 	}
 
-	//プレイヤーの体力をぎりぎりにする(Startボタン)
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START, 0))
-	{
-		Player* pPlayer = (Player*)FindObject("Player");
-		pPlayer->SetDying();
-	}
+	
 
 #endif
 }

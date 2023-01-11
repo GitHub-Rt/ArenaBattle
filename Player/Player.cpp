@@ -22,6 +22,8 @@
 
 
 
+
+
 //コンストラクタ
 Player::Player(GameObject* parent)
     :GameObject(parent, "Player"),count_(0), aliveFlg(true)
@@ -71,6 +73,8 @@ void Player::Initialize()
 //更新
 void Player::Update()
 {
+    
+
 #ifdef _DEBUG
     if (isDying == true)
     {

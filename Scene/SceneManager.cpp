@@ -10,6 +10,8 @@
 #include "GameOverScene.h"
 #include "ButtleScene.h"
 
+
+
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)
 	: GameObject(parent, "SceneManager")
@@ -23,6 +25,9 @@ void SceneManager::Initialize()
 	currentSceneID_ = SCENE_ID_PLAY;
 	nextSceneID_ = currentSceneID_;
 	Instantiate<PlayScene>(this);
+
+
+	
 }
 
 //更新

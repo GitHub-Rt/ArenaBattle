@@ -9,6 +9,12 @@
 
 #include "SceneManager.h"
 
+#include "../imgui/imguiObject.h"
+
+
+
+
+
 //コンストラクタ
 PlayScene::PlayScene(GameObject* parent)
 	: GameObject(parent, "PlayScene")
@@ -26,11 +32,15 @@ void PlayScene::Initialize()
 	Instantiate<HP_Gauge>(this);
 
 	//Instantiate<Enemy>(this);
+
+
+	Instantiate<imguiObject>(this);
 }
 
 //更新
 void PlayScene::Update()
 {
+	
 }
 
 //描画

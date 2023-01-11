@@ -90,6 +90,7 @@ void EnemyBoss::Update()
     {
         if (isAttack == false)
         {
+            isAttack = true;
 
             //ランダムで攻撃を選択
             srand((unsigned int)time(NULL));    //現在時刻の情報で初期化
@@ -108,16 +109,12 @@ void EnemyBoss::Update()
 
             //攻撃フラグ、各番号の攻撃を行う
 
-            isAttack == true;
-
             switch (attackNum)
             {
             default:
-                isAttack = true;
                 break;
 
             case NoAttack:
-                //次の攻撃を可能にする
                 isAttack = false;
                 break;
 
@@ -127,7 +124,7 @@ void EnemyBoss::Update()
                 break;
 
             case RotationAttack:
-                //回転攻撃の開始を宣言
+                //渦巻攻撃の開始を宣言
                 isRotationStart = true;
                 break;
 
@@ -141,10 +138,10 @@ void EnemyBoss::Update()
                 isJumpStart = true;
                 break;
             }
-
             
             if (HP < (MAX_HP / 10) * 3)
             {
+                attackNum = NoAttack;
                 //特殊攻撃の開始を宣言
                 isSpacial = true;
             }
@@ -157,7 +154,7 @@ void EnemyBoss::Update()
     //弾攻撃(攻撃番号 : 1番)
     {
         //弾攻撃が開始になっているかどうか
-        if (isBulletStart == true)
+        if (isBulletStart )
         {
             //回転(90°)
             transform_.rotate_.y += 1.5f;
@@ -332,14 +329,65 @@ void EnemyBoss::Update()
 
                 //攻撃中であるという情報の破棄
                 isBulletStart = false;
+                isAttack = false;
                 attackNum = NoAttack;
             }
         }
     }
 
-    //回転移動攻撃(渦巻上に移動して、また中心に戻ってくる)
+    //渦巻移動攻撃(渦巻上に移動して、また中心に戻ってくる)
     {
+        //渦巻攻撃が開始になっているかどうか
+        if (isRotationStart)    
+        {//開始        
 
+            //次のx,z座標を求める
+            float x = transform_.position_.x + (cos(angle) * radius);
+            float z = transform_.position_.z + (sin(angle) * radius);
+
+            //移動可能範囲の内側かどうかを調べる
+            float moveLimit = x * x + z * z;
+
+            
+            if (isEndLine)
+            {
+                //内側に移動を始める
+                //radius -= 0.05f;
+
+                x = -x;
+                z = -z;
+
+            }
+            else
+            {
+                //外側に移動を始める
+                //radius += 0.05f;
+            }
+
+
+            if (moveLimit < CIRCLE_RANGE)
+            {
+                //移動
+                transform_.position_.x = x;
+                transform_.position_.z = z;
+
+            }
+            else
+            {
+                isEndLine = true;
+            }
+
+            //最初のポジションに帰ってきた
+            if (transform_.position_.x == firstPos.x &&
+                transform_.position_.z == firstPos.z)
+            {
+                //攻撃中であるという情報の破棄
+                isRotationStart = false;
+                isAttack = false;
+                attackNum = NoAttack;
+            }
+
+        }
     }
 
     //波状攻撃(ドーナツ型で攻撃を4回行う)
@@ -386,12 +434,6 @@ void EnemyBoss::Draw()
 void EnemyBoss::Release()
 {
 }
-
-
-
-
-
-
 
 
 //何かに当たった

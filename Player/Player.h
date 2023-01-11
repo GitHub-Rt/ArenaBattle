@@ -128,6 +128,13 @@ public:
         isDying = true;
     }
 
+
+    //imgui—pŠÖ”
+
+    float GetHP() { return HP; }
+    int GetAttackPattern() { return attackNum; }
+
+
 #endif
 
 
