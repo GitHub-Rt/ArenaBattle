@@ -48,6 +48,12 @@
     <Filter Include="05Stage\StageObject">
       <UniqueIdentifier>{801e51c1-9e2a-4492-a11e-e3efd871bf36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07AttackModel">
+      <UniqueIdentifier>{39642c0d-4bf7-4119-afae-9a6ccdd025e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07AttackModel\Player">
+      <UniqueIdentifier>{44704878-154d-45a4-8798-eca34055580b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -169,6 +175,12 @@
     </ClCompile>
     <ClCompile Include="Character\Player.cpp">
       <Filter>06Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackModel\AttackModelBase.cpp">
+      <Filter>07AttackModel</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackModel\RobotBullet.cpp">
+      <Filter>07AttackModel\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,6 +306,12 @@
     </ClInclude>
     <ClInclude Include="Character\Player.h">
       <Filter>06Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackModel\AttackModelBase.h">
+      <Filter>07AttackModel</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackModel\RobotBullet.h">
+      <Filter>07AttackModel\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

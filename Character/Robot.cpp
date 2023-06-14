@@ -1,6 +1,10 @@
 #include "Robot.h"
 #include "Player.h"
+
 #include "../Engine/Input.h"
+
+#include "../AttackModel/RobotBullet.h"
+
 
 // 定数宣言
 
@@ -34,12 +38,24 @@ Robot::~Robot()
 
 void Robot::Initialize()
 {
-	CharacterModelLoad("Character/Model/robot.fbx");
+	CharacterModelLoad("robot.fbx");
 
 	pPlayer = (Player*)FindObject("Player");
 
 	SetParameter(CharacterID::Robot);
 	SetData();
+
+	// 初期位置設定
+	{
+		XMFLOAT3 playerPos = pPlayer->GetPosition();
+		playerPos.x += POS_X;
+		playerPos.y += POS_Y;
+		playerPos.z += POS_Z;
+
+		transform_.position_.x += playerPos.x;
+		transform_.position_.y += playerPos.y;
+		transform_.position_.z += playerPos.z;
+	}
 }
 
 void Robot::Release() 
@@ -49,43 +65,51 @@ void Robot::Release()
 void Robot::CharacterUpdate()
 {
 	SetAngle();
-
 	CharacterMove();
-	CharacterAttack();
+	
+	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
+	{
+		ChangeState(CharacterState::Attacking);
+	}
 }
 
 void Robot::CharacterMove()
 {
-	XMFLOAT3 playerPos = pPlayer->GetPosition();
-	playerPos.x += POS_X;
-	playerPos.y += POS_Y;
-	playerPos.z += POS_Z;
-
-	if (transform_.position_.x != playerPos.x ||
-		transform_.position_.y != playerPos.y ||
-		transform_.position_.z != playerPos.z)
+	if (pPlayer->GetState() == CharacterState::Moving)
 	{
+		XMFLOAT3 playerPos = pPlayer->GetPosition();
+		playerPos.x += POS_X;
+		playerPos.y += POS_Y;
+		playerPos.z += POS_Z;
 
-		XMFLOAT3 nowPos = GetPosition();
-		XMVECTOR vNowPos = XMLoadFloat3(&nowPos);
-		XMVECTOR vPoint = XMLoadFloat3(&playerPos);
-		XMVECTOR vMove = vPoint - vNowPos;
-		XMVector3Normalize(vMove);
-		vMove *= MOVESPEED;
+		if (transform_.position_.x != playerPos.x ||
+			transform_.position_.z != playerPos.z)
+		{
 
-		XMFLOAT3 move;
-		XMStoreFloat3(&move, vMove);
+			XMFLOAT3 nowPos = GetPosition();
+			XMVECTOR vNowPos = XMLoadFloat3(&nowPos);
+			XMVECTOR vPoint = XMLoadFloat3(&playerPos);
+			XMVECTOR vMove = vPoint - vNowPos;
+			XMVector3Normalize(vMove);
+			vMove *= MOVESPEED;
+
+			XMFLOAT3 move;
+			XMStoreFloat3(&move, vMove);
 
 
-		transform_.position_.x += move.x;
-		transform_.position_.y += move.y;
-		transform_.position_.z += move.z;
+			transform_.position_.x += move.x;
+			transform_.position_.z += move.z;
+		}
+	}
+	else
+	{
+		ChangeState(CharacterState::Idle);
 	}
 }
 
 void Robot::CharacterAttack()
 {
-	/*bulletTimer++;
+	bulletTimer++;
 	if (bulletTimer >= BETWEEN_BULLETTIMER)
 	{
 		if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
@@ -107,50 +131,77 @@ void Robot::CharacterAttack()
 			XMStoreFloat3(&move, vMove);
 
 			pBullet->SetPosition(tip);
-			pBullet->SetMove(move);
+			pBullet->SetMoveDirection(move);
 		}
-	}*/
+		else
+		{
+			ChangeState(CharacterState::Idle);
+		}
+	}
+	
 }
 
 void Robot::SetAngle()
 {
-	//// カメラの方向ベクトルを取得
-	//XMFLOAT3 cameraDirection = pPlayer->GetCameraDirection();
-	//cameraDirection.y = 0;
+	// カメラの方向ベクトルを取得
+	XMFLOAT3 cameraDirection = pPlayer->GetCameraDirection();
+	cameraDirection.y = 0;
 
-	//// モデルの方向ベクトルを設定
-	//XMFLOAT3 modelDirection = { 0, 0, 1 };
+	// モデルの方向ベクトルを設定
+	XMFLOAT3 modelDirection = { 0, 0, -1 };
 
-	//// それぞれの方向ベクトルを正規化する
-	//XMVECTOR vCameraDirection = XMVector3Normalize(XMLoadFloat3(&cameraDirection));
-	//XMVECTOR vModelDirection = XMVector3Normalize(XMLoadFloat3(&modelDirection));
+	// それぞれの方向ベクトルを正規化する
+	XMVECTOR vCameraDirection = XMVector3Normalize(XMLoadFloat3(&cameraDirection));
+	XMVECTOR vModelDirection = XMVector3Normalize(XMLoadFloat3(&modelDirection));
 
-	//// 二つのベクトルの内積を求める
-	//XMVECTOR vDot = XMVector3Dot(vCameraDirection, vModelDirection);
-	//float rad = acos(XMVectorGetX(vDot));
+	// 二つのベクトルの内積を求める
+	XMVECTOR vDot = XMVector3Dot(vCameraDirection, vModelDirection);
+	float rad = acos(XMVectorGetX(vDot));
 
-	//XMVECTOR vCross = XMVector3Cross(vCameraDirection, vModelDirection);
-	//float cross = XMVectorGetY(vCross);
-	//if (cross > 0)
-	//{
-	//	rad *= -1;
-	//}
-	//// ラジアン → 度に変換
-	//float angle = rad * DEGREES_180 / M_PI;
+	XMVECTOR vCross = XMVector3Cross(vCameraDirection, vModelDirection);
+	float cross = XMVectorGetY(vCross);
+	if (cross > 0)
+	{
+		rad *= -1;
+	}
+	// ラジアン → 度に変換
+	float angle = rad * DEGREES_180 / M_PI;
 
-	//// 回転
-	//transform_.rotate_.y = (float)angle;
+	// 回転
+	transform_.rotate_.y = (float)angle;
 }
 
+void Robot::CharacterIdleAction()
+{
+	if (pPlayer->GetState() == CharacterState::Moving)
+	{
+		ChangeState(CharacterState::Moving);
+	}
 
+
+	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
+	{
+		ChangeState(CharacterState::Attacking);
+	}
+}
 
 void Robot::CharacterCheckHP()
 {
+
+}
+
+void Robot::CharacterJumpAction()
+{
+
+}
+
+
+void Robot::CharacterDodingAction()
+{
+
 }
 
 void Robot::CharacterTakeDamage(float damage)
 {
+
 }
-
-
-

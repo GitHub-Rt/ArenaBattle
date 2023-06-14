@@ -55,10 +55,12 @@ void CharacterBase::Update()
 {
 	if (IsEntered())
 	{
-		/*switch (characterState)
+		CharacterUpdate();
+
+		switch (characterState)
 		{
 		case CharacterState::Idle:
-			CharacterUpdate();
+			CharacterIdleAction();
 			break;
 		case CharacterState::Moving:
 			CharacterMove();
@@ -69,16 +71,14 @@ void CharacterBase::Update()
 		case CharacterState::Damaged:
 			CharacterTakeDamage(damage);
 			break;
+		case CharacterState::Jumping:
+			CharacterJumpAction();
+			break;
+		case CharacterState::Doding:
+			CharacterDodingAction();
+			break;
 		default:
 			break;
-		}*/
-
-
-
-		CharacterUpdate();
-		if (characterState == CharacterState::Damaged)
-		{
-			CharacterTakeDamage(damage);
 		}
 	}
 	
@@ -91,7 +91,7 @@ void CharacterBase::Draw()
 
 void CharacterBase::CharacterModelLoad(std::string fileName)
 {
-	hModel = Model::Load(fileName);
+	hModel = Model::Load("Character/Model/" + fileName);
 	assert(hModel >= 0);
 }
 

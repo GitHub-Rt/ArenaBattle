@@ -1,6 +1,9 @@
 #include "DebugScene.h"
 #include "../Stage/NormalField.h"
 
+#include "../imgui/imguiObject.h"
+
+
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
 
@@ -18,6 +21,8 @@ void DebugScene::Initialize()
 	Instantiate<NormalField>(this);
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
+
+	Instantiate<imguiObject>(this);
 }
 
 void DebugScene::Update()

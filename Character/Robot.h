@@ -23,10 +23,14 @@ public:
 	void Initialize()  override;
 	void Release() override;
 	void CharacterUpdate() override;
+	void CharacterIdleAction() override;
 	void CharacterMove() override;
 	void CharacterAttack() override;
+
 	void CharacterCheckHP() override;
-	void CharacterTakeDamage(float damage) override; 
+	void CharacterJumpAction()override;
+	void CharacterDodingAction()override;
+	void CharacterTakeDamage(float damage) override;
 
 	//　プレイヤーのカメラ奥方向にモデルを回転させる(弾の打つ方向を決める)
 	void SetAngle();

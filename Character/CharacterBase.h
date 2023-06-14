@@ -43,6 +43,8 @@ enum class CharacterState
 	Moving,		// 移動
 	Attacking,	// 攻撃
 	Damaged,	// 被ダメージ
+	Jumping,		// ジャンプ状態
+	Doding		// 回避状態
 };
 
 // 攻撃段階を管理
@@ -154,6 +156,9 @@ public:
 	/// <returns></returns>
 	float GetDamage() { return damage; }
 
+
+	CharacterState GetState() { return characterState; }
+
 	/// <summary>
 	/// 状態を変化させる
 	/// </summary>
@@ -228,9 +233,14 @@ public:
 	virtual void CharacterCheckHP() = 0;
 
 	/// <summary>
-	/// 各キャラクターのIdle状態のときの処理をかく関数
+	/// 各キャラクターの度の状態のときも実行したい処理をかく関数
 	/// </summary>
 	virtual void CharacterUpdate() = 0;
+
+	/// <summary>
+	/// キャラクターのIdle状態の処理を書く関数
+	/// </summary>
+	virtual void CharacterIdleAction() = 0;
 
 	/// <summary>
 	/// 各キャラの移動周り処理を書く関数
@@ -247,9 +257,15 @@ public:
 	/// </summary>
 	virtual void CharacterTakeDamage(float damage) = 0; 
 
+	/// <summary>
+	/// ジャンプアクション処理
+	/// </summary>
+	virtual void CharacterJumpAction() = 0;
 
-	
-
+	/// <summary>
+	/// 回避アクション処理
+	/// </summary>
+	virtual void CharacterDodingAction() = 0;
 
 private:
 
