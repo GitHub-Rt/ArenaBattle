@@ -19,6 +19,7 @@ namespace Input
 	DIMOUSESTATE mouseState_;				//マウスの状態
 	DIMOUSESTATE prevMouseState_;			//前フレームのマウスの状態
 	POINT mousePos_;							//マウスカーソルの位置
+	bool isCursor = false;					//マウスモード
 
 	//コントローラー
 	const int MAX_PAD_NUM = 4;
@@ -122,13 +123,14 @@ namespace Input
 	}
 
 
+
 	/////////////////////////////　マウス情報取得　//////////////////////////////////
 
 	//マウスのボタンが押されているか調べる
-	bool IsMouseButton(int buttonCode)
+	bool IsMouseButton(MouseBottunCode buttonCode)
 	{
 		//押してる
-		if (mouseState_.rgbButtons[buttonCode] & 0x80)
+		if (mouseState_.rgbButtons[(int)buttonCode] & 0x80)
 		{
 			return true;
 		}
@@ -136,10 +138,10 @@ namespace Input
 	}
 
 	//マウスのボタンを今押したか調べる（押しっぱなしは無効）
-	bool IsMouseButtonDown(int buttonCode)
+	bool IsMouseButtonDown(MouseBottunCode buttonCode)
 	{
 		//今は押してて、前回は押してない
-		if (IsMouseButton(buttonCode) && !(prevMouseState_.rgbButtons[buttonCode] & 0x80))
+		if (IsMouseButton(buttonCode) && !(prevMouseState_.rgbButtons[(int)buttonCode] & 0x80))
 		{
 			return true;
 		}
@@ -147,10 +149,10 @@ namespace Input
 	}
 
 	//マウスのボタンを今放したか調べる
-	bool IsMouseButtonUp(int buttonCode)
+	bool IsMouseButtonUp(MouseBottunCode buttonCode)
 	{
 		//今押してなくて、前回は押してる
-		if (!IsMouseButton(buttonCode) && prevMouseState_.rgbButtons[buttonCode] & 0x80)
+		if (!IsMouseButton(buttonCode) && prevMouseState_.rgbButtons[(int)buttonCode] & 0x80)
 		{
 			return true;
 		}
@@ -179,6 +181,21 @@ namespace Input
 		return result;
 	}
 
+	void SetMouseMove(int x, int y)
+	{
+
+		SetCursorPos(x, y);
+	}
+
+	void ChangeModeFlg()
+	{
+		isCursor = !isCursor;
+	}
+
+	bool GetMouseFlg()
+	{
+		return isCursor;
+	}
 
 	/////////////////////////////　コントローラー情報取得　//////////////////////////////////
 

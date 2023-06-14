@@ -1,13 +1,7 @@
-
-//
-//　最終更新日：2023/04/06
-//
-
-
-
 #include <Windows.h>
 #include <stdlib.h>
 #include <assert.h>
+//#include <crtdbg.h>
 #include <time.h>
 
 #include "global.h"
@@ -19,10 +13,18 @@
 #include "Audio.h"
 #include "VFX.h"
 
+#if _DEBUG
+#include "../imgui/imgui_impl_dx11.h"
+#include "../imgui/imgui_impl_win32.h"
+#endif
+
+
 #pragma comment(lib,"Winmm.lib")
 
 //定数宣言
-const char* WIN_CLASS_NAME = "SampleGame";	//ウィンドウクラス名
+const char* WIN_CLASS_NAME = "Arena Battle";	//ウィンドウクラス名
+const int HALF_WIDTH = 640;						//ウィンドウ幅の中心点
+const int HALF_HEIGHT = 360;					//ウィンドウ縦の中心点
 
 
 //プロトタイプ宣言
@@ -41,8 +43,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetCurrentDirectory("Assets");
 
 	//初期化ファイル（setup.ini）から必要な情報を取得
-	int screenWidth = GetPrivateProfileInt("SCREEN", "Width", 800, ".\\setup.ini");		//スクリーンの幅
-	int screenHeight = GetPrivateProfileInt("SCREEN", "Height", 600, ".\\setup.ini");	//スクリーンの高さ
+	int screenWidth = GetPrivateProfileInt("SCREEN", "Width", 1280, ".\\setup.ini");		//スクリーンの幅
+	int screenHeight = GetPrivateProfileInt("SCREEN", "Height", 720, ".\\setup.ini");	//スクリーンの高さ
 	int fpsLimit = GetPrivateProfileInt("GAME", "Fps", 60, ".\\setup.ini");				//FPS（画面更新速度）
 	int isDrawFps = GetPrivateProfileInt("DEBUG", "ViewFps", 0, ".\\setup.ini");		//キャプションに現在のFPSを表示するかどうか
 
@@ -54,6 +56,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
+
+	{//GUI初期化
+#if _DEBUG
+		//IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
+		ImFontConfig config;
+		config.MergeMode = true;
+		io.Fonts->AddFontDefault();
+		io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+		ImGui::StyleColorsDark();
+		ImGui_ImplWin32_Init(hWnd);
+		ImGui_ImplDX11_Init(Direct3D::pDevice_, Direct3D::pContext_);
+		ImGui::SetNextWindowSize(ImVec2(320, 100));
+#endif
+	}
+
+
 
 	//カメラを準備
 	Camera::Initialize();
@@ -112,12 +132,43 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//指定した時間（FPSを60に設定した場合は60分の1秒）経過していたら更新処理
 			if ((nowTime - lastUpdateTime) * fpsLimit > 1000.0f)
 			{
+#if _DEBUG
+				ImGui_ImplDX11_NewFrame();
+				ImGui_ImplWin32_NewFrame();
+				ImGui::NewFrame();
+
+				//{
+				//	static float f = 0.0f;
+				//	static int counter = 0;
+
+				//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+				//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+				//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+
+				//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+
+				//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+				//		counter++;
+				//	ImGui::SameLine();
+				//	ImGui::Text("counter = %d", counter);
+
+				//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				//	ImGui::End();
+				//}
+				//if (show_another_window)
+				//{
+				//	ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+				//	ImGui::Text("Hello from another window!");
+				//	if (ImGui::Button("Close Me"))
+				//		show_another_window = false;
+				//	ImGui::End();
+				//}
+#endif
+
 				//時間計測関連
 				lastUpdateTime = nowTime;	//現在の時間（最後に画面を更新した時間）を覚えておく
 				FPS++;						//画面更新回数をカウントする
-
-
-
 
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
@@ -127,18 +178,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				pRootObject->UpdateSub();
 
 				//カメラを更新
-				Camera::Update();
+				Camera::Update();	
 
 				//エフェクトの更新
 				VFX::Update();
-
-
+				
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
 
 				//全オブジェクトを描画
-				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のDrawが呼ばれる
 				pRootObject->DrawSub();
+#if _DEBUG
+				ImGui::Render();
+				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+#endif
 
 				//エフェクトの描画
 				VFX::Draw();
@@ -146,9 +200,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//描画終了
 				Direct3D::EndDraw();
 
-
-
-				
 				//ちょっと休ませる
 				Sleep(1);
 			}
@@ -160,9 +211,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//いろいろ解放
 	VFX::Release();
-	Audio::AllRelease();
+	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();
+#if _DEBUG
+	ImGui_ImplDX11_Shutdown();
+	ImGui::DestroyContext();
+#endif
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();
@@ -187,7 +242,7 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 	wc.lpszMenuName = nullptr;						//メニュー（なし）
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	//背景（白）
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);	//背景（黒）
 	RegisterClassEx(&wc);
 
 	//ウィンドウサイズの計算
@@ -203,8 +258,8 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 		WIN_CLASS_NAME,					//ウィンドウクラス名
 		caption,						//タイトルバーに表示する内容
 		WS_OVERLAPPEDWINDOW,			//スタイル（普通のウィンドウ）
-		CW_USEDEFAULT,					//表示位置左（おまかせ）
-		CW_USEDEFAULT,					//表示位置上（おまかせ）
+		30,								//表示位置左（おまかせ）
+		30,								//表示位置上（おまかせ）
 		winRect.right - winRect.left,	//ウィンドウ幅
 		winRect.bottom - winRect.top,	//ウィンドウ高さ
 		nullptr,						//親ウインドウ（なし）
@@ -216,13 +271,33 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 	//ウィンドウを表示
 	ShowWindow(hWnd, nCmdShow);
 
+
+	//マウスの初期値をクライアント領域の真ん中にする
+	RECT r;
+	GetWindowRect(hWnd, &r);
+	LPARAM width = (double)r.left + HALF_WIDTH;
+	LPARAM height = (double)r.top + HALF_HEIGHT;
+	Input::SetMouseMove(LOWORD(width), LOWORD(height));
+	
+	//マウスカーソルの非表示
+	ShowCursor(FALSE);
+
 	return hWnd;
 }
 
+#if _DEBUG
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+#endif
 
 //ウィンドウプロシージャ（何かあった時によばれる関数）
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+#if _DEBUG
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+		return true;
+#endif
 	switch (msg)
 	{
 	//ウィンドウを閉じた
@@ -232,8 +307,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	//マウスが動いた
 	case WM_MOUSEMOVE:
+#if _DEBUG
+		//通常通りマウスを描画する
 		Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
+		ShowCursor(TRUE);
+		
+		return 0;
+#endif
+
+		//マウスカーゾルが動かなくなるようにしつつ非表示にする
+		RECT r;
+		GetWindowRect(hWnd, &r);
+		LPARAM width = (double)r.left + HALF_WIDTH;
+		LPARAM height = (double)r.top + HALF_HEIGHT;
+		Input::SetMouseMove(LOWORD(width), LOWORD(height));
+		ShowCursor(FALSE);
+
 		return 0;
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+

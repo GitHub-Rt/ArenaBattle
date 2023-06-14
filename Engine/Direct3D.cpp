@@ -27,7 +27,8 @@ namespace Direct3D
 
 	//【ブレンドステート】
 	//半透明のものをどのように表現するか
-	ID3D11BlendState*	pBlendState[BLEND_MAX];
+	ID3D11BlendState*		pBlendState[BLEND_MAX];
+
 
 	bool		isDrawCollision_ = true;	//コリジョンを表示するか
 	bool		_isLighting = false;		//ライティングするか
@@ -193,6 +194,7 @@ namespace Direct3D
 			pDevice_->CreateBlendState(&BlendDesc, &pBlendState[BLEND_ADD]);
 		}
 
+
 		//パイプラインの構築
 		//データを画面に描画するための一通りの設定
 		pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
@@ -254,7 +256,6 @@ namespace Direct3D
 			rdc.FrontCounterClockwise = TRUE;
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_3D].pRasterizerState);
 		}
-
 
 		//2D
 		{
@@ -369,16 +370,19 @@ namespace Direct3D
 		pContext_->IASetInputLayout(shaderBundle[type].pVertexLayout);
 	}
 
+
 	//ブレンドモードの変更
 	void SetBlendMode(BLEND_MODE blendMode)
 	{
 		//加算合成
 		float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
 		pContext_->OMSetBlendState(pBlendState[blendMode], blendFactor, 0xffffffff);
-		
+
 		//Zバッファへの書き込み
 		pContext_->OMSetDepthStencilState(pDepthStencilState[blendMode], 0);
 	}
+
+
 
 	//描画開始
 	void BeginDraw()
@@ -390,7 +394,7 @@ namespace Direct3D
 		if (NULL == pSwapChain_) return;
 
 		//背景の色
-		float clearColor[4] = { 0.1f, 0.2f, 0.2f, 1.0f };//R,G,B,A
+		float clearColor[4] = { 0.1f, 0.5f, 0.5f, 1.0f };//R,G,B,A
 
 		//画面をクリア
 		pContext_->ClearRenderTargetView(pRenderTargetView_, clearColor);

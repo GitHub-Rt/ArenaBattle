@@ -31,9 +31,6 @@ HRESULT Texture::Load(std::string fileName)
 	HRESULT hr = pFactory->CreateDecoderFromFilename(wtext, NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pDecoder);
 	if(FAILED(hr))
 	{
-		char message[256];
-		wsprintf(message, "「%s」が見つかりまん", fileName.c_str());
-		MessageBox(0, message, "画像ファイルの読み込みに失敗", MB_OK);
 		return hr;
 	}
 	pDecoder->GetFrame(0, &pFrame);
@@ -89,6 +86,7 @@ HRESULT Texture::Load(std::string fileName)
 	pFrame->Release();
 	pDecoder->Release();
 	pFactory->Release();
+
 
 	return S_OK;
 }

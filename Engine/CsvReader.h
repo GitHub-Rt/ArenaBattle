@@ -49,5 +49,12 @@ public:
 	//引数：なし
 	//戻値：行数
 	size_t GetHeight();
+
+	/// <summary>
+	/// ファイルの指定した行の列数を取得する関数
+	/// </summary>
+	/// <param name="columnNumber">指定する列数</param>
+	/// <returns></returns>
+	size_t GetColumnCalCount(size_t columnNumber);
 };
 

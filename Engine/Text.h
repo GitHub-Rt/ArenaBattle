@@ -1,6 +1,8 @@
 #pragma once
 #include "Image.h"
 
+
+
 class Text
 {
 	int hPict_;

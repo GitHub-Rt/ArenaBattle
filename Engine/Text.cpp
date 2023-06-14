@@ -86,6 +86,7 @@ void Text::Draw(int x, int y, int value)
 	Draw(x, y, str);
 }
 
+
 //‰ð•ú
 void Text::Release()
 {

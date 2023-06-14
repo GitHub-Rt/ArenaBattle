@@ -28,7 +28,8 @@ namespace Direct3D
 
 
 	//■シェーダー関連で必要なセット
-	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_MAX};	//3タイプ（3D用、2D用、当たり判定枠表示用）
+	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_MAX};	//描画形式
+
 	struct SHADER_BUNDLE
 	{
 		//【頂点入力レイアウト情報】
@@ -48,13 +49,14 @@ namespace Direct3D
 		//頂点の表示位置確定後、画面のどのピクセルを光らせればいいか求めるもの
 		ID3D11RasterizerState*	pRasterizerState;
 	};
+	extern SHADER_BUNDLE shaderBundle[SHADER_MAX];
+
 
 	//■ブレンドモード
 	enum BLEND_MODE
 	{
 		BLEND_DEFAULT, BLEND_ADD, BLEND_MAX
 	};
-
 
 
 	//その他
@@ -79,7 +81,7 @@ namespace Direct3D
 	void InitShaderBundle();
 
 	//今から描画するShaderBundleを設定
-	//引数：type	SHADER_3D, SHADER_2D, SHADER_UNLITのどれか
+	//引数：type	SHADER_TYPEのうちのどれか
 	void SetShader(SHADER_TYPE type);
 
 	//ブレンドモードの変更

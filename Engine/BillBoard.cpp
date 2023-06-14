@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "Global.h"
 
-BillBoard::BillBoard():
+BillBoard::BillBoard() :
 	pVertexBuffer_(nullptr), pIndexBuffer_(nullptr), pConstantBuffer_(nullptr), pTexture_(nullptr)
 {
 }

@@ -1,5 +1,6 @@
 #include "VFX.h"
 #include "Camera.h"
+#include "Direct3D.h"
 
 namespace VFX
 {
@@ -111,7 +112,7 @@ void VFX::EmitterUpdate()
 void VFX::CreateParticle(std::list<VFX::Emitter*>::iterator& emitter)
 {
     //指定個数分
-    for (DWORD i = 0; i < (*emitter)->data.number; i++)
+    for (int i = 0; i < (*emitter)->data.number; i++)
     {
         //パーティクル発生
         Particle* pParticle = new Particle;
@@ -179,7 +180,7 @@ void VFX::CreateParticle(std::list<VFX::Emitter*>::iterator& emitter)
 
         pParticle->pEmitter = *emitter; //発生元
 
-                                    
+
         particleList_.push_back(pParticle);    //発生
 
         pParticle->pEmitter->particleNum++; //発生元のパーティクル数をカウントアップ
@@ -193,7 +194,7 @@ void VFX::Draw()
     Direct3D::SetShader(Direct3D::SHADER_BILLBOARD);
     Direct3D::SetBlendMode(Direct3D::BLEND_ADD);
 
- 
+
     for (auto particle = particleList_.begin(); particle != particleList_.end(); particle++)
     {
         XMMATRIX matWorld;
@@ -214,11 +215,8 @@ void VFX::Draw()
         {
             matWorld = matScale * matRotate * matTrans;
         }
-        (*particle)->pEmitter->pBillBoard->Draw(matWorld,(*particle)->now.color);
+        (*particle)->pEmitter->pBillBoard->Draw(matWorld, (*particle)->now.color);
     }
-
-    Direct3D::SetShader(Direct3D::SHADER_3D);
-    Direct3D::SetBlendMode(Direct3D::BLEND_DEFAULT);
 }
 
 //解放
@@ -235,11 +233,11 @@ void VFX::Release()
     //全エミッター削除
     for (auto emitter = emitterList_.begin(); emitter != emitterList_.end();)
     {
-		(*emitter)->pBillBoard->Release();
-		delete ((*emitter)->pBillBoard);
-		delete (*emitter);
-		emitter = emitterList_.erase(emitter);
-	}
+        (*emitter)->pBillBoard->Release();
+        delete ((*emitter)->pBillBoard);
+        delete (*emitter);
+        emitter = emitterList_.erase(emitter);
+    }
     emitterList_.clear();
 }
 

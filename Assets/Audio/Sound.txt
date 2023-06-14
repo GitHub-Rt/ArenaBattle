@@ -1,0 +1,36 @@
+<ゲーム内音楽>
+フリーBGM・音楽素材 MusMus https://musmus.main.jp/music_game.html　様より使用しています
+
+※サイト内のタイトル記載。()内にファイル名記載。 : 使用場所記載、クラス内番号			
+●世界は灰色だったのに　(MusMus-BGM-157) : タイトル、操作説明シーン時使用 0	
+●血と夕焼け (MusMus-BGM-036)  		 : プレイシーン使用 1
+●ハクギン (MusMus-BGM-069)		 : バトルシーン内雑魚敵戦闘時使用 2		
+●覇道 (MusMus-BGM-039)			 : バトルシーン内ボス戦闘第2形態時使用 4
+●ワインブレイク (MusMus-JGL-027)		 : ゲームクリア時使用	5
+●ジングル011 (MusMus-JGL-011)		 : ゲームオーバー時使用 6			
+			
+魔王魂 https://maou.audio/category/game/game-battle/#google_vignette　様より使用しています
+
+※サイト内のタイトル記載。()内にファイル名記載。 : 使用場所記載、クラス内番号
+●ラストボス04 (maou_game_lastboss04)	  : バトルシーン内ボス戦闘時使用  3
+
+DOVA-SYNDROME https://dova-s.jp/EN/ 様より使用しています
+
+※サイト内タイトル記載。()内にファイル名記載　: 使用場所、クラス内番号
+●ゲーム風アラート音	(Alert)		 : ボス登場演出時	7
+
+
+<ゲーム内効果音>
+効果音ラボ　https://soundeffect-lab.info/  様より使用しています
+
+※サイト内タイトル記載。()内にファイル名記載　: 使用場所、クラス内番号
+●決定ボタンを押す33　(Decision)		: コマンド選択決定時  0
+●カーソル移動3		(MoveSelection)		: 選択項目移動時  1
+●メニューを開く	2	(Invasion)		: PlayScene内色い筒に触れた際 2
+●ゲージ回復1		(Recover)			: 体力回復時 3
+●打撃2		(NormalAttack)			: 通常攻撃時 4
+●風魔法2		(HardAttack)			: 強攻撃時 5
+●火炎魔法1		(Damage)			: 被ダメージ時 6
+
+
+

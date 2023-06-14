@@ -179,17 +179,29 @@ namespace Model
 
 
 	//レイキャスト（レイを飛ばして当たり判定）
-	void RayCast(int handle, RayCastData *data)
+	void RayCast(int handle, RayCastData* data)
 	{
-			XMFLOAT3 target = Transform::Float3Add(data->start, data->dir);
-			XMMATRIX matInv = XMMatrixInverse(nullptr, _datas[handle]->transform.GetWorldMatrix());
-			XMVECTOR vecStart = XMVector3TransformCoord(XMLoadFloat3(&data->start), matInv);
-			XMVECTOR vecTarget = XMVector3TransformCoord(XMLoadFloat3(&target), matInv);
-			XMVECTOR vecDir = vecTarget - vecStart;
+		XMFLOAT3 target = Transform::Float3Add(data->start, data->dir);
+		XMMATRIX matInv = XMMatrixInverse(nullptr, _datas[handle]->transform.GetWorldMatrix());
+		XMVECTOR vecStart = XMVector3TransformCoord(XMLoadFloat3(&data->start), matInv);
+		XMVECTOR vecTarget = XMVector3TransformCoord(XMLoadFloat3(&target), matInv);
+		XMVECTOR vecDir = vecTarget - vecStart;
 
-			XMStoreFloat3(&data->start, vecStart);
-			XMStoreFloat3(&data->dir, vecDir);
+		XMStoreFloat3(&data->start, vecStart);
+		XMStoreFloat3(&data->dir, vecDir);
 
-			_datas[handle]->pFbx->RayCast(data); 
+		_datas[handle]->pFbx->RayCast(data);
 	}
+
+
+	void ChangeColor(int handle, float red, float green, float blue)
+	{
+		_datas[handle]->pFbx->ChangeColor(red, green, blue);
+	}
+
+	void RestoreOriginalColor(int handle)
+	{
+		_datas[handle]->pFbx->RestoreOriginalColor();
+	}
+
 }

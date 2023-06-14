@@ -156,6 +156,7 @@ void FbxParts::InitMaterial(fbxsdk::FbxNode * pNode)
 		// 環境光＆拡散反射光＆鏡面反射光の反射成分値をマテリアルバッファにコピー
 		pMaterial_[i].ambient = XMFLOAT4((float)ambient[0], (float)ambient[1], (float)ambient[2], 1.0f);
 		pMaterial_[i].diffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
+		pMaterial_[i].defaultDiffuse = XMFLOAT4((float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f);
 		pMaterial_[i].specular = XMFLOAT4(0, 0, 0, 0);
 		pMaterial_[i].shininess = 0;
 
@@ -449,7 +450,7 @@ void FbxParts::Draw(Transform& transform)
 		cb.speculer = pMaterial_[i].specular;
 		cb.shininess = pMaterial_[i].shininess;
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
-		cb.lightDirection = XMFLOAT4(1, -1, 1, 0);
+		cb.lightDirection = XMFLOAT4(0, -1, 0, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
 
 
@@ -607,4 +608,16 @@ void FbxParts::RayCast(RayCastData * data)
 			}
 		}
 	}
+}
+
+
+
+void FbxParts::ChangeMaterialColor(float red, float green, float blue)
+{
+	pMaterial_->diffuse = XMFLOAT4(red, green, blue, 1.0f);
+}
+
+void FbxParts::RestoreOriginalColor()
+{
+	pMaterial_->diffuse = pMaterial_->defaultDiffuse;
 }

@@ -70,6 +70,16 @@ namespace Image
 	//引数：height	切り抜きたい範囲の高さ
 	void SetRect(int handle, int x, int y, int width, int height);
 
+	/// <summary>
+	/// 画像のピクセルの値を座標に変換する関数
+	/// </summary>
+	/// <param name="handle"></param>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	XMFLOAT3 PixcelPos(int handle, int x, int y);
+
+
 	//切り抜き範囲をリセット（画像全体を表示する）
 	//引数：handle	設定したい画像の番号
 	void ResetRect(int handle);

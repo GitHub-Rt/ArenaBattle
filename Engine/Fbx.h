@@ -87,5 +87,17 @@ public:
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData *data);
 
+	/// <summary>
+	/// マテリアルカラーを変更する
+	/// </summary>
+	/// <param name="red"></param>
+	/// <param name="green"></param>
+	/// <param name="blue"></param>
+	void ChangeColor(float red, float green, float blue);
+
+	/// <summary>
+	/// 元々のマテリアルの色に戻す
+	/// </summary>
+	void RestoreOriginalColor();
 };
 

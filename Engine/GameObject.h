@@ -63,16 +63,27 @@ public:
 
 
 	//各フラグの制御
-	bool IsDead();			// 削除するかどうか
-	void KillMe();			// 自分を削除する
-	void Enter();			// Updateを許可
-	void Leave();			// Updateを拒否
-	void Visible();			// Drawを許可
-	void Invisible();		// Drawを拒否
-	bool IsInitialized();	// 初期化済みかどうか
-	void SetInitialized();	// 初期化済みにする
-	bool IsEntered();		// Update実行していいか
-	bool IsVisibled();		// Draw実行していいか
+
+	// 削除するかどうか
+	bool IsDead();	
+	// 自分を削除する
+	void KillMe();		
+	// Updateを許可
+	void Enter();			
+	// Updateを拒否
+	void Leave();			
+	// Drawを許可
+	void Visible();			
+	// Drawを拒否
+	void Invisible();		
+	// 初期化済みかどうか
+	bool IsInitialized();	
+	// 初期化済みにする
+	void SetInitialized();	
+	// Update実行していいか
+	bool IsEntered();		
+	// Draw実行していいか
+	bool IsVisibled();		
 
 
 	//子オブジェクトリストを取得
@@ -113,16 +124,15 @@ public:
 	//コライダー（衝突判定）を追加する
 	void AddCollider(Collider * collider);
 
+
 	//何かと衝突した場合に呼ばれる（オーバーライド用）
 	//引数：pTarget	衝突した相手
 	virtual void OnCollision(GameObject* pTarget) {};
 
-	//コライダー（衝突判定）を削除
-	void ClearCollider();
-
 	//衝突判定
 	//引数：pTarget	衝突してるか調べる相手
 	void Collision(GameObject* pTarget);
+
 
 	//テスト用の衝突判定枠を表示
 	void CollisionDraw();

@@ -45,6 +45,7 @@ class FbxParts
 	{
 		DWORD		polygonCount;		//マテリアルのポリゴン数
 		XMFLOAT4	diffuse;			//拡散反射光（ディフューズ）への反射強度
+		XMFLOAT4	defaultDiffuse;		//元々の拡散反射光(ディフーズ)
 		XMFLOAT4	ambient;			//環境光（アンビエント）への反射強度
 		XMFLOAT4	specular;			//鏡面反射光（スペキュラ）への反射強度
 		float		shininess;			//ハイライトの強さ（サイズ）
@@ -151,5 +152,19 @@ public:
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData *data);
+
+
+	/// <summary>
+	/// マテリアルの色を変更する関数
+	/// </summary>
+	/// <param name="red">Rの値</param>
+	/// <param name="green">Gの値</param>
+	/// <param name="blue">Bの値</param>
+	void ChangeMaterialColor(float red, float green, float blue);
+
+	/// <summary>
+	/// 元々のマテリアルの色に戻す
+	/// </summary>
+	void RestoreOriginalColor();
 };
 

@@ -16,7 +16,6 @@ using namespace DirectX;
 //-----------------------------------------------------------
 class Sprite
 {
-protected:
 	// ˆê‚Â‚Ì’¸“_î•ñ‚ğŠi”[‚·‚é\‘¢‘Ì
 	struct VERTEX
 	{

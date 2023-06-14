@@ -220,15 +220,6 @@ void GameObject::AddCollider(Collider* collider)
 	colliderList_.push_back(collider);
 }
 
-//コライダー（衝突判定）を削除
-void GameObject::ClearCollider()
-{
-	for (auto it = colliderList_.begin(); it != colliderList_.end(); it++)
-	{
-		SAFE_DELETE(*it);
-	}
-	colliderList_.clear();
-}
 
 //衝突判定
 void GameObject::Collision(GameObject * pTarget)
@@ -341,9 +332,10 @@ void GameObject::DrawSub()
 
 void GameObject::ReleaseSub()
 {
-	//コライダーを削除
-	ClearCollider();
-
+	for (auto it = colliderList_.begin(); it != colliderList_.end(); it++)
+	{
+		SAFE_DELETE(*it);
+	}
 
 	for (auto it = childList_.begin(); it != childList_.end(); it++)
 	{

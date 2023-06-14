@@ -2,6 +2,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dInput.h>
 #include <DirectXMath.h>
+#include <list>
 #include "XInput.h"
 
 #pragma comment(lib, "dxguid.lib")
@@ -10,6 +11,13 @@
 
 
 using namespace DirectX;
+
+enum class MouseBottunCode
+{
+	LeftClick,
+	RightClick,
+	CenterClick
+};
 
 //-----------------------------------------------------------
 //DirectInputを使ったキーボード入力処理
@@ -40,22 +48,21 @@ namespace Input
 	//戻値：放した瞬間だったらtrue
 	bool IsKeyUp(int keyCode);
 
-
 	///////////////////////////　マウス　//////////////////////////////////
 	//マウスのボタンが押されているか調べる
 	//引数：buttonCode	調べたいボタンの番号
 	//戻値：押されていればtrue
-	bool IsMouseButton(int buttonCode);
+	bool IsMouseButton(MouseBottunCode buttonCode);
 
 	//マウスのボタンを今押したか調べる（押しっぱなしは無効）
 	//引数：buttonCode	調べたいボタンの番号
 	//戻値：押した瞬間だったらtrue
-	bool IsMouseButtonDown(int buttonCode);
+	bool IsMouseButtonDown(MouseBottunCode buttonCode);
 
 	//マウスのボタンを今放したか調べる
 	//引数：buttonCode	調べたいボタンの番号
 	//戻値：放した瞬間だったらtrue
-	bool IsMouseButtonUp(int buttonCode);
+	bool IsMouseButtonUp(MouseBottunCode buttonCode);
 
 
 	//マウスカーソルの位置を取得
@@ -69,6 +76,24 @@ namespace Input
 	//そのフレームでのマウスの移動量を取得
 	//戻値：X,Y マウスの移動量　／　Z,ホイールの回転量
 	XMFLOAT3 GetMouseMove();
+
+	/// <summary>
+	/// マウスカーソル位置のセット
+	/// </summary>
+	/// <param name="x">マウスカーソルのx座標</param>
+	/// <param name="y">マウスカーソルのy座標</param>
+	void SetMouseMove(int x, int y);
+
+	/// <summary>
+	/// マウスのモードを変更する関数
+	/// </summary>
+	void ChangeModeFlg();
+
+	/// <summary>
+	/// マウスのモードを取得する関数
+	/// </summary>
+	/// <returns>デバッグモードならtrue</returns>
+	bool GetMouseFlg();
 
 
 	///////////////////////////　コントローラー　//////////////////////////////////
@@ -111,4 +136,6 @@ namespace Input
 
 	//開放
 	void Release();
+
+
 };

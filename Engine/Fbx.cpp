@@ -121,6 +121,7 @@ XMFLOAT3 Fbx::GetBonePosition(std::string boneName)
 void Fbx::Draw(Transform& transform, int frame)
 {
 	Direct3D::SetBlendMode(Direct3D::BLEND_DEFAULT);
+	Direct3D::SetShader(Direct3D::SHADER_3D);
 
 	//ƒp[ƒc‚ğ1ŒÂ‚¸‚Â•`‰æ
 	for (int k = 0; k < parts_.size(); k++)
@@ -152,5 +153,21 @@ void Fbx::RayCast(RayCastData * data)
 	for (int i = 0; i < parts_.size(); i++)
 	{
 		parts_[i]->RayCast(data);
+	}
+}
+
+void Fbx::ChangeColor(float red, float green, float blue)
+{
+	for (int k = 0; k < parts_.size(); k++)
+	{
+		parts_[k]->ChangeMaterialColor(red, green, blue);
+	}
+}
+
+void Fbx::RestoreOriginalColor()
+{
+	for (int k = 0; k < parts_.size(); k++)
+	{
+		parts_[k]->RestoreOriginalColor();
 	}
 }

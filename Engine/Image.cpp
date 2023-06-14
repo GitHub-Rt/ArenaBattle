@@ -142,6 +142,14 @@ namespace Image
 	}
 
 
+	XMFLOAT3 PixelPos(int handle, int x, int y)
+	{
+		float screenWidth = GetPrivateProfileInt("SCREEN", "Width", 1280, ".\\setup.ini");
+		float screenHeight = GetPrivateProfileInt("SCREEN", "Height", 720, ".\\setup.ini");
+		return XMFLOAT3(((float)1 / screenWidth + x / (screenWidth / 2)) - 1, 1 - ((float)1 / screenHeight + y / (screenHeight / 2)), 0);
+	}
+
+	
 	//切り抜き範囲をリセット（画像全体を表示する）
 	void ResetRect(int handle)
 	{

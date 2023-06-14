@@ -34,10 +34,16 @@ public:
 	//戻値：その時点でのワールド行列
 	XMMATRIX GetWorldMatrix();
 
+	
 
 	static XMFLOAT3 Float3Add(XMFLOAT3 a, XMFLOAT3 b)
 	{
 		return XMFLOAT3(a.x + b.x, a.y + b.y, a.z + b.z);
+	}
+
+	static XMFLOAT3 Float3Sub(XMFLOAT3 a, XMFLOAT3 b)
+	{
+		return XMFLOAT3(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 };
 

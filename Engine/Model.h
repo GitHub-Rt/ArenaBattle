@@ -100,4 +100,8 @@ namespace Model
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(int handle, RayCastData *data);
 
+
+	void ChangeColor(int handle, float red, float green, float blue);
+
+	void RestoreOriginalColor(int handle);
 };

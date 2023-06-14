@@ -129,3 +129,18 @@ size_t CsvReader::GetHeight()
 {
 	return data_.size();
 }
+
+size_t CsvReader::GetColumnCalCount(size_t columnNumber)
+{
+	size_t calCount = 0;
+
+	for (const auto& cal : data_)
+	{
+		if (columnNumber < cal.size())
+		{
+			calCount++;
+		}
+	}
+
+	return calCount;
+}
