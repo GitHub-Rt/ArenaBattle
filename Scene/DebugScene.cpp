@@ -1,5 +1,5 @@
 #include "DebugScene.h"
-#include "../Stage/NormalField.h"
+#include "../Stage/Stage.h"
 
 #include "../imgui/imguiObject.h"
 
@@ -18,7 +18,7 @@ DebugScene::DebugScene(GameObject* parent)
 
 void DebugScene::Initialize()
 {
-	Instantiate<NormalField>(this);
+	Instantiate<Stage>(this);
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 

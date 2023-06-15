@@ -130,6 +130,8 @@
     <ClCompile Include="Character\CharacterBase.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Character\Robot.cpp" />
+    <ClCompile Include="Effect\PlayerEffect.cpp" />
+    <ClCompile Include="Effect\PolyLine.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -174,6 +176,8 @@
     <ClInclude Include="Character\CharacterBase.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Character\Robot.h" />
+    <ClInclude Include="Effect\PlayerEffect.h" />
+    <ClInclude Include="Effect\PolyLine.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
     <ClInclude Include="Engine\BoxCollider.h" />

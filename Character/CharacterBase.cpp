@@ -42,7 +42,7 @@ CharacterBase::CharacterBase(GameObject* parent, std::string fileName)
 	parameter.attack = 0;
 	parameter.defense = 0;
 
-	characterState = CharacterState::Idle;
+	ChangeState(CharacterState::Idle);
 	attackStage = AttackStage::NoAttack;
 	damageStage = DamageStage::NoDamage;
 }
@@ -56,30 +56,39 @@ void CharacterBase::Update()
 	if (IsEntered())
 	{
 		CharacterUpdate();
-
-		switch (characterState)
+		for (unsigned int nowState = (unsigned int)CharacterState::Idle; nowState <= (unsigned int)CharacterState::MAX_CharacterState; nowState++)
 		{
-		case CharacterState::Idle:
-			CharacterIdleAction();
-			break;
-		case CharacterState::Moving:
-			CharacterMove();
-			break;
-		case CharacterState::Attacking:
-			CharacterAttack();
-			break;
-		case CharacterState::Damaged:
-			CharacterTakeDamage(damage);
-			break;
-		case CharacterState::Jumping:
-			CharacterJumpAction();
-			break;
-		case CharacterState::Doding:
-			CharacterDodingAction();
-			break;
-		default:
-			break;
+			CharacterState nowAction = (CharacterState)nowState;
+
+			// 状態フラグが立っているかどうかをチェックする
+			if (IsStateSet(nowAction))
+			{
+				switch (nowAction)
+				{
+				case CharacterState::Idle:
+					CharacterIdleAction();
+					break;
+				case CharacterState::Moving:
+					CharacterMove();
+					break;
+				case CharacterState::Attacking:
+					CharacterAttack();
+					break;
+				case CharacterState::Damaged:
+					CharacterTakeDamage(damage);
+					break;
+				case CharacterState::Dodging:
+					CharacterDodingAction();
+					break;
+				case CharacterState::Jumping:
+					CharacterJumpAction();
+					break;
+				default:
+					break;
+				}
+			}
 		}
+		
 	}
 	
 }
@@ -87,6 +96,8 @@ void CharacterBase::Update()
 void CharacterBase::Draw()
 {
 	CharacterDraw(hModel);
+	
+	DrawEffect();
 }
 
 void CharacterBase::CharacterModelLoad(std::string fileName)
@@ -160,6 +171,17 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 }
 
 
+XMVECTOR CharacterBase::GetFrontVector()
+{
+	XMVECTOR vFront = { 0,0,1,0 };
+	XMMATRIX mAngle = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	vFront = XMVector3TransformCoord(vFront, mAngle);
+	XMVector3Normalize(vFront);
+
+	return vFront;
+}
+
+
 float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 {
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
@@ -169,15 +191,13 @@ float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 	switch (nowScene)
 	{
 	case SCENE_ID::SCENE_ID_BATTLE:
+	case SCENE_ID::SCENE_ID_DEBUG:
 		pStage = (StageBase*)FindObject("Stage");
 		break;
 	case SCENE_ID::SCENE_ID_TUTORIAL:
 		pStage = (StageBase*)FindObject("TutorialStage");
 		break;
 	case SCENE_ID::SCENE_ID_PLAY:
-		pStage = (StageBase*)FindObject("NormalField");
-		break;
-	case SCENE_ID::SCENE_ID_DEBUG:
 		pStage = (StageBase*)FindObject("NormalField");
 		break;
 	default:
@@ -430,4 +450,26 @@ bool CharacterBase::IsMoveLimit(XMFLOAT3 position)
 	}
 	
 	return false;
+}
+
+void CharacterBase::ChangeStateForIdle()
+{
+	bool isTrueState = false;
+
+
+	for (unsigned int nowState = (unsigned int)CharacterState::Idle; nowState <= (unsigned int)CharacterState::MAX_CharacterState; nowState++)
+	{
+		CharacterState nowAction = (CharacterState)nowState;
+
+		// 状態フラグが立っているかどうかをチェックする
+		if (IsStateSet(nowAction))
+		{
+			isTrueState = true;
+		}
+	}
+
+	if (isTrueState == false)
+	{
+		ChangeState(CharacterState::Idle);
+	}
 }

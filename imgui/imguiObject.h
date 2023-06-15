@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 
 enum class CharacterState;
+class CharacterBase;
 class Player;
 class Robot;
 
@@ -15,7 +16,9 @@ public:
     void Draw() override;
     void Release() override;
 
-    std::string GetCharacterStateString(CharacterState state);
+    std::string GetCharacterStateString(CharacterBase* pTarget);
+
+    std::string GetPlayerAttackStateString();
 
 private:
 
@@ -24,4 +27,6 @@ private:
 
 
     std::string stateStr;
+
+    std::string attackStateStr;
 };

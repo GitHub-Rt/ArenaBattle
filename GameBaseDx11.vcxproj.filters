@@ -54,6 +54,15 @@
     <Filter Include="07AttackModel\Player">
       <UniqueIdentifier>{44704878-154d-45a4-8798-eca34055580b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08UI">
+      <UniqueIdentifier>{9c867248-dce2-40b7-9320-a9d2adcb5487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09Sound">
+      <UniqueIdentifier>{6266f503-f17c-4e61-90a0-02e8c636d14e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10Effect">
+      <UniqueIdentifier>{56d5f319-2e6b-406b-abc7-4ceb043632b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -181,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="AttackModel\RobotBullet.cpp">
       <Filter>07AttackModel\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\PlayerEffect.cpp">
+      <Filter>10Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\PolyLine.cpp">
+      <Filter>10Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +327,12 @@
     </ClInclude>
     <ClInclude Include="AttackModel\RobotBullet.h">
       <Filter>07AttackModel\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\PlayerEffect.h">
+      <Filter>10Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\PolyLine.h">
+      <Filter>10Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

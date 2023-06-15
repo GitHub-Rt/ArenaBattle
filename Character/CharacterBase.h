@@ -39,12 +39,13 @@ enum class CharacterID
 // キャラクターの状態を管理
 enum class CharacterState
 {
-	Idle,		// 待機
-	Moving,		// 移動
-	Attacking,	// 攻撃
-	Damaged,	// 被ダメージ
-	Jumping,		// ジャンプ状態
-	Doding		// 回避状態
+	Idle =(unsigned int)( 1 << 0),        // 待機		00000001 1
+	Moving = (unsigned int)(1 << 1),      // 移動		00000010 2
+	Attacking = (unsigned int)(1 << 2),   // 攻撃		00000100 4
+	Damaged = (unsigned int)(1 << 3),     // 被ダメージ 00001000 8
+	Dodging = (unsigned int)(1 << 4),     // 回避		00010000 16
+	Jumping = (unsigned int)(1 << 5),     // ジャンプ	00100000 32
+	MAX_CharacterState
 };
 
 // 攻撃段階を管理
@@ -127,7 +128,7 @@ public:
 	void SetDamageStage(DamageStage nextStage) 
 	{
 		damageStage = nextStage; 
-		characterState = CharacterState::Damaged;
+		ChangeState(CharacterState::Damaged);
 	}
 
 	/// <summary>
@@ -156,20 +157,48 @@ public:
 	/// <returns></returns>
 	float GetDamage() { return damage; }
 
-
-	CharacterState GetState() { return characterState; }
-
 	/// <summary>
-	/// 状態を変化させる
+	/// 状態を変化させる(状態フラグを立てる)
 	/// </summary>
 	/// <param name="nextState">次の状態</param>
-	void ChangeState(CharacterState nextState) { characterState = nextState; }
+	void ChangeState(CharacterState nextState) 
+	{
+		characterStateFlg |= (unsigned int)nextState;
+
+		if (IsStateSet(CharacterState::Idle) && nextState != CharacterState::Idle)
+		{
+			ClearState(CharacterState::Idle);
+		}
+	}
 
 	/// <summary>
-	/// キャラクターの状態を取得する関数
+	/// 状態をクリアにする(状態フラグを下す)
+	/// </summary>
+	/// <param name="clearState"></param>
+	void ClearState(CharacterState clearState) 
+	{
+		characterStateFlg &= ~(unsigned int)clearState;
+		ChangeStateForIdle();
+	}
+
+	/// <summary>
+	/// 待機以外の状態がすべてfalseだったら状態をIdleにする
+	/// </summary>
+	void ChangeStateForIdle();
+
+	/// <summary>
+	/// 状態を取得する(状態が立っているかどうかを返す)
+	/// </summary>
+	/// <param name="state"></param>
+	/// <returns></returns>
+	bool IsStateSet(CharacterState state) const { return (characterStateFlg & (unsigned int)state) != 0; }
+	
+
+	/// <summary>
+	/// 方向ベクトルを正規化して返す関数
 	/// </summary>
 	/// <returns></returns>
-	CharacterState GetCharacterState() { return characterState; }
+	XMVECTOR GetFrontVector();
 
 	/// <summary>
 	/// 各シーンに対応したレイの距離を返す関数
@@ -267,6 +296,11 @@ public:
 	/// </summary>
 	virtual void CharacterDodingAction() = 0;
 
+	/// <summary>
+	/// エフェクトの描画に使う
+	/// </summary>
+	virtual void DrawEffect() = 0;
+
 private:
 
 	//各パラメータの値を取得する関数
@@ -287,7 +321,7 @@ private:
 	CsvReader RobotInternalDataCSV;
 	Parameters parameter;
 
-	CharacterState characterState;
+	unsigned int characterStateFlg;	// ビットフラグ
 	AttackStage attackStage;
 	DamageStage damageStage;
 };

@@ -10,7 +10,7 @@
 
 // プレイヤーからみた位置の増減値
 const float POS_X = 0.5f;
-const float POS_Y = 1.5f;
+const float POS_Y = 0.5f;
 const float POS_Z = -2.5f;
 const float MOVESPEED = 0.25f;		// プレイヤーの移動についていくときのスピード
 
@@ -65,7 +65,13 @@ void Robot::Release()
 void Robot::CharacterUpdate()
 {
 	SetAngle();
+
 	CharacterMove();
+
+	if (pPlayer->IsStateSet(CharacterState::Idle))
+	{
+		ClearState(CharacterState::Moving);
+	}
 	
 	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
 	{
@@ -75,7 +81,7 @@ void Robot::CharacterUpdate()
 
 void Robot::CharacterMove()
 {
-	if (pPlayer->GetState() == CharacterState::Moving)
+	if (pPlayer->IsStateSet(CharacterState::Moving) || pPlayer->IsStateSet(CharacterState::Attacking))
 	{
 		XMFLOAT3 playerPos = pPlayer->GetPosition();
 		playerPos.x += POS_X;
@@ -85,6 +91,7 @@ void Robot::CharacterMove()
 		if (transform_.position_.x != playerPos.x ||
 			transform_.position_.z != playerPos.z)
 		{
+			ChangeState(CharacterState::Moving);
 
 			XMFLOAT3 nowPos = GetPosition();
 			XMVECTOR vNowPos = XMLoadFloat3(&nowPos);
@@ -103,7 +110,7 @@ void Robot::CharacterMove()
 	}
 	else
 	{
-		ChangeState(CharacterState::Idle);
+		ClearState(CharacterState::Moving);
 	}
 }
 
@@ -132,10 +139,11 @@ void Robot::CharacterAttack()
 
 			pBullet->SetPosition(tip);
 			pBullet->SetMoveDirection(move);
+			pBullet->SetAttackPower(GetParameterValue(CharacterID::Robot, CharacterStatus::AttackPower));
 		}
 		else
 		{
-			ChangeState(CharacterState::Idle);
+			ClearState(CharacterState::Attacking);
 		}
 	}
 	
@@ -173,7 +181,7 @@ void Robot::SetAngle()
 
 void Robot::CharacterIdleAction()
 {
-	if (pPlayer->GetState() == CharacterState::Moving)
+	if (pPlayer->IsStateSet(CharacterState::Moving))
 	{
 		ChangeState(CharacterState::Moving);
 	}
@@ -202,6 +210,11 @@ void Robot::CharacterDodingAction()
 }
 
 void Robot::CharacterTakeDamage(float damage)
+{
+
+}
+
+void Robot::DrawEffect()
 {
 
 }

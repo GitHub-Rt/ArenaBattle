@@ -20,11 +20,14 @@ public:
 	// ポジションをセット
 	void SetPosition(XMFLOAT3 pos) { transform_.position_ = pos; }
 
+
+	void SetAttackPower(float value) override;
+
 private:
 
 	Robot* pRobot;
 	int timer;						// 時間
 	XMFLOAT3 travelingDirection;	// 進行方向
-
+	float attackPower;				// 攻撃力
 };
 

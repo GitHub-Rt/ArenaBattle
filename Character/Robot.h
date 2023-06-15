@@ -32,6 +32,8 @@ public:
 	void CharacterDodingAction()override;
 	void CharacterTakeDamage(float damage) override;
 
+	void DrawEffect() override;
+
 	//　プレイヤーのカメラ奥方向にモデルを回転させる(弾の打つ方向を決める)
 	void SetAngle();
 

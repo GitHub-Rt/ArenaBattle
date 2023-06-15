@@ -2,10 +2,14 @@
 
 #include "../Engine/Input.h"
 #include "../Engine/Camera.h"
+#include "../Engine/Global.h"
+
+#include "../Effect/PolyLine.h"
+#include "../Effect/PlayerEffect.h"
 
 // 定数宣言
-
-
+const XMFLOAT3 HIT_TEST_RANGE = { 1, 2, 1 };	// 当たり判定枠
+const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
 
 
 void Player::SetData()
@@ -37,7 +41,7 @@ Player::Player(GameObject* parent)
 	RECOVERY_QUANTITY = 0;
 	MAX_INVINCIBLE_TIME = 0;
 
-	attackState = AttackState::NoAttack;
+	
 
 
 	isTrrigerReset = true;
@@ -45,6 +49,17 @@ Player::Player(GameObject* parent)
 
 	movingDistance = XMFLOAT3(0, 0, 0);
 	vPrevPos = { 0,0,0,0 };
+
+	beforeJumpY = 0;
+	jumpSpeed = 0;
+
+	pEffect = nullptr;
+	attackState = AttackState::NoAttack;
+	attackTimer = 0;
+	attackVector = { 0,0,0,0 };
+
+	pLine = nullptr;
+	dodgeTimer = 0;
 
 	angleX = 0;
 	angleY = 0;
@@ -58,16 +73,34 @@ Player::~Player()
 
 void Player::Initialize()
 {
+	SetData();
+
 	CharacterModelLoad("player.fbx");
 
-	transform_.position_.z = -45.0f;
-	vPrevPos = XMLoadFloat3(&transform_.position_);
+	
+	// 変数の初期化
+	{
+		transform_.position_.z = -45.0f;
+		vPrevPos = XMLoadFloat3(&transform_.position_);
+
+		jumpSpeed = JUMP_FIRST_SPEED;
+
+		pLine = new PolyLine();
+		pLine->Load("Effect/Player/tex.png");
+
+		pEffect = new PlayerEffect();
+	}
 
 	NormalCamera();
 }
 
 void Player::Release()
 {
+	pLine->Release();
+	pEffect->Release();
+
+	SAFE_DELETE(pLine);
+	SAFE_DELETE(pEffect);
 }
 
 void Player::CharacterUpdate()
@@ -81,7 +114,58 @@ void Player::CharacterUpdate()
 		isTrrigerReset = true;
 	}
 
-	if (GetState() != CharacterState::Jumping)
+	// 現在の状態関係なく行えるアクション
+	{
+		if (IsDodEntry())
+		{
+			// 回避
+			ChangeState(CharacterState::Dodging);
+		}
+	}
+
+	// 特定の状態じゃないときに使えるアクション
+	{
+		// 攻撃中は使用できないアクション
+		if (IsStateSet(CharacterState::Attacking) == false)
+		{
+			// ジャンプ
+			if (IsJumpEntry())
+			{
+				ChangeState(CharacterState::Jumping);
+			}
+
+			// 移動
+			if (IsMoveEntry())
+			{
+				ChangeState(CharacterState::Moving);
+			}
+		}
+		else
+		{
+			// 状態フラグが立っていたら下げる
+			if (IsStateSet(CharacterState::Jumping))
+			{
+				ClearState(CharacterState::Jumping);
+			}
+
+			if (IsStateSet(CharacterState::Moving))
+			{
+				ClearState(CharacterState::Moving);
+			}
+		}
+
+		// ジャンプ中には行えないアクション
+		if (IsStateSet(CharacterState::Jumping) == false)
+		{
+			if (IsAttackEntry())
+			{
+				// 攻撃
+				ChangeState(CharacterState::Attacking);
+			}
+		}
+	}
+
+	if (IsStateSet(CharacterState::Jumping) == false)
 	{
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
@@ -90,12 +174,13 @@ void Player::CharacterUpdate()
 void Player::CharacterIdleAction()
 {
 	// 各状態に応じた入力が行われたら状態を変化させる
-	if (IsMoveEntry()) {
+	if (IsMoveEntry()) 
+	{
 		ChangeState(CharacterState::Moving);
 	}
 	if (IsDodEntry())
 	{
-		ChangeState(CharacterState::Doding);
+		ChangeState(CharacterState::Dodging);
 	}
 	if (IsAttackEntry())
 	{	
@@ -114,7 +199,7 @@ void Player::CharacterMove()
 	XMFLOAT3 move = Input::GetPadStickL();
 	if (move.x == 0 && move.y == 0)
 	{
-		ChangeState(CharacterState::Idle);
+		ClearState(CharacterState::Moving);
 	}
 
 	XMVECTOR travelingDirection = XMVectorSet(move.x, 0, move.y, 0);
@@ -132,9 +217,21 @@ void Player::CharacterMove()
 	travelingDirection *= MOVING_DISTANCE_ADJUSTMENT;
 	XMStoreFloat3(&movingDistance, travelingDirection);
 
-	// 移動処理
-	transform_.position_.x += movingDistance.x;
-	transform_.position_.z += movingDistance.z;
+
+	XMFLOAT3 nextPos = movingDistance;
+	nextPos.x += transform_.position_.x;
+	nextPos.z += transform_.position_.z;
+
+	if (IsMoveLimit(nextPos))
+	{
+		XMStoreFloat3(&transform_.position_, vPrevPos);
+	}
+	else
+	{
+		// 移動処理
+		transform_.position_.x += movingDistance.x;
+		transform_.position_.z += movingDistance.z;
+	}
 
 	// モデルの回転
 	if (movingDistance.x != 0 || movingDistance.z != 0)
@@ -145,7 +242,82 @@ void Player::CharacterMove()
 
 void Player::CharacterAttack()
 {
+	switch (attackState)
+	{
+	case AttackState::NoAttack:
+		ClearState(CharacterState::Attacking);
+		break;
+	case AttackState::NormalAttack:
+		NormalAttackAction();
+		break;
+	case AttackState::HardAttack:
+		HardAttackAction();
+		break;
+	default:
+		break;
+	}
+}
 
+void Player::NormalAttackAction()
+{
+	const float VECTOR_LENGTH_AT_NORMAL_ATTACK = 0.5f;	// 通常攻撃時のベクトルの長さ
+
+	// エフェクト
+	pEffect->SetEmitterPosition(transform_.position_, EmitterType::Ventilation);
+	pEffect->SetDirection(movingDistance, transform_.rotate_);
+	pEffect->StartEffectAtNormalAttack();
+
+
+	// 方向のベクトルを取得して移動量に変換
+	attackVector = GetFrontVector();
+	attackVector *= VECTOR_LENGTH_AT_NORMAL_ATTACK;
+	XMFLOAT3 motionPos;
+	XMStoreFloat3(&motionPos, attackVector);
+
+	motionPos.x += transform_.position_.x;
+	motionPos.z += transform_.position_.z;
+
+	if (attackTimer > NORMAL_ATTACK_TIME)
+	{
+		pEffect->StopEffectAtNormalAttack();
+		attackTimer = 0;
+		attackState = AttackState::NoAttack;
+	}
+	else
+	{
+		attackTimer++;
+
+		if (IsMoveLimit(motionPos))
+		{
+			XMStoreFloat3(&motionPos, vPrevPos);
+		}
+		else
+		{
+			transform_.position_.x = motionPos.x;
+			transform_.position_.z = motionPos.z;
+		}
+	}
+}
+
+void Player::HardAttackAction()
+{
+	const float ANGLE_ROTATE_HARD_ATTACK = 12.0f;	// 強攻撃時の回転する角度
+
+	// エフェクト
+	pEffect->SetEmitterPosition(transform_.position_, EmitterType::Tornado);
+	pEffect->StartEffectAtHardAttack();
+
+	if (attackTimer > HARD_ATTACK_TIME)
+	{
+		pEffect->StopEffectAtHardAttack();
+		attackTimer = 0;
+		attackState = AttackState::NoAttack;
+	}
+	else
+	{
+		attackTimer++;
+		transform_.rotate_.y += ANGLE_ROTATE_HARD_ATTACK;
+	}
 }
 
 void Player::CharacterCheckHP()
@@ -154,6 +326,7 @@ void Player::CharacterCheckHP()
 
 void Player::CharacterTakeDamage(float damage)
 {
+	ClearState(CharacterState::Damaged);
 }
 
 void Player::NormalCamera()
@@ -278,12 +451,86 @@ void Player::NormalCamera()
 
 void Player::CharacterJumpAction()
 {
+	const float LOWEST_JUMP_VELOCITY_CHANGE_QUANTITY = 0.1f;	// 最低ジャンプ速度変化量
+	const float JUMP_GRAVTY_DEGREES = 0.85f;					// ジャンプ重力度
+	const float JUMP_DESCENDING_SPEED = 1.09f;					// ジャンプ降下速度
 
+
+	if (jumpSpeed > LOWEST_JUMP_VELOCITY_CHANGE_QUANTITY && isJumpSummit == false)
+	{// 上昇中の処理
+		transform_.position_.y += jumpSpeed;
+		jumpSpeed *= JUMP_GRAVTY_DEGREES;
+	}
+	else if (beforeJumpY < transform_.position_.y)
+	{// 降下中の処理
+		isJumpSummit = true;
+		transform_.position_.y -= jumpSpeed;
+		jumpSpeed *= JUMP_DESCENDING_SPEED;
+	}
+	else
+	{// ジャンプ終了
+		transform_.position_.y = beforeJumpY;
+		jumpSpeed = JUMP_FIRST_SPEED;
+		isJumpSummit = false;
+		ClearState(CharacterState::Jumping);
+	}
 }
 
 void Player::CharacterDodingAction()
 {
+	const float DODGE_MOVING_DISTANCE_MAGNIFICATION = 1.5f;	// 回避移動量倍率
 
+	// 回避コマンドが入ったとき、攻撃中だったら中止する
+	if (IsStateSet(CharacterState::Attacking))
+	{
+		if (attackState == AttackState::NormalAttack)
+		{
+			pEffect->StopEffectAtNormalAttack();
+		}
+		else
+		{
+			pEffect->StopEffectAtHardAttack();
+		}
+
+		attackTimer = 0;
+		attackState = AttackState::NoAttack;
+	}
+
+	// ポリライン
+	pLine->AddPosition(transform_.position_);
+
+	if (dodgeTimer <= DODGE_TIME)
+	{
+		dodgeTimer++;
+
+		XMFLOAT3 nextPos = transform_.position_;
+		nextPos.x += movingDistance.x * DODGE_MOVING_DISTANCE_MAGNIFICATION;
+		nextPos.z += movingDistance.z * DODGE_MOVING_DISTANCE_MAGNIFICATION;
+
+		if (IsMoveLimit(nextPos))
+		{
+			XMStoreFloat3(&transform_.position_, vPrevPos);
+		}
+		else
+		{
+			//　回避処理
+			transform_.position_.x = nextPos.x;
+			transform_.position_.z = nextPos.z;
+		}
+	}
+	else
+	{
+		dodgeTimer = 0;
+		ClearState(CharacterState::Dodging);
+	}
+}
+
+void Player::DrawEffect()
+{
+	if (IsStateSet(CharacterState::Dodging))
+	{
+		pLine->Draw();
+	}
 }
 
 bool Player::IsMoveEntry()
@@ -311,26 +558,32 @@ bool Player::IsDodEntry()
 
 bool Player::IsAttackEntry()
 {
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
-#ifdef NDEBUG
-		|| Input::IsMouseButtonDown(MouseBottunCode::LeftClick)
-#endif
-		)
+	if (attackState == AttackState::NoAttack)
 	{
-		attackState = AttackState::NormalAttack;
-		//pSound->EffectPlay(SoundEffect::NormalAttack);
-		return true;
-	}
+		// 通常攻撃
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
+#ifdef NDEBUG
+			|| Input::IsMouseButtonDown(MouseBottunCode::LeftClick)
+#endif
+			)
+		{
+			attackState = AttackState::NormalAttack;
+			//pSound->EffectPlay(SoundEffect::NormalAttack);
+			return true;
+		}
 
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y)
+		// 強攻撃
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y)
 #ifdef NDEBUG
-		|| Input::IsMouseButtonDown(MouseBottunCode::RightClick)
+			|| Input::IsMouseButtonDown(MouseBottunCode::RightClick)
 #endif
-		)
-	{
-		attackState = AttackState::HardAttack;
-		//pSound->EffectPlay(SoundEffect::HardAttack);
-		return true;
+			)
+		{
+			attackState = AttackState::HardAttack;
+			//pSound->EffectPlay(SoundEffect::HardAttack);
+			
+			return true;
+		}
 	}
 
 	return false;
@@ -351,13 +604,19 @@ bool Player::IsRecoverEntry()
 
 bool Player::IsJumpEntry()
 {
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A)
-#ifdef NDEBUG
-		|| Input::IsKeyDown(DIK_SPACE)
-#endif	
-		)
+	if (IsStateSet(CharacterState::Jumping) == false)
 	{
-		return true;
+
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A)
+#ifdef NDEBUG
+			|| Input::IsKeyDown(DIK_SPACE)
+#endif	
+			)
+		{
+			beforeJumpY = transform_.position_.y;
+			return true;
+		}
 	}
+
 	return false;
 }

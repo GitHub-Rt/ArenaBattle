@@ -20,6 +20,8 @@ public:
 
 	SCENE_ID GetSceneID();
 
+	virtual void SetAttackPower(float value) = 0;
+
 	// s“®”ÍˆÍŠO‚È‚çtrue‚ğ•Ô‚·
 	bool IsMoveLimit(XMFLOAT3 nextPosition);
 

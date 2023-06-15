@@ -19,6 +19,7 @@ imguiObject::~imguiObject()
 void imguiObject::Initialize()
 {
     stateStr = "CharacterState : ";
+    attackStateStr = "AttackState : ";
 }
 
 void imguiObject::Update()
@@ -47,10 +48,11 @@ void imguiObject::Update()
                 ImGui::Text("position_y : %g", pPlayer->GetPosition().y);
                 ImGui::Text("position_z : %g", pPlayer->GetPosition().z);
 
-                CharacterState robotState = pPlayer->GetCharacterState();
-                std::string nowState = GetCharacterStateString(robotState);
-                std::string str = stateStr + nowState;
+                std::string str = GetCharacterStateString(pPlayer);
                 ImGui::Text(str.c_str());
+
+                std::string attack = GetPlayerAttackStateString();
+                ImGui::Text(attack.c_str());
             }
 
             ImGui::TreePop();
@@ -66,9 +68,7 @@ void imguiObject::Update()
                 ImGui::Text("position_y : %g", pRobot->GetPosition().y);
                 ImGui::Text("position_z : %g", pRobot->GetPosition().z);
 
-                CharacterState robotState = pRobot->GetCharacterState();
-                std::string nowState = GetCharacterStateString(robotState);
-                std::string str = stateStr + nowState;
+                std::string str = GetCharacterStateString(pRobot);
                 ImGui::Text(str.c_str());
             }
 
@@ -92,24 +92,79 @@ void imguiObject::Release()
 {
 }
 
-std::string imguiObject::GetCharacterStateString(CharacterState state)
+std::string imguiObject::GetCharacterStateString(CharacterBase* pTarget)
 {
-    switch (state)
+    // 状態のビットフラグ
+    unsigned int stateFlg = 0;
+
+    // 状態を表すテキスト
+    std::string nowState = "";
+
+    // 各状態のフラグが立っているかどうかを調べるためにループ文で各要素を回す
+    for (unsigned int checkFlg = (unsigned int)CharacterState::Idle; checkFlg <= (unsigned int)CharacterState::MAX_CharacterState; checkFlg++)
     {
-    case CharacterState::Idle:
-        return "Idle";
+        
+        CharacterState check = (CharacterState)checkFlg;
+
+        // 状態フラグが立ってたら
+        if (pTarget->IsStateSet(check))
+        {
+            // 状態に応じたテキストを追加
+            switch (check)
+            {
+            case CharacterState::Idle:
+                nowState += "Idle";
+                break;
+            case CharacterState::Moving:
+                nowState += "Moving, ";
+                break;
+            case CharacterState::Attacking:
+                nowState += "Attacking, ";
+                break;
+            case CharacterState::Damaged:
+                nowState += "Damaged, ";
+                break;
+            case CharacterState::Jumping:
+                nowState += "Jumping, ";
+                break;
+            case CharacterState::Dodging:
+                nowState += "Dodging, ";
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    if (nowState == "")
+    {
+        nowState = "Unknown";
+    }
+
+    return stateStr + nowState;
+
+}
+
+std::string imguiObject::GetPlayerAttackStateString()
+{
+    std::string nowAttackState = "";
+
+    AttackState nowState = pPlayer->GetAttackState();
+
+    switch (nowState)
+    {
+    case AttackState::NoAttack:
+        nowAttackState = "NoAttack";
         break;
-    case CharacterState::Moving:
-        return "Moving";
+    case AttackState::NormalAttack:
+        nowAttackState = "NormalAttack";
         break;
-    case CharacterState::Attacking:
-        return "Attacking";
-        break;
-    case CharacterState::Damaged:
-        return "Damaged";
+    case AttackState::HardAttack:
+        nowAttackState = "HardAttack";
         break;
     default:
-        return "Unknown";
         break;
     }
+
+    return attackStateStr + nowAttackState;
 }

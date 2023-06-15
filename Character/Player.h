@@ -1,6 +1,8 @@
 #pragma once
 #include "CharacterBase.h"
 
+class PolyLine;
+class PlayerEffect;
 
 // 攻撃の状態を管理
 enum class AttackState
@@ -32,6 +34,9 @@ public:
 	// カメラの方向ベクトルを返す
 	XMFLOAT3 GetCameraDirection() { return cameraDirection; }
 
+	// 攻撃状態を返す
+	AttackState GetAttackState() { return attackState; }
+
 	void SetData() override;
 	Player(GameObject* parent);
 	~Player();
@@ -45,11 +50,14 @@ public:
 	void CharacterDodingAction() override;
 	void CharacterTakeDamage(float damage) override;
 	void CharacterCheckHP() override;
-
+	void DrawEffect() override;
 
 	// カメラ周り
 	void NormalCamera();	// 通常時カメラ関数
 	
+	// 攻撃周り
+	void NormalAttackAction();	// 通常攻撃アクション
+	void HardAttackAction();	// 強攻撃アクション
 
 	// 各入力が行われたかどうか
 	bool IsMoveEntry();			// 動き周りの入力
@@ -71,9 +79,7 @@ private:
 	float RECOVERY_POTION_NUMBER;			// 回復ポーションの最大数
 	float RECOVERY_QUANTITY;				// 回復量
 	int MAX_INVINCIBLE_TIME;				// 最大無敵時間
-
-	// 状態変数
-	AttackState attackState;
+	
 
 	// 入力周りの変数
 	bool isTrrigerReset;
@@ -81,6 +87,22 @@ private:
 	// 移動周りの変数
 	XMFLOAT3 movingDistance;	// 移動量
 	XMVECTOR vPrevPos;			// 前回の位置ベクトル
+
+	// ジャンプ周りの変数
+	float beforeJumpY;			// ジャンプする前のy座標
+	float jumpSpeed;			// ジャンプ速度
+	bool isJumpSummit;			// ジャンプの頂上に到達したかどうか
+
+
+	// 攻撃周りの変数
+	AttackState attackState;		// 攻撃状態
+	PlayerEffect* pEffect;			// エフェクトのポインタ
+	int attackTimer;				// 攻撃時間
+	XMVECTOR attackVector;			// 入力ベクトル
+
+	// 回避周りの変数
+	PolyLine* pLine;			// ポリラインのポインタ
+	int dodgeTimer;				// 回避時間
 
 	// カメラ周りの変数
 	float angleX;				// 水平方向のカメラ回転角度

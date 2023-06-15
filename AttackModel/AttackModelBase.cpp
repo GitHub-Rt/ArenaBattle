@@ -59,12 +59,12 @@ void AttackModelBase::AttackModelAddSphereCollider(float radius, XMFLOAT3 center
 
 bool AttackModelBase::IsMoveLimit(XMFLOAT3 nextPosition)
 {
-	const float MOVE_LIMIT = 60.0f;
+	const float MOVE_LIMIT = 75.0f;
 
 	if (nextPosition.x > MOVE_LIMIT ||
 		nextPosition.x < -MOVE_LIMIT ||
 		nextPosition.z > MOVE_LIMIT ||
-		nextPosition.z > MOVE_LIMIT)
+		nextPosition.z < -MOVE_LIMIT)
 	{
 		return true;
 	}

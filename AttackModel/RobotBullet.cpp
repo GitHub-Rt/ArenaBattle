@@ -45,20 +45,7 @@ void RobotBullet::AttackModelUpdate()
     XMFLOAT3 nextPos = XMFLOAT3(0, 0, 0);
     XMStoreFloat3(&nextPos, vPos + vMove);
 
-    if (GetSceneID() != SCENE_ID::SCENE_ID_BATTLE)
-    {
-        
-        if (timer < BULLET_MAX_TIMER)
-        {
-            timer++;
-            transform_.position_ = nextPos;
-        }
-        else
-        {
-            KillMe();
-        }
-    }
-    else
+    if (GetSceneID() == SCENE_ID::SCENE_ID_BATTLE || GetSceneID() == SCENE_ID::SCENE_ID_DEBUG)
     {
         if (IsMoveLimit(nextPos))
         {
@@ -67,6 +54,18 @@ void RobotBullet::AttackModelUpdate()
         else
         {
             transform_.position_ = nextPos;
+        }
+    }
+    else
+    {
+        if (timer < BULLET_MAX_TIMER)
+        {
+            timer++;
+            transform_.position_ = nextPos;
+        }
+        else
+        {
+            KillMe();
         }
     }
 }
@@ -79,4 +78,9 @@ void RobotBullet::InitialPositionPreference()
     XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(pRobot->GetParent()->GetRotate().y));
     vPos = XMVector3TransformCoord(vPos, mRotate);
     XMStoreFloat3(&transform_.position_, vPos);
+}
+
+void RobotBullet::SetAttackPower(float value)
+{
+    attackPower = value;
 }
