@@ -26,7 +26,6 @@ void Player::SetData()
 	MAX_INVINCIBLE_TIME = GetInternalData(CharacterID::Player, (int)PlayerData::MaxInvincibleTime);
 }
 
-
 Player::Player(GameObject* parent)
 	:CharacterBase(parent, "Player")
 {
@@ -444,6 +443,10 @@ void Player::NormalCamera()
 	XMFLOAT3 cameraPosition, cameraFocus;
 	XMStoreFloat3(&cameraPosition, vCameraPosition);
 	XMStoreFloat3(&cameraFocus, vCameraFocus);
+
+#ifdef _DEBUG
+	SetCamera(cameraPosition, cameraFocus);
+#endif
 
 	Camera::SetPosition(cameraPosition);
 	Camera::SetTarget(cameraFocus);

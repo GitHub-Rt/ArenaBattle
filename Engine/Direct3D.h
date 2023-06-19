@@ -25,10 +25,12 @@ namespace Direct3D
 	//【コンテキスト】
 	//GPUに命令を出すためのやつ
 	extern ID3D11DeviceContext*    pContext_;
-
+	extern XMMATRIX lightView_;
+	extern XMMATRIX clipToUV_;
+	extern ID3D11ShaderResourceView* pDepthSRV_;
 
 	//■シェーダー関連で必要なセット
-	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_MAX};	//描画形式
+	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_SHADOW, SHADER_MAX};	//描画形式
 
 	struct SHADER_BUNDLE
 	{
@@ -88,6 +90,9 @@ namespace Direct3D
 	//引数：blendMode	BLEND_DEFAULT	通常
 	//					BLEND_ADD		加算合成（パーティクル用）
 	void SetBlendMode(BLEND_MODE blendMode);
+
+	//テクスチャへ深度情報を描く
+	void BeginDrawToTexture();
 
 	//描画開始
 	void BeginDraw();

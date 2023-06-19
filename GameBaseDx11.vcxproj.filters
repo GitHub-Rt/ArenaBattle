@@ -348,5 +348,8 @@
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\Shadowmap.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

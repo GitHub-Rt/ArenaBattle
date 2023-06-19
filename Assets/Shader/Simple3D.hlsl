@@ -3,6 +3,7 @@
 //───────────────────────────────────────
 Texture2D		g_texture: register(t0);	//テクスチャー
 SamplerState	g_sampler : register(s0);	//サンプラー
+Texture2D		g_texDepth : register(t1);//深度テクスチャー
 
 //───────────────────────────────────────
  // コンスタントバッファ
@@ -13,6 +14,10 @@ cbuffer global
 	float4x4	g_matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	g_matNormalTrans;	// 法線の変換行列（回転行列と拡大の逆行列）
 	float4x4	g_matWorld;			// ワールド変換行列
+
+	float4x4	g_mWLP;				//ワールド・”ライトビュー”・プロジェクションの合成 
+	float4x4	g_mWLPT;			//ワールド・”ライトビュー”・プロジェクション・UV 行列の合成 
+
 	float4		g_vecLightDir;		// ライトの方向ベクトル
 	float4		g_vecDiffuse;		// ディフューズカラー（マテリアルの色）
 	float4		g_vecAmbient;		// アンビエントカラー（影の色）
@@ -20,6 +25,7 @@ cbuffer global
 	float4		g_vecCameraPosition;// 視点（カメラの位置）
 	float		g_shuniness;		// ハイライトの強さ（テカリ具合）
 	bool		g_isTexture;		// テクスチャ貼ってあるかどうか
+
 
 };
 
@@ -32,6 +38,9 @@ struct VS_OUT
 	float4 normal : TEXCOORD2;		//法線
 	float2 uv	  : TEXCOORD0;		//UV座標
 	float4 eye	  : TEXCOORD1;		//視線
+
+	float4 LightTexCoord : TEXCOORD5;
+	float4 LighViewPos : TEXCOORD6;
 };
 
 //───────────────────────────────────────
@@ -44,7 +53,7 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
-	outData.pos = mul(pos, g_matWVP);		
+	outData.pos = mul(pos, g_matWVP);
 
 	//法線の変形
 	Normal.w = 0;					//4次元目は使わないので0
@@ -57,6 +66,15 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 
 	//UV「座標
 	outData.uv = Uv;	//そのままピクセルシェーダーへ
+
+
+
+	///////////////////////////////////////////////////////
+	 //ライトビューを参照するとき、手がかりとなるテクスチャー座標 
+	outData.LightTexCoord = mul(pos, g_mWLPT); //この点が、ライトビューであったときの位置がわかる 
+
+	//ライトビューにおける位置(変換後) 
+	outData.LighViewPos = mul(pos, g_mWLP);
 
 
 	//まとめて出力
@@ -107,5 +125,20 @@ float4 PS(VS_OUT inData) : SV_Target
 	}
 
 	//最終的な色
-	return diffuse * shade + diffuse * ambient + speculer;
+	float4 color = diffuse * shade + diffuse * ambient + speculer;
+
+
+	///////////////////////////////////////////////
+	//影の処理 
+	inData.LightTexCoord /= inData.LightTexCoord.w;
+	float TexValue = g_texDepth.Sample(g_sampler, inData.LightTexCoord).r;
+
+
+	float LightLength = inData.LighViewPos.z / inData.LighViewPos.w;
+	if (TexValue + 0.003 < LightLength) //ライトビューでの長さが短い（ライトビューでは遮蔽物がある） 
+	{
+		color *= 0.6; //影（明るさを 60%） 
+	}
+	color.a = diffuse.a;
+	return color;
 }

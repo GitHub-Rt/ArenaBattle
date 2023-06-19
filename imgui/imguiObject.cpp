@@ -48,6 +48,13 @@ void imguiObject::Update()
                 ImGui::Text("position_y : %g", pPlayer->GetPosition().y);
                 ImGui::Text("position_z : %g", pPlayer->GetPosition().z);
 
+                // ƒJƒƒ‰Žü‚è
+                XMFLOAT3 camPos = pPlayer->GetCameraPosition();
+                ImGui::Text("CameraPosition: %g, %g, %g",camPos.x,camPos.y,camPos.z);
+
+                XMFLOAT3 camFoc = pPlayer->GetCameraTarget();
+                ImGui::Text("CameraTarget:%g, %g, %g", camFoc.x, camFoc.y, camFoc.z);
+
                 std::string str = GetCharacterStateString(pPlayer);
                 ImGui::Text(str.c_str());
 

@@ -66,6 +66,22 @@ public:
 	bool IsRecoverEntry();		// ‰ñ•œü‚è‚Ì“ü—Í
 	bool IsJumpEntry();			// ƒWƒƒƒ“ƒvü‚è‚Ì“ü—Í
 
+#ifdef _DEBUG
+
+	XMFLOAT3 camPos;
+	XMFLOAT3 camTarget;
+
+	void SetCamera(XMFLOAT3 pos, XMFLOAT3 tar)
+	{
+		camPos = pos;
+		camTarget = tar;
+	}
+
+	XMFLOAT3 GetCameraPosition() { return camPos; }
+	XMFLOAT3 GetCameraTarget() { return camTarget; }
+
+#endif
+
 private:
 
 	// InternalDataCSV‚©‚ç’l‚ğŠi”[‚·‚é•Ï”

@@ -1,6 +1,6 @@
 #include "CharacterBase.h"
 #include "../Engine/BoxCollider.h"
-
+#include "../Engine/Camera.h"
 
 #include "../Scene/SceneManager.h"
 #include "../Stage/StageBase.h"
@@ -96,7 +96,7 @@ void CharacterBase::Update()
 void CharacterBase::Draw()
 {
 	CharacterDraw(hModel);
-	
+
 	DrawEffect();
 }
 
