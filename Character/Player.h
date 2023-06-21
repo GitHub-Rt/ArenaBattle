@@ -48,9 +48,11 @@ public:
 	void CharacterAttack() override;
 	void CharacterJumpAction() override;
 	void CharacterDodingAction() override;
+	void CharacterStunAction() override;
 	void CharacterTakeDamage(float damage) override;
 	void CharacterCheckHP() override;
 	void DrawEffect() override;
+	void OnCollision(GameObject* pTarget) override;
 
 	// カメラ周り
 	void NormalCamera();	// 通常時カメラ関数
@@ -58,6 +60,9 @@ public:
 	// 攻撃周り
 	void NormalAttackAction();	// 通常攻撃アクション
 	void HardAttackAction();	// 強攻撃アクション
+
+	// 被ダメージモーション
+	void DamageTakenMotion();
 
 	// 各入力が行われたかどうか
 	bool IsMoveEntry();			// 動き周りの入力

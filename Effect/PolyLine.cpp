@@ -158,6 +158,9 @@ void PolyLine::Draw()
 
 	//頂点データの並び方を指定を戻す
 	Direct3D::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	
+	Direct3D::SetShader(Direct3D::SHADER_3D);
 }
 
 void PolyLine::Release()

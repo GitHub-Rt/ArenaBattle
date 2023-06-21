@@ -11,17 +11,12 @@ class RootObject :	public GameObject
 public:
 	RootObject();
 	~RootObject();
-
-	//初期化
 	void Initialize() override;
-
-	//更新
 	void Update() override;
-
-	//描画
 	void Draw() override;
-
-	//開放
 	void Release() override;
+
+	// プレイヤーの通常カメラ関数を呼ぶ関数(シャドーマップ後のカメラセットのため)
+	void PlayerCamera();
 };
 

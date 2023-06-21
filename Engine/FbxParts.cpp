@@ -477,7 +477,7 @@ void FbxParts::Draw(Transform& transform)
 		ID3D11ShaderResourceView* pSRV = Direct3D::pDepthSRV_;
 		Direct3D::pContext_->PSSetShaderResources(1, 1, &pSRV);
 
-		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);									// GPUからのリソースアクセスを再開
+		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);	// GPUからのリソースアクセスを再開
 
 		 //ポリゴンメッシュを描画する
 		Direct3D::pContext_->DrawIndexed(pMaterial_[i].polygonCount * 3, 0, 0);
@@ -622,10 +622,16 @@ void FbxParts::RayCast(RayCastData * data)
 
 void FbxParts::ChangeMaterialColor(float red, float green, float blue)
 {
-	pMaterial_->diffuse = XMFLOAT4(red, green, blue, 1.0f);
+	for (DWORD i = 0; i < materialCount_; i++)
+	{
+		pMaterial_[i].diffuse = XMFLOAT4(red, green, blue, 1.0f);
+	}
 }
 
 void FbxParts::RestoreOriginalColor()
 {
-	pMaterial_->diffuse = pMaterial_->defaultDiffuse;
+	for (DWORD i = 0; i < materialCount_; i++)
+	{
+		pMaterial_[i].diffuse = pMaterial_[i].defaultDiffuse;
+	}
 }

@@ -5,6 +5,7 @@ enum class CharacterState;
 class CharacterBase;
 class Player;
 class Robot;
+class Enemy;
 
 class imguiObject : public GameObject
 {
@@ -24,7 +25,7 @@ private:
 
     Player* pPlayer;
     Robot* pRobot;
-
+    Enemy* pEnemy;
 
     std::string stateStr;
 

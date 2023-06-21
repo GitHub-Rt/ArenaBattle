@@ -128,6 +128,9 @@
     <ClCompile Include="AttackModel\AttackModelBase.cpp" />
     <ClCompile Include="AttackModel\RobotBullet.cpp" />
     <ClCompile Include="Character\CharacterBase.cpp" />
+    <ClCompile Include="Character\Enemy.cpp" />
+    <ClCompile Include="Character\EnemyBase.cpp" />
+    <ClCompile Include="Character\EnemyBoss.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Character\Robot.cpp" />
     <ClCompile Include="Effect\PlayerEffect.cpp" />
@@ -174,6 +177,9 @@
     <ClInclude Include="AttackModel\AttackModelBase.h" />
     <ClInclude Include="AttackModel\RobotBullet.h" />
     <ClInclude Include="Character\CharacterBase.h" />
+    <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="Character\EnemyBase.h" />
+    <ClInclude Include="Character\EnemyBoss.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Character\Robot.h" />
     <ClInclude Include="Effect\PlayerEffect.h" />

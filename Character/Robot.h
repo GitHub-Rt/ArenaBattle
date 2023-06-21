@@ -30,6 +30,7 @@ public:
 	void CharacterCheckHP() override;
 	void CharacterJumpAction()override;
 	void CharacterDodingAction()override;
+	void CharacterStunAction() override;
 	void CharacterTakeDamage(float damage) override;
 
 	void DrawEffect() override;

@@ -63,6 +63,12 @@
     <Filter Include="10Effect">
       <UniqueIdentifier>{56d5f319-2e6b-406b-abc7-4ceb043632b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06Character\Enemy">
+      <UniqueIdentifier>{4a96e473-537f-4ecb-96ef-c50a9be95dcc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="06Character\Enemy\EnemyObject">
+      <UniqueIdentifier>{7d4ea5f2-7df5-4284-b28b-16d0c2762566}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -196,6 +202,15 @@
     </ClCompile>
     <ClCompile Include="Effect\PolyLine.cpp">
       <Filter>10Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\EnemyBase.cpp">
+      <Filter>06Character\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Enemy.cpp">
+      <Filter>06Character\Enemy\EnemyObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\EnemyBoss.cpp">
+      <Filter>06Character\Enemy\EnemyObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +348,15 @@
     </ClInclude>
     <ClInclude Include="Effect\PolyLine.h">
       <Filter>10Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\EnemyBase.h">
+      <Filter>06Character\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Enemy.h">
+      <Filter>06Character\Enemy\EnemyObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\EnemyBoss.h">
+      <Filter>06Character\Enemy\EnemyObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

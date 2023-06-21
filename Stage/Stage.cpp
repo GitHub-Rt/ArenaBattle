@@ -12,5 +12,5 @@ Stage::~Stage()
 void Stage::Initialize()
 {
     //バトルフィールドモデルのロード
-    StageModelLoad("Stage/buttleField.fbx");
+    StageModelLoad("Stage/ButtleField.fbx");
 }

@@ -103,6 +103,7 @@ namespace Direct3D
 
 
 		///////////////////////////描画のための準備///////////////////////////////
+		
 		//スワップチェーンからバックバッファを取得（バックバッファ ＝ 裏画面 ＝ 描画先）
 		ID3D11Texture2D* pBackBuffer;
 		hr = pSwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -486,7 +487,6 @@ namespace Direct3D
 		pContext_->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 		SetShader(SHADER_SHADOW);
-		//SetBlendMode(Direct3D::BLEND_DEFAULT);
 	}
 
 	//描画開始
@@ -508,7 +508,6 @@ namespace Direct3D
 		pContext_->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 		SetShader(SHADER_3D);
-		SetBlendMode(Direct3D::BLEND_DEFAULT);
 	}
 
 

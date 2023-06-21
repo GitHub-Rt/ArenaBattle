@@ -203,8 +203,12 @@ void Robot::CharacterJumpAction()
 
 }
 
-
 void Robot::CharacterDodingAction()
+{
+
+}
+
+void Robot::CharacterStunAction()
 {
 
 }

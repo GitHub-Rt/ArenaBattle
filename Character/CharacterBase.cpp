@@ -37,6 +37,7 @@ CharacterBase::CharacterBase(GameObject* parent, std::string fileName)
 	ParameterCSV.Load("Character/Data/characterParameter.csv");
 	PlayerInternalDataCSV.Load("Character/Data/PlayerInternalData.csv");
 	RobotInternalDataCSV.Load("Character/Data/RobotInternalData.csv");
+	EnemyInternalDataCSV.Load("Character/Data/EnemyInternalData.csv");
 
 	parameter.hp = 0;
 	parameter.attack = 0;
@@ -82,6 +83,9 @@ void CharacterBase::Update()
 					break;
 				case CharacterState::Jumping:
 					CharacterJumpAction();
+					break;
+				case CharacterState::Stan:
+					CharacterStunAction();
 					break;
 				default:
 					break;
@@ -170,7 +174,6 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 	pTarget->SetDamage(attackDamage);
 }
 
-
 XMVECTOR CharacterBase::GetFrontVector()
 {
 	XMVECTOR vFront = { 0,0,1,0 };
@@ -180,7 +183,6 @@ XMVECTOR CharacterBase::GetFrontVector()
 
 	return vFront;
 }
-
 
 float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 {
@@ -219,7 +221,6 @@ float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 		}
 	}
 }
-
 
 void CharacterBase::SetParameter(CharacterID id)
 {
@@ -293,7 +294,6 @@ Parameters CharacterBase::GetParameter(CharacterID id)
 	return data;
 }
 
-
 int CharacterBase::GetParameterValue(CharacterID id, CharacterStatus status)
 {
 	switch (id)
@@ -318,14 +318,12 @@ int CharacterBase::GetParameterValue(CharacterID id, CharacterStatus status)
 	return value;
 }
 
-
 void CharacterBase::SetParameter(int hp_, int attack_, int defense_)
 {
 	parameter.hp = hp_;
 	parameter.attack = attack_;
 	parameter.defense = defense_;
 }
-
 
 int CharacterBase::GetPlayerStatusValue(CharacterStatus status)
 {
@@ -402,10 +400,10 @@ float CharacterBase::GetInternalData(CharacterID id, int cal)
 		internalData = RobotInternalDataCSV.GetValue(cal, INTERNALDATA);
 		break;
 	case CharacterID::NormalEnemy:
-		//internalData = InternalDataCSV.GetValue(cal, INTERNALDATA);
+		internalData = EnemyInternalDataCSV.GetValue(cal, INTERNALDATA);
 		break;
 	case CharacterID::EnemyBoss:
-		//internalData = InternalDataCSV.GetValue(cal, INTERNALDATA);
+		//internalData = EnemyBossInternalDataCSV.GetValue(cal, INTERNALDATA);
 		break;
 	default:
 		break;
@@ -425,7 +423,7 @@ int CharacterBase::GetColumnCalCount(CharacterID id)
 		calCount = RobotInternalDataCSV.GetColumnCalCount(INTERNALDATA);
 		break;
 	case CharacterID::NormalEnemy:
-		//calCount = InternalDataCSV.GetColumnCalCount(INTERNALDATA);
+		calCount = EnemyInternalDataCSV.GetColumnCalCount(INTERNALDATA);
 		break;
 	case CharacterID::EnemyBoss:
 		//calCount = InternalDataCSV.GetColumnCalCount(INTERNALDATA);

@@ -45,6 +45,7 @@ enum class CharacterState
 	Damaged = (unsigned int)(1 << 3),     // 被ダメージ 00001000 8
 	Dodging = (unsigned int)(1 << 4),     // 回避		00010000 16
 	Jumping = (unsigned int)(1 << 5),     // ジャンプ	00100000 32
+	Stan = (unsigned int)(1 << 6),		  // スタン		01000000 64
 	MAX_CharacterState
 };
 
@@ -130,6 +131,12 @@ public:
 		damageStage = nextStage; 
 		ChangeState(CharacterState::Damaged);
 	}
+
+	/// <summary>
+	/// ダメージ段階を取得する関数
+	/// </summary>
+	/// <returns></returns>
+	DamageStage GetDamageState() { return damageStage; }
 
 	/// <summary>
 	/// 該当キャラクターが受けるダメージ量をセットする
@@ -297,6 +304,11 @@ public:
 	virtual void CharacterDodingAction() = 0;
 
 	/// <summary>
+	/// スタン中の処理
+	/// </summary>
+	virtual void CharacterStunAction() = 0;
+
+	/// <summary>
 	/// エフェクトの描画に使う
 	/// </summary>
 	virtual void DrawEffect() = 0;
@@ -316,9 +328,12 @@ private:
 	int calCount;		// キャラクター内部データの列数
 	float damage;		// 受けるダメージ量
 	float attackDamage;	// 与えるダメージ量
+
+	// 各種データ
 	CsvReader ParameterCSV;
 	CsvReader PlayerInternalDataCSV;
 	CsvReader RobotInternalDataCSV;
+	CsvReader EnemyInternalDataCSV;
 	Parameters parameter;
 
 	unsigned int characterStateFlg;	// ビットフラグ

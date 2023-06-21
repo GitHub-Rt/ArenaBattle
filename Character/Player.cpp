@@ -75,6 +75,7 @@ void Player::Initialize()
 	SetData();
 
 	CharacterModelLoad("player.fbx");
+	CharacterAddCollider(HIT_TEST_RANGE);
 
 	
 	// 変数の初期化
@@ -263,7 +264,9 @@ void Player::NormalAttackAction()
 
 	// エフェクト
 	pEffect->SetEmitterPosition(transform_.position_, EmitterType::Ventilation);
-	pEffect->SetDirection(movingDistance, transform_.rotate_);
+	XMFLOAT3 dir = { 0,0,0 };
+	XMStoreFloat3(&dir, GetFrontVector());
+	pEffect->SetDirection(dir, transform_.rotate_);
 	pEffect->StartEffectAtNormalAttack();
 
 
@@ -325,7 +328,43 @@ void Player::CharacterCheckHP()
 
 void Player::CharacterTakeDamage(float damage)
 {
-	ClearState(CharacterState::Damaged);
+	DamageStage nowStage = GetDamageState();
+
+	switch (nowStage)
+	{
+	case DamageStage::NoDamage:
+		ClearState(CharacterState::Damaged);
+		break;
+	case DamageStage::DamageStart:
+		if (IsStateSet(CharacterState::Dodging))
+		{// 攻撃を受けたときにプレイヤーの状態が回避状態だったら判定無しで処理を終える
+			SetDamageStage(DamageStage::EndDamage);
+			break;
+		}
+		// HPゲージを減らす
+
+		ColorChange(1, 0, 0);	// モデルの色変更
+		SetDamageStage(DamageStage::TakeDamage);
+		break;
+	case DamageStage::TakeDamage:
+		DamageTakenMotion();
+		break;
+	case DamageStage::EndDamage:
+		RestoreOriginalColor();
+		SetDamageStage(DamageStage::NoDamage);
+		break;
+	default:
+		break;
+	}
+
+	
+}
+
+void Player::DamageTakenMotion()
+{
+	
+
+	SetDamageStage(DamageStage::EndDamage);
 }
 
 void Player::NormalCamera()
@@ -528,12 +567,22 @@ void Player::CharacterDodingAction()
 	}
 }
 
+void Player::CharacterStunAction()
+{
+
+}
+
 void Player::DrawEffect()
 {
 	if (IsStateSet(CharacterState::Dodging))
 	{
 		pLine->Draw();
 	}
+}
+
+void Player::OnCollision(GameObject* pTarget)
+{
+
 }
 
 bool Player::IsMoveEntry()

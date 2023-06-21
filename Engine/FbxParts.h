@@ -33,7 +33,7 @@ class FbxParts
 		XMMATRIX world;			//ワールド行列
 
 		XMMATRIX mWLP; //ワールド・”ライトビュー”・プロジェクションの合成 
-		XMMATRIX mWLPT; //ワールド・”ライトビュー”・プロジェクション・テクスチャ座標行列の合
+		XMMATRIX mWLPT; //ワールド・”ライトビュー”・プロジェクション・テクスチャ座標行列の合成
 
 		XMFLOAT4 lightDirection;//ライトの向き
 		XMFLOAT4 diffuse;		//ディフューズカラー。マテリアルの色。（テクスチャ貼ってるときは使わない）

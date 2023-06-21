@@ -3,6 +3,7 @@
 
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
+#include "../Character/Enemy.h"
 
 
 imguiObject::imguiObject(GameObject* parent)
@@ -10,6 +11,7 @@ imguiObject::imguiObject(GameObject* parent)
 {
     pPlayer = nullptr;
     pRobot = nullptr;
+    pEnemy = nullptr;
 }
 
 imguiObject::~imguiObject()
@@ -81,7 +83,23 @@ void imguiObject::Update()
 
             ImGui::TreePop();
         }
-        
+
+        // Enemyî•ñ
+        if (ImGui::TreeNode("EnemyInformation"))
+        {
+            pEnemy = (Enemy*)FindObject("Enemy");
+            if (pEnemy != nullptr)
+            {
+                ImGui::Text("position_x : %g", pEnemy->GetPosition().x);
+                ImGui::Text("position_y : %g", pEnemy->GetPosition().y);
+                ImGui::Text("position_z : %g", pEnemy->GetPosition().z);
+
+                std::string str = GetCharacterStateString(pEnemy);
+                ImGui::Text(str.c_str());
+            }
+
+            ImGui::TreePop();
+        }
 
         ImGui::TreePop();
     }

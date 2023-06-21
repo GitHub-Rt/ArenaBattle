@@ -6,6 +6,7 @@
 
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
+#include "../Character/Enemy.h"
 
 #include "../Engine/Input.h"
 #include "SceneManager.h"
@@ -21,6 +22,8 @@ void DebugScene::Initialize()
 	Instantiate<Stage>(this);
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
+
+	Instantiate<Enemy>(this);
 
 	Instantiate<imguiObject>(this);
 }

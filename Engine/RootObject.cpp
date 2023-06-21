@@ -1,6 +1,7 @@
 #include "RootObject.h"
 #include "../Scene/SceneManager.h"
 
+#include "../Character/Player.h"
 
 RootObject::RootObject():
 	GameObject(nullptr, "RootObject")
@@ -27,4 +28,10 @@ void RootObject::Draw()
 
 void RootObject::Release()
 {
+}
+
+void RootObject::PlayerCamera()
+{
+	Player* pPlayer = (Player*)FindObject("Player");
+	pPlayer->NormalCamera();
 }

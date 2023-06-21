@@ -95,7 +95,7 @@ void PlayerEffect::StartEffectAtHardAttack()
 	data_Tornado.size = XMFLOAT2(2, 2);
 	data_Tornado.sizeRnd = XMFLOAT2(0.4, 0.4);
 	data_Tornado.scale = XMFLOAT2(1.03, 1.03);
-	data_Tornado.color = XMFLOAT4(1, 1, 1, 0.3f);
+	data_Tornado.color = XMFLOAT4(1, 1, 1, 0.2f);
 	data_Tornado.deltaColor = XMFLOAT4(0, 0, 0, -0.003);
 	data_Tornado.lifeTime = 45;
 	data_Tornado.spin.z = -4;
@@ -115,7 +115,7 @@ void PlayerEffect::StartEffectAtNormalAttack()
 {
 	XMFLOAT3 vr = ventilationRotate;
 	vr.z += 45;
-	data_Ventilation.textureFileName = "Effect/Player/slash_W.png";
+	data_Ventilation.textureFileName = "Effect/Player/flashA_R.png";
 	{
 		XMVECTOR vView = {0,0,1,0};
 		XMVECTOR vDir = XMLoadFloat3(&ventilationDir);
