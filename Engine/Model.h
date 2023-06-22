@@ -101,7 +101,7 @@ namespace Model
 	void RayCast(int handle, RayCastData *data);
 
 
-	void ChangeColor(int handle, float red, float green, float blue);
+	void ChangeColor(int handle, float red, float green, float blue, float alpha);
 
 	void RestoreOriginalColor(int handle);
 };

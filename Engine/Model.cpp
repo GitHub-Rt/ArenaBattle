@@ -194,9 +194,9 @@ namespace Model
 	}
 
 
-	void ChangeColor(int handle, float red, float green, float blue)
+	void ChangeColor(int handle, float red, float green, float blue, float alpha)
 	{
-		_datas[handle]->pFbx->ChangeColor(red, green, blue);
+		_datas[handle]->pFbx->ChangeColor(red, green, blue, alpha);
 	}
 
 	void RestoreOriginalColor(int handle)

@@ -116,9 +116,9 @@ void CharacterBase::CharacterAddCollider(XMFLOAT3 size, XMFLOAT3 center)
 	AddCollider(myCollision);
 }
 
-void CharacterBase::ColorChange(float red, float green, float blue)
+void CharacterBase::ColorChange(float red, float green, float blue, float alpha)
 {
-	Model::ChangeColor(hModel, red, green, blue);
+	Model::ChangeColor(hModel, red, green, blue, alpha);
 }
 
 void CharacterBase::RestoreOriginalColor()
@@ -140,8 +140,7 @@ void CharacterBase::CharacterDamageCalculation(CharacterID attackChara, Characte
 	Parameters targetParameter = GetParameter(target);
 
 	// ダメージ量の計算
-	attackDamage = attackParameter.attack - targetParameter.defense;
-	attackDamage *= magnification;
+	float attackDamage = attackParameter.attack * magnification - targetParameter.defense;
 
 	
 	SetTakeDamageStart(target, attackDamage);
@@ -161,7 +160,7 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 		pTarget = (CharacterBase*)FindObject("Robot");
 		break;
 	case CharacterID::NormalEnemy:
-		pTarget = (CharacterBase*)FindObject("NormalEnemy");
+		pTarget = (CharacterBase*)FindObject("Enemy");
 		break;
 	case CharacterID::EnemyBoss:
 		pTarget = (CharacterBase*)FindObject("EnemyBoss");
@@ -170,7 +169,6 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 		break;
 	}
 
-	pTarget->SetDamageStage(DamageStage::DamageStart);
 	pTarget->SetDamage(attackDamage);
 }
 
@@ -258,7 +256,7 @@ void CharacterBase::SetParameter(CharacterID id)
 
 Parameters CharacterBase::GetParameter(CharacterID id)
 {
-	Parameters data;
+	Parameters data = { 0,0,0 };
 
 	switch (id)
 	{

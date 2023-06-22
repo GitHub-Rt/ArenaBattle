@@ -3,6 +3,7 @@
 
 class PolyLine;
 class PlayerEffect;
+class Gauge;
 
 // 攻撃の状態を管理
 enum class AttackState
@@ -24,7 +25,7 @@ enum class PlayerData
 	DodgeTime = 7,
 	RecoveryPotionNumber = 8,
 	RecoveryQuantity = 9,
-	MaxInvincibleTime = 10
+	MaxDamageTimer = 10
 };
 
 class Player : public CharacterBase
@@ -61,8 +62,13 @@ public:
 	void NormalAttackAction();	// 通常攻撃アクション
 	void HardAttackAction();	// 強攻撃アクション
 
-	// 被ダメージモーション
+	// 被ダメージモーション周り
 	void DamageTakenMotion();
+
+	// HPゲージ周り
+	void HPDamage(float value);		// HPゲージ減少、hp減少
+	void HPRecovery(float value);	// HPゲージ増加、hp増加
+	
 
 	// 各入力が行われたかどうか
 	bool IsMoveEntry();			// 動き周りの入力
@@ -73,23 +79,15 @@ public:
 
 #ifdef _DEBUG
 
-	XMFLOAT3 camPos;
-	XMFLOAT3 camTarget;
+	float GetHP() { return hp; }
 
-	void SetCamera(XMFLOAT3 pos, XMFLOAT3 tar)
-	{
-		camPos = pos;
-		camTarget = tar;
-	}
-
-	XMFLOAT3 GetCameraPosition() { return camPos; }
-	XMFLOAT3 GetCameraTarget() { return camTarget; }
+	
 
 #endif
 
 private:
 
-	// InternalDataCSVから値を格納する変数
+	// InternalDataCSVから値を格納する定数
 	float STRENGTH_RATE_INCREASING_ATTACK;	// 攻撃力が増加する体力の割合ライン
 	float ATTACK_POWER_INCREASE_RATE;		// 体力の割合ラインより体力が下になったときの攻撃力の増加率
 	float NORMAL_ATTACK_INCREASE_RATE;		// 通常攻撃の攻撃倍率
@@ -99,8 +97,13 @@ private:
 	float DODGE_TIME;						// 回避時間
 	float RECOVERY_POTION_NUMBER;			// 回復ポーションの最大数
 	float RECOVERY_QUANTITY;				// 回復量
-	int MAX_INVINCIBLE_TIME;				// 最大無敵時間
-	
+	float MAX_DAMAGE_TIMER;					// 被ダメージ最大時間
+
+	// ポインタ
+	Gauge* pGauge;
+
+	// 全体変数
+	float hp;		// 体力
 
 	// 入力周りの変数
 	bool isTrrigerReset;
@@ -124,6 +127,9 @@ private:
 	// 回避周りの変数
 	PolyLine* pLine;			// ポリラインのポインタ
 	int dodgeTimer;				// 回避時間
+
+	// 被ダメージ周りの変数
+	int damageTimer;				// ダメージタイマー
 
 	// カメラ周りの変数
 	float angleX;				// 水平方向のカメラ回転角度

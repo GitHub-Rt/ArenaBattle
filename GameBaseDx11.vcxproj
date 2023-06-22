@@ -172,6 +172,7 @@
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Stage\StageBase.cpp" />
     <ClCompile Include="Stage\Wall.cpp" />
+    <ClCompile Include="UI\Gauge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackModel\AttackModelBase.h" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="Stage\StageBase.h" />
     <ClInclude Include="Stage\Wall.h" />
+    <ClInclude Include="UI\Gauge.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

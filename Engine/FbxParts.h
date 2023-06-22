@@ -164,7 +164,7 @@ public:
 	/// <param name="red">Rの値</param>
 	/// <param name="green">Gの値</param>
 	/// <param name="blue">Bの値</param>
-	void ChangeMaterialColor(float red, float green, float blue);
+	void ChangeMaterialColor(float red, float green, float blue, float alpha);
 
 	/// <summary>
 	/// 元々のマテリアルの色に戻す

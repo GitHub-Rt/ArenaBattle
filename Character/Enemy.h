@@ -1,6 +1,10 @@
 #pragma once
 #include "EnemyBase.h"
 
+enum class AttackState;
+
+class Gauge;
+
 enum class EnemyData
 {
 	AttackStartRange = 1,
@@ -30,14 +34,36 @@ public:
 	// 小ジャンプする関数
 	void SmallJump();
 
+	// 被ダメージモーション
+	void DamageMotion();
+
+	// プレイヤーに触れているかどうか
+	bool IsPlayerHitting() { return isHittingPlayer; }
+
+
 	void DrawEffect() override;
 	void CharacterStunAction() override;
+
+#ifdef _DEBUG
+
+	float GetHP() { return hp; }
+
+
+
+#endif
+
 
 private:
 
 	// InternalDataCSVから値を格納する変数
 	float ATTACK_START_RANGE;		// 攻撃開始する範囲の長さ
 	int ATTACK_TIME;				// 攻撃時間
+
+	Gauge* pGauge;
+	
+	// 全体変数
+	float hp;	// 体力
+
 
 	// 移動周りの変数
 	XMVECTOR vPrevPos;				// 前回の位置ベクトル
@@ -51,5 +77,9 @@ private:
 	float jumpSpeed;				// 初速度
 	bool isJumpSummit;				// ジャンプの頂上に到達したかどうか
 	bool isStartingAttackMoving;	// ジャンプ処理を終えて移動を始めたかどうか
+
+
+	// その他
+	bool isHittingPlayer;			// プレイヤーに触れているかどうか
 };
 

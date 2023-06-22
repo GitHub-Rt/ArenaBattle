@@ -11,19 +11,28 @@
 #include "../Engine/Input.h"
 #include "SceneManager.h"
 
+
 DebugScene::DebugScene(GameObject* parent)
 	: GameObject(parent, "DebugScene")
 {
-
+	for (int i = 0; i < ENEMY_COUNT; i++)
+	{
+		pEnemy[i] = nullptr;
+	}
 }
 
 void DebugScene::Initialize()
 {
+
+
 	Instantiate<Stage>(this);
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 
-	Instantiate<Enemy>(this);
+	for (int i = 0; i < ENEMY_COUNT; i++)
+	{
+		pEnemy[i] = Instantiate<Enemy>(this);
+	}
 
 	Instantiate<imguiObject>(this);
 }

@@ -93,7 +93,7 @@ public:
 	/// <param name="red">Rの値</param>
 	/// <param name="green">Gの値</param>
 	/// <param name="blue">Bの値</param>
-	void ColorChange(float red, float green, float blue);
+	void ColorChange(float red, float green, float blue, float alpha = 1);
 
 	/// <summary>
 	/// 元々のマテリアルの色に戻す関数
@@ -116,7 +116,7 @@ public:
 	void CharacterDamageCalculation(CharacterID attackChara, CharacterID target, float magnification = 1);
 
 	/// <summary>
-	/// ダメージを負ったことを該当キャラクターに知らせる関数
+	/// ダメージ量を該当キャラクターにセットする関数
 	/// </summary>
 	/// <param name="target">該当キャラクターのID</param>
 	/// <param name="attackDamage">与えるダメージ量</param>
@@ -327,7 +327,6 @@ private:
 	float internalData; // キャラクターの内部データの数値
 	int calCount;		// キャラクター内部データの列数
 	float damage;		// 受けるダメージ量
-	float attackDamage;	// 与えるダメージ量
 
 	// 各種データ
 	CsvReader ParameterCSV;

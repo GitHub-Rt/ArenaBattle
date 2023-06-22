@@ -153,11 +153,11 @@ void Fbx::RayCast(RayCastData * data)
 	}
 }
 
-void Fbx::ChangeColor(float red, float green, float blue)
+void Fbx::ChangeColor(float red, float green, float blue, float alpha)
 {
 	for (int k = 0; k < parts_.size(); k++)
 	{
-		parts_[k]->ChangeMaterialColor(red, green, blue);
+		parts_[k]->ChangeMaterialColor(red, green, blue, alpha);
 	}
 }
 

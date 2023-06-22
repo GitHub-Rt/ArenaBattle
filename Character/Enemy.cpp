@@ -1,6 +1,7 @@
 #include "Enemy.h"
-
 #include "Player.h"
+
+#include "../UI/Gauge.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 5, 8, 5 };	// 当たり判定枠
@@ -9,6 +10,13 @@ const float JUMP_FIRST_SPEED = 1.6f;			// ジャンプの初速度
 Enemy::Enemy(GameObject* parent)
 	:EnemyBase(parent, "Enemy")
 {
+	ATTACK_START_RANGE = 0;
+	ATTACK_TIME = 0;
+
+	pGauge = nullptr;
+
+	hp = 0;
+
 	vPrevPos = { 0,0,0,0 };
 
 	vAttackMove = { 0,0,0,0 };
@@ -18,6 +26,8 @@ Enemy::Enemy(GameObject* parent)
 	jumpSpeed = 0;
 	isJumpSummit = false;
 	isStartingAttackMoving = false;
+
+	isHittingPlayer = false;
 }
 
 Enemy::~Enemy()
@@ -34,14 +44,16 @@ void Enemy::SetData()
 void Enemy::Initialize()
 {
 	SetData();
+	SetParameter(CharacterID::NormalEnemy);
 
 	CharacterModelLoad("enemy.fbx");
 	CharacterAddCollider(HIT_TEST_RANGE);
-	
-	ChangeState(CharacterState::Moving);
 
 	// 変数の初期化
 	{
+		pGauge = Instantiate<Gauge>(this);
+
+		hp = GetParameterValue(CharacterID::NormalEnemy, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
 
 		transform_.position_.x = (float)(rand() % 100 - 50);
@@ -70,7 +82,7 @@ void Enemy::CharacterUpdate()
 
 void Enemy::CharacterIdleAction()
 {
-
+	ChangeState(CharacterState::Moving);
 }
 
 void Enemy::CharacterMove()
@@ -147,12 +159,12 @@ void Enemy::CharacterAttack()
 {
 	if (isStartingAttackMoving)
 	{
-		const float VECTOR_LENGTH_ATTACK = 0.9f;	// 攻撃時のベクトルの長さ
+		const float VECTOR_LENGTH_ATTACK = 0.5f;	// 攻撃時のベクトルの長さ
 
-		vAttackMove *= VECTOR_LENGTH_ATTACK;
+		XMVECTOR vMove = vAttackMove * VECTOR_LENGTH_ATTACK;
 
 		XMFLOAT3 motionPos = { 0,0,0 };
-		XMStoreFloat3(&motionPos, vAttackMove);
+		XMStoreFloat3(&motionPos, vMove);
 
 		motionPos.x += transform_.position_.x;
 		motionPos.z += transform_.position_.z;
@@ -160,12 +172,10 @@ void Enemy::CharacterAttack()
 		if (attackTimer <= ATTACK_TIME)
 		{
 			attackTimer++;
-			if (IsMoveLimit(motionPos))
+			if (IsMoveLimit(motionPos) == false)
 			{
-				XMStoreFloat3(&motionPos, vPrevPos);
-			}
-			else
-			{
+				vPrevPos = XMLoadFloat3(&transform_.position_);
+
 				transform_.position_.x = motionPos.x;
 				transform_.position_.z = motionPos.z;
 			}
@@ -214,28 +224,107 @@ void Enemy::SmallJump()
 
 void Enemy::CharacterTakeDamage(float damage)
 {
+	DamageStage nowStage = GetDamageState();
 
+	switch (nowStage)
+	{
+	case DamageStage::NoDamage:
+		ClearState(CharacterState::Damaged);
+		break;
+	case DamageStage::DamageStart:
+		// HPを減らす
+		hp -= damage;
+		ColorChange(1, 0, 0);	// モデルの色変更
+		SetDamageStage(DamageStage::TakeDamage);
+		break;
+	case DamageStage::TakeDamage:
+		DamageMotion();
+		break;
+	case DamageStage::EndDamage:
+		RestoreOriginalColor();
+		isHittingPlayer = false;
+		SetDamageStage(DamageStage::NoDamage);
+		break;
+	default:
+		break;
+	}
+
+	
+}
+
+void Enemy::DamageMotion()
+{
+	const float NORMAL_DAMAGE_VECTOR = 15.0f;	// 通常攻撃時の移動倍率
+	const float HARD_DAMAGE_VECTOR = 25.0f;		// 強攻撃時の移動倍率
+
+	Player* pPlayer = (Player*)FindObject("Player");
+	AttackState nowAttack = pPlayer->GetAttackState();
+
+	XMVECTOR vMove = -(GetFrontVector());
+
+	switch (nowAttack)
+	{
+	case AttackState::NoAttack:
+		
+		break;
+	case AttackState::NormalAttack:
+		vMove *= NORMAL_DAMAGE_VECTOR;
+		break;
+	case AttackState::HardAttack:
+		vMove *= HARD_DAMAGE_VECTOR;
+		break;
+	default:
+		break;
+	}
+
+	XMFLOAT3 nextPos = { 0,0,0 };
+	XMStoreFloat3(&nextPos, vMove);
+
+	nextPos.x += transform_.position_.x;
+	nextPos.z += transform_.position_.z;
+
+	if (IsMoveLimit(nextPos) == false)
+	{
+		transform_.position_.x = nextPos.x;
+		transform_.position_.z = nextPos.z;
+	}
+
+	SetDamageStage(DamageStage::EndDamage);
 }
 
 void Enemy::CharacterCheckHP()
 {
-
+	if (hp < 0)
+	{
+		KillMe();
+	}
 }
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
+		isHittingPlayer = true;
+
 		XMStoreFloat3(&transform_.position_, vPrevPos);
 
-		if (IsStateSet(CharacterState::Attacking))
+		Player* pPlayer = (Player*)FindObject("Player");
+
+		// プレイヤーが攻撃中ではなく、敵が攻撃中でプレイヤーがダメージを負ってない状態だったらダメージ処理を開始させる
+		if (pPlayer->IsStateSet(CharacterState::Attacking) == false)
 		{
-			Player* pPlayer = (Player*)FindObject("Player");
-			if (pPlayer->GetDamageState() == DamageStage::NoDamage)
+			if (IsStateSet(CharacterState::Attacking) && pPlayer->GetDamageState() == DamageStage::NoDamage)
 			{
+				CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
 				pPlayer->SetDamageStage(DamageStage::DamageStart);
 			}
 		}
+		else
+		{
+			// プレイヤーが攻撃中だったらEnemyは攻撃状態をやめる
+			ClearState(CharacterState::Attacking);
+		}
+		
 
 
 	}

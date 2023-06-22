@@ -7,10 +7,16 @@
 #include "../Effect/PolyLine.h"
 #include "../Effect/PlayerEffect.h"
 
+#include "../UI/Gauge.h"
+
+#include "../Scene/DebugScene.h"
+#include "../Character/Enemy.h"
+
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 1, 2, 1 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
-
+const XMFLOAT3 GaugePos = XMFLOAT3(-0.95f, 0.88f, 0);
+const XMFLOAT3 GaugeScale = XMFLOAT3(1.5f, 1.5f, 1.0f);
 
 void Player::SetData()
 {
@@ -23,7 +29,7 @@ void Player::SetData()
 	DODGE_TIME = GetInternalData(CharacterID::Player, (int)PlayerData::DodgeTime);
 	RECOVERY_POTION_NUMBER = GetInternalData(CharacterID::Player, (int)PlayerData::RecoveryPotionNumber);
 	RECOVERY_QUANTITY = GetInternalData(CharacterID::Player, (int)PlayerData::RecoveryQuantity);
-	MAX_INVINCIBLE_TIME = GetInternalData(CharacterID::Player, (int)PlayerData::MaxInvincibleTime);
+	MAX_DAMAGE_TIMER = GetInternalData(CharacterID::Player, (int)PlayerData::MaxDamageTimer);
 }
 
 Player::Player(GameObject* parent)
@@ -38,9 +44,11 @@ Player::Player(GameObject* parent)
 	DODGE_TIME = 0;
 	RECOVERY_POTION_NUMBER = 0;
 	RECOVERY_QUANTITY = 0;
-	MAX_INVINCIBLE_TIME = 0;
 
-	
+
+	pGauge = nullptr;
+
+	hp = 0;
 
 
 	isTrrigerReset = true;
@@ -60,6 +68,8 @@ Player::Player(GameObject* parent)
 	pLine = nullptr;
 	dodgeTimer = 0;
 
+	damageTimer = 0;
+
 	angleX = 0;
 	angleY = 0;
 	cameraDirection = XMFLOAT3(0, 0, 0);
@@ -73,6 +83,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	SetData();
+	SetParameter(CharacterID::Player);
 
 	CharacterModelLoad("player.fbx");
 	CharacterAddCollider(HIT_TEST_RANGE);
@@ -83,7 +94,13 @@ void Player::Initialize()
 		transform_.position_.z = -45.0f;
 		vPrevPos = XMLoadFloat3(&transform_.position_);
 
+		pGauge = Instantiate<Gauge>(GetParent());
+		pGauge->SetGaugeScale(GaugeScale);
+		pGauge->SetGaugePosition(GaugePos);
+
+		hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
+
 
 		pLine = new PolyLine();
 		pLine->Load("Effect/Player/tex.png");
@@ -330,19 +347,19 @@ void Player::CharacterTakeDamage(float damage)
 {
 	DamageStage nowStage = GetDamageState();
 
+	if (IsStateSet(CharacterState::Dodging))
+	{// 攻撃を受けたときにプレイヤーの状態が回避状態だったなら判定無しでダメージ処理を終える
+		nowStage = DamageStage::EndDamage;
+	}
+
 	switch (nowStage)
 	{
 	case DamageStage::NoDamage:
 		ClearState(CharacterState::Damaged);
 		break;
 	case DamageStage::DamageStart:
-		if (IsStateSet(CharacterState::Dodging))
-		{// 攻撃を受けたときにプレイヤーの状態が回避状態だったら判定無しで処理を終える
-			SetDamageStage(DamageStage::EndDamage);
-			break;
-		}
 		// HPゲージを減らす
-
+		HPDamage(damage);
 		ColorChange(1, 0, 0);	// モデルの色変更
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
@@ -362,9 +379,35 @@ void Player::CharacterTakeDamage(float damage)
 
 void Player::DamageTakenMotion()
 {
-	
+	if (damageTimer <= MAX_DAMAGE_TIMER)
+	{
+		const float VECTOR_MAGNIFICATION = 0.8f;	// 移動倍率
 
-	SetDamageStage(DamageStage::EndDamage);
+		damageTimer++;
+
+		// 進行方向ベクトルを取得
+		XMVECTOR vTraveling = -(GetFrontVector());
+		vTraveling *= VECTOR_MAGNIFICATION;
+
+		XMFLOAT3 motionPos = { 0,0,0 };
+		XMStoreFloat3(&motionPos, vTraveling);
+
+		motionPos.x += transform_.position_.x;
+		motionPos.z += transform_.position_.z;
+
+		if (IsMoveLimit(motionPos) == false)
+		{
+			vPrevPos = XMLoadFloat3(&transform_.position_);
+
+			transform_.position_.x = motionPos.x;
+			transform_.position_.z = motionPos.z;
+		}
+	}
+	else
+	{
+		damageTimer = 0;
+		SetDamageStage(DamageStage::EndDamage);
+	}
 }
 
 void Player::NormalCamera()
@@ -482,11 +525,6 @@ void Player::NormalCamera()
 	XMFLOAT3 cameraPosition, cameraFocus;
 	XMStoreFloat3(&cameraPosition, vCameraPosition);
 	XMStoreFloat3(&cameraFocus, vCameraFocus);
-
-#ifdef _DEBUG
-	SetCamera(cameraPosition, cameraFocus);
-#endif
-
 	Camera::SetPosition(cameraPosition);
 	Camera::SetTarget(cameraFocus);
 }
@@ -538,12 +576,15 @@ void Player::CharacterDodingAction()
 		attackState = AttackState::NoAttack;
 	}
 
-	// ポリライン
+	// ポリラインに現在ポジションを追加する
 	pLine->AddPosition(transform_.position_);
 
+	//　回避処理
 	if (dodgeTimer <= DODGE_TIME)
 	{
 		dodgeTimer++;
+
+		ColorChange(0, 0, 1, 0.5f);
 
 		XMFLOAT3 nextPos = transform_.position_;
 		nextPos.x += movingDistance.x * DODGE_MOVING_DISTANCE_MAGNIFICATION;
@@ -555,13 +596,14 @@ void Player::CharacterDodingAction()
 		}
 		else
 		{
-			//　回避処理
+			// 移動
 			transform_.position_.x = nextPos.x;
 			transform_.position_.z = nextPos.z;
 		}
 	}
 	else
 	{
+		RestoreOriginalColor();
 		dodgeTimer = 0;
 		ClearState(CharacterState::Dodging);
 	}
@@ -582,7 +624,40 @@ void Player::DrawEffect()
 
 void Player::OnCollision(GameObject* pTarget)
 {
+	if (pTarget->GetObjectName() == "Enemy")
+	{
+		XMStoreFloat3(&transform_.position_, vPrevPos);
 
+		if (IsStateSet(CharacterState::Attacking))
+		{
+			CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
+
+			DebugScene* pDebug = (DebugScene*)FindObject("DebugScene");
+			Enemy* pEnemy[ENEMY_COUNT];
+			pDebug->SetEnemyPointer(pEnemy);
+
+			for (int i = 0; i < ENEMY_COUNT; i++)
+			{
+				if (pEnemy[i] != nullptr && pEnemy[i]->IsPlayerHitting())
+				{
+					pEnemy[i]->SetDamageStage(DamageStage::DamageStart);
+
+				}
+			}
+		}
+	}
+}
+
+void Player::HPDamage(float value)
+{
+	hp -= value;
+	pGauge->Damage(value);
+}
+
+void Player::HPRecovery(float value)
+{
+	hp += value;
+	pGauge->Recovery(value);
 }
 
 bool Player::IsMoveEntry()
@@ -672,3 +747,5 @@ bool Player::IsJumpEntry()
 
 	return false;
 }
+
+

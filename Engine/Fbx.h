@@ -93,7 +93,7 @@ public:
 	/// <param name="red"></param>
 	/// <param name="green"></param>
 	/// <param name="blue"></param>
-	void ChangeColor(float red, float green, float blue);
+	void ChangeColor(float red, float green, float blue, float alpha);
 
 	/// <summary>
 	/// 元々のマテリアルの色に戻す

@@ -620,11 +620,11 @@ void FbxParts::RayCast(RayCastData * data)
 
 
 
-void FbxParts::ChangeMaterialColor(float red, float green, float blue)
+void FbxParts::ChangeMaterialColor(float red, float green, float blue, float alpha)
 {
 	for (DWORD i = 0; i < materialCount_; i++)
 	{
-		pMaterial_[i].diffuse = XMFLOAT4(red, green, blue, 1.0f);
+		pMaterial_[i].diffuse = XMFLOAT4(red, green, blue, alpha);
 	}
 }
 
