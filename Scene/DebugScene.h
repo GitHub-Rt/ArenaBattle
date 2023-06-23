@@ -26,5 +26,6 @@ public:
 
 private:	
 
+	int enemyCount;
 	Enemy* pEnemy[ENEMY_COUNT];
 };

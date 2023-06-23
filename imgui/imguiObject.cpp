@@ -93,6 +93,15 @@ void imguiObject::Update()
 
                 std::string str = GetCharacterStateString(pEnemy);
                 ImGui::Text(str.c_str());
+
+                static float x = 0.0f;
+                if (ImGui::SliderFloat("float", &x, -1.0f, 1.0f)) {
+                    printf("SliderFloat\n");
+                    pEnemy->SetDebugPos(x, pEnemy->getDebugPos().y);
+                }
+
+                ImGui::Text("gaugePos_x : %g", pEnemy->getDebugPos().x);
+                ImGui::Text("gaugePos_y : %g", pEnemy->getDebugPos().y);
             }
 
             ImGui::TreePop();

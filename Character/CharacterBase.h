@@ -8,7 +8,6 @@
 
 // 180度を表す定数
 const double DEGREES_180 = 180.0;
-
 enum class SCENE_ID;
 
 // キャラステータス

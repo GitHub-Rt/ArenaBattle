@@ -2,7 +2,7 @@
 #include "../Engine/Image.h"
 
 //定数宣言
-const float MAX_HP = 100.0f;
+
 const float DMG_SPEED = 0.0025f;      //ダメージバーの速度
 const float RCV_SPEED = 0.005f;       //回復バーの速度
 
@@ -14,14 +14,14 @@ Gauge::Gauge(GameObject* parent)
     {
         hPict_[i] = -1;
     }
+
+    MAX_HP = 100;
+
     nowHp_ = MAX_HP;      //初期HP （適宜変更）
-    maxHp_ = MAX_HP;     //MaxHP（適宜変更）
+    maxHp_ = MAX_HP;      //MaxHP（適宜変更）
 
     stopRatio_ = (float)nowHp_ / (float)maxHp_;
     moveRatio_ = stopRatio_;
-
-
-
 }
 
 Gauge::~Gauge()
@@ -30,6 +30,16 @@ Gauge::~Gauge()
 
 void Gauge::Initialize()
 {
+    if (MAX_HP != 100)
+    {
+        nowHp_ = MAX_HP;      //初期HP （適宜変更）
+        maxHp_ = MAX_HP;      //MaxHP（適宜変更）
+
+        stopRatio_ = (float)nowHp_ / (float)maxHp_;
+        moveRatio_ = stopRatio_;
+    }
+
+
     //画像ファイルロード
     {
         //使用する画像ファイル名

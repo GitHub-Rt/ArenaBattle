@@ -23,11 +23,18 @@ public:
     void Recovery(float value);
 
 
-    void SetGaugePosition(XMFLOAT3 pos) { transform_.position_ = pos; }
+    void SetGaugePosition(float x, float y) 
+    {
+        transform_.position_.x  = x;
+        transform_.position_.y = y;
+    }
     void SetGaugeScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
-
+    void SetMaxHP(float maxValue) { MAX_HP = maxValue; }
 
 private:
+
+    float MAX_HP;
+
     float nowHp_; //åªç›ÇÃÇgÇo
     float maxHp_; //ç≈ëÂÇgÇo
 

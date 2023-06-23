@@ -26,13 +26,16 @@ void DebugScene::Initialize()
 
 
 	Instantiate<Stage>(this);
-	Instantiate<Player>(this);
-	Instantiate<Robot>(this);
 
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
 		pEnemy[i] = Instantiate<Enemy>(this);
 	}
+
+	Instantiate<Player>(this);
+	Instantiate<Robot>(this);
+
+	
 
 	Instantiate<imguiObject>(this);
 }

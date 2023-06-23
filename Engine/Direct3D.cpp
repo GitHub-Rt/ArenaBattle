@@ -6,6 +6,7 @@
 //画面の描画に関する処理
 namespace Direct3D
 {
+	
 
 	ID3D11Texture2D* pDepthTexture = nullptr;			//深度を書き込むテクスチャ
 	ID3D11RenderTargetView* pDepthTargetView = nullptr;	//↑のビュー
@@ -135,7 +136,6 @@ namespace Direct3D
 		vp.MaxDepth = 1.0f;		//奥
 		vp.TopLeftX = 0;		//左
 		vp.TopLeftY = 0;		//上
-
 
 		//各パターンのシェーダーセット準備
 		InitShaderBundle();

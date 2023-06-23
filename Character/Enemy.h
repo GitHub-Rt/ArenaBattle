@@ -4,6 +4,7 @@
 enum class AttackState;
 
 class Gauge;
+class RedDot;
 
 enum class EnemyData
 {
@@ -40,6 +41,10 @@ public:
 	// プレイヤーに触れているかどうか
 	bool IsPlayerHitting() { return isHittingPlayer; }
 
+	// HPゲージの位置をセットする関数
+	void SetGaugePosition(XMFLOAT3 position);
+
+	void GaugeDamage(float value);
 
 	void DrawEffect() override;
 	void CharacterStunAction() override;
@@ -48,7 +53,18 @@ public:
 
 	float GetHP() { return hp; }
 
+	XMFLOAT2 gaugePos;
+	bool isDebug;
+	void SetDebugPos(float x, float y) 
+	{ 
+		gaugePos.x = x, gaugePos.y = y; 
+		isDebug = true;
+	}
 
+	XMFLOAT2 getDebugPos()
+	{
+		return gaugePos;
+	}
 
 #endif
 
@@ -59,11 +75,12 @@ private:
 	float ATTACK_START_RANGE;		// 攻撃開始する範囲の長さ
 	int ATTACK_TIME;				// 攻撃時間
 
+	RedDot* pRedDot;
 	Gauge* pGauge;
 	
 	// 全体変数
 	float hp;	// 体力
-
+	
 
 	// 移動周りの変数
 	XMVECTOR vPrevPos;				// 前回の位置ベクトル

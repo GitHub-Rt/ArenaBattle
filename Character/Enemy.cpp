@@ -3,9 +3,15 @@
 
 #include "../UI/Gauge.h"
 
+#include "../Engine/Camera.h"
+#include "../Engine/Direct3D.h"
+
+
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 5, 8, 5 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.6f;			// ジャンプの初速度
+const XMFLOAT3 GaugeScale = XMFLOAT3(0.3f, 0.7f, 0);
+
 
 Enemy::Enemy(GameObject* parent)
 	:EnemyBase(parent, "Enemy")
@@ -13,6 +19,7 @@ Enemy::Enemy(GameObject* parent)
 	ATTACK_START_RANGE = 0;
 	ATTACK_TIME = 0;
 
+	pRedDot = nullptr;
 	pGauge = nullptr;
 
 	hp = 0;
@@ -51,17 +58,18 @@ void Enemy::Initialize()
 
 	// 変数の初期化
 	{
-		pGauge = Instantiate<Gauge>(this);
+		transform_.position_.x = (float)(rand() % 100 - 50);
+		transform_.position_.z = 15;
 
 		hp = GetParameterValue(CharacterID::NormalEnemy, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
 
-		transform_.position_.x = (float)(rand() % 100 - 50);
-		transform_.position_.z = 15;
+		pGauge = Instantiate<Gauge>(this);
+		pGauge->SetGaugeScale(GaugeScale);
+		SetGaugePosition(transform_.position_);
+		//pGauge->SetGaugePosition(transform_.position_.x, transform_.position_.y + 0.002f);
+		pGauge->SetMaxHP(hp);
 	}
-	
-
-
 }
 
 void Enemy::EnemyRelease()
@@ -76,7 +84,7 @@ void Enemy::CharacterUpdate()
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
 
-
+	SetGaugePosition(transform_.position_);
 	CharacterCheckHP();
 }
 
@@ -159,7 +167,7 @@ void Enemy::CharacterAttack()
 {
 	if (isStartingAttackMoving)
 	{
-		const float VECTOR_LENGTH_ATTACK = 0.5f;	// 攻撃時のベクトルの長さ
+		const float VECTOR_LENGTH_ATTACK = 0.65f;	// 攻撃時のベクトルの長さ
 
 		XMVECTOR vMove = vAttackMove * VECTOR_LENGTH_ATTACK;
 
@@ -232,8 +240,7 @@ void Enemy::CharacterTakeDamage(float damage)
 		ClearState(CharacterState::Damaged);
 		break;
 	case DamageStage::DamageStart:
-		// HPを減らす
-		hp -= damage;
+		GaugeDamage(damage);
 		ColorChange(1, 0, 0);	// モデルの色変更
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
@@ -250,6 +257,12 @@ void Enemy::CharacterTakeDamage(float damage)
 	}
 
 	
+}
+
+void Enemy::GaugeDamage(float value)
+{
+	//hp -= damage;
+	pGauge->Damage(value);
 }
 
 void Enemy::DamageMotion()
@@ -315,8 +328,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 		{
 			if (IsStateSet(CharacterState::Attacking) && pPlayer->GetDamageState() == DamageStage::NoDamage)
 			{
-				CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
-				pPlayer->SetDamageStage(DamageStage::DamageStart);
+				//CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
+				//pPlayer->SetDamageStage(DamageStage::DamageStart);
 			}
 		}
 		else
@@ -333,6 +346,53 @@ void Enemy::OnCollision(GameObject* pTarget)
 	{
 
 	}
+}
+
+void Enemy::SetGaugePosition(XMFLOAT3 position)
+{
+	const float GAUGE_POS_Y = 0.25f; // どれくらい上に表示するか
+	const float scrWidth = 1280;
+	const float scrHeight = 720;
+	
+
+	// ビューポート行列
+	float w = scrWidth / 2.0f;
+	float h = scrHeight / 2.0f;
+
+	XMMATRIX vp = {
+		w, 0, 0, 0,
+		0, -h, 0, 0,
+		0, 0, 1, 0,
+		w, h, 0, 1
+	};
+
+	XMVECTOR vPosition = XMLoadFloat3(&position);
+	XMMATRIX viewPort = XMMatrixInverse(nullptr, vp);
+	XMMATRIX viewProj = Camera::GetViewProjectionMatrix();
+	XMMATRIX matrix = viewProj * viewPort;
+	XMVECTOR screenPos = XMVector3TransformCoord(vPosition, matrix);
+
+	float x = ((XMVectorGetX(screenPos) + 1.0f) * 0.5f) * scrWidth / 2.0f;
+	float y = ((1.0f - XMVectorGetY(screenPos)) * 0.5f) * scrHeight;
+
+	// 頭上に固定する
+	y += GAUGE_POS_Y;
+
+#ifdef _DEBUG
+	if (isDebug)
+	{
+		x = gaugePos.x;
+		y = gaugePos.y;
+	}
+	else
+	{
+		gaugePos.x = x;
+		gaugePos.y = y;
+	}
+#endif
+
+	// ゲージの位置を設定する
+	pGauge->SetGaugePosition(x, y);
 }
 
 void Enemy::DrawEffect()

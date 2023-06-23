@@ -27,6 +27,7 @@ const int HALF_WIDTH = 640;						//ウィンドウ幅の中心点
 const int HALF_HEIGHT = 360;					//ウィンドウ縦の中心点
 
 
+
 //プロトタイプ宣言
 HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdShow);
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

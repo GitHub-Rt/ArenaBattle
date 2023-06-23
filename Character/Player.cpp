@@ -94,12 +94,16 @@ void Player::Initialize()
 		transform_.position_.z = -45.0f;
 		vPrevPos = XMLoadFloat3(&transform_.position_);
 
-		pGauge = Instantiate<Gauge>(GetParent());
-		pGauge->SetGaugeScale(GaugeScale);
-		pGauge->SetGaugePosition(GaugePos);
+		
 
 		hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
+
+
+		pGauge = Instantiate<Gauge>(GetParent());
+		pGauge->SetGaugeScale(GaugeScale);
+		pGauge->SetGaugePosition(GaugePos.x, GaugePos.y);
+		pGauge->SetMaxHP(hp);
 
 
 		pLine = new PolyLine();
