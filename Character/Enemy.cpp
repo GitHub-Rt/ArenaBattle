@@ -64,11 +64,11 @@ void Enemy::Initialize()
 		hp = GetParameterValue(CharacterID::NormalEnemy, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
 
-		pGauge = Instantiate<Gauge>(this);
-		pGauge->SetGaugeScale(GaugeScale);
-		SetGaugePosition(transform_.position_);
-		//pGauge->SetGaugePosition(transform_.position_.x, transform_.position_.y + 0.002f);
-		pGauge->SetMaxHP(hp);
+		//pGauge = Instantiate<Gauge>(this);
+		//pGauge->SetGaugeScale(GaugeScale);
+		//SetGaugePosition(transform_.position_);
+		////pGauge->SetGaugePosition(transform_.position_.x, transform_.position_.y + 0.002f);
+		//pGauge->SetMaxHP(hp);
 	}
 }
 
@@ -84,7 +84,7 @@ void Enemy::CharacterUpdate()
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
 
-	SetGaugePosition(transform_.position_);
+	//SetGaugePosition(transform_.position_);
 	CharacterCheckHP();
 }
 
@@ -240,8 +240,10 @@ void Enemy::CharacterTakeDamage(float damage)
 		ClearState(CharacterState::Damaged);
 		break;
 	case DamageStage::DamageStart:
-		GaugeDamage(damage);
-		ColorChange(1, 0, 0);	// モデルの色変更
+		//GaugeDamage(damage);
+		hp -= damage;
+		isHittingPlayer = false;
+		ColorChange(1, 0, 0);	// モデルの色変更させる
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
 	case DamageStage::TakeDamage:
@@ -249,7 +251,6 @@ void Enemy::CharacterTakeDamage(float damage)
 		break;
 	case DamageStage::EndDamage:
 		RestoreOriginalColor();
-		isHittingPlayer = false;
 		SetDamageStage(DamageStage::NoDamage);
 		break;
 	default:
@@ -293,8 +294,8 @@ void Enemy::DamageMotion()
 	XMFLOAT3 nextPos = { 0,0,0 };
 	XMStoreFloat3(&nextPos, vMove);
 
-	nextPos.x += transform_.position_.x;
-	nextPos.z += transform_.position_.z;
+	nextPos.x -= transform_.position_.x;
+	nextPos.z -= transform_.position_.z;
 
 	if (IsMoveLimit(nextPos) == false)
 	{
@@ -328,8 +329,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 		{
 			if (IsStateSet(CharacterState::Attacking) && pPlayer->GetDamageState() == DamageStage::NoDamage)
 			{
-				//CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
-				//pPlayer->SetDamageStage(DamageStage::DamageStart);
+				CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
+				pPlayer->SetDamageStage(DamageStage::DamageStart);
 			}
 		}
 		else
@@ -344,7 +345,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 	if (pTarget->GetObjectName() == "RobotBullet")
 	{
-
+		CharacterDamageCalculation(CharacterID::Robot, CharacterID::NormalEnemy);
+		SetDamageStage(DamageStage::DamageStart);
 	}
 }
 
@@ -397,10 +399,8 @@ void Enemy::SetGaugePosition(XMFLOAT3 position)
 
 void Enemy::DrawEffect()
 {
-
 }
 
 void Enemy::CharacterStunAction()
 {
-
 }

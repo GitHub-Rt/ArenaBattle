@@ -69,6 +69,9 @@
     <Filter Include="06Character\Enemy\EnemyObject">
       <UniqueIdentifier>{7d4ea5f2-7df5-4284-b28b-16d0c2762566}</UniqueIdentifier>
     </Filter>
+    <Filter Include="11Manager">
+      <UniqueIdentifier>{df3daa10-435c-41db-9027-8c32ae6daa77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -214,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="UI\Gauge.cpp">
       <Filter>08UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\EnemyManager.cpp">
+      <Filter>11Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,6 +369,9 @@
     </ClInclude>
     <ClInclude Include="UI\Gauge.h">
       <Filter>08UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\EnemyManager.h">
+      <Filter>11Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

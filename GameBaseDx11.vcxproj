@@ -165,6 +165,7 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Manager\EnemyManager.cpp" />
     <ClCompile Include="Scene\DebugScene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Stage\BattleWall.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="Manager\EnemyManager.h" />
     <ClInclude Include="Scene\DebugScene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Stage\BattleWall.h" />

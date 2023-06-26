@@ -15,10 +15,6 @@
 DebugScene::DebugScene(GameObject* parent)
 	: GameObject(parent, "DebugScene")
 {
-	for (int i = 0; i < ENEMY_COUNT; i++)
-	{
-		pEnemy[i] = nullptr;
-	}
 }
 
 void DebugScene::Initialize()
@@ -26,12 +22,7 @@ void DebugScene::Initialize()
 
 
 	Instantiate<Stage>(this);
-
-	for (int i = 0; i < ENEMY_COUNT; i++)
-	{
-		pEnemy[i] = Instantiate<Enemy>(this);
-	}
-
+	Instantiate<Enemy>(this);
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 

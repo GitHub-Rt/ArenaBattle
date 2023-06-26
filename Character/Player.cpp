@@ -636,18 +636,8 @@ void Player::OnCollision(GameObject* pTarget)
 		{
 			CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
 
-			DebugScene* pDebug = (DebugScene*)FindObject("DebugScene");
-			Enemy* pEnemy[ENEMY_COUNT];
-			pDebug->SetEnemyPointer(pEnemy);
-
-			for (int i = 0; i < ENEMY_COUNT; i++)
-			{
-				if (pEnemy[i] != nullptr && pEnemy[i]->IsPlayerHitting())
-				{
-					pEnemy[i]->SetDamageStage(DamageStage::DamageStart);
-
-				}
-			}
+			Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+			pEnemy->SetDamageStage(DamageStage::DamageStart);
 		}
 	}
 }
