@@ -198,7 +198,6 @@ public:
 	/// <param name="state"></param>
 	/// <returns></returns>
 	bool IsStateSet(CharacterState state) const { return (characterStateFlg & (unsigned int)state) != 0; }
-	
 
 	/// <summary>
 	/// •ûŒüƒxƒNƒgƒ‹‚ğ³‹K‰»‚µ‚Ä•Ô‚·ŠÖ”

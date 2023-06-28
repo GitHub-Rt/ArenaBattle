@@ -6,7 +6,20 @@
 #include "../Engine/Audio.h"
 #include "../Engine/Global.h"
 
+
+
+//#include "TitleScene.h"
+//#include "StartScene.h"
+//#include "ReleaseScene.h"
+//#include "OperationScene.h"
+//#include "Operation2Scene.h"
+//#include "PlayScene.h"
+//#include "BattleScene.h"
+//#include "ClearScene.h"
+//#include "GameOverScene.h"
 #include "DebugScene.h"
+
+
 
 
 SceneManager::SceneManager(GameObject * parent)
@@ -16,7 +29,7 @@ SceneManager::SceneManager(GameObject * parent)
 	nextSceneID_ = SCENE_ID::MAX_SCENE_ID;
 	prevSceneID_ = SCENE_ID::MAX_SCENE_ID;
 
-	//pSound = nullptr;
+	pSound = nullptr;
 }
 
 void SceneManager::Initialize()
@@ -50,10 +63,19 @@ void SceneManager::Update()
 		//éüÇÃÉVÅ[ÉìÇçÏê¨
 		switch (nextSceneID_)
 		{
-		case SCENE_ID::SCENE_ID_DEBUG:	Instantiate<DebugScene>(this);	break;
+		/*case SCENE_ID::SCENE_ID_TITLE:		Instantiate<TitleScene>(this);			break;
+		case SCENE_ID::SCENE_ID_START:		Instantiate<StartScene>(this);			break;
+		case SCENE_ID::SCENE_ID_RELEASE:	Instantiate<ReleaseScene>(this);		break;
+		case SCENE_ID::SCENE_ID_OPERATION:  Instantiate<OperationScene>(this);		break;
+		case SCENE_ID::SCENE_ID_OPERATION2: Instantiate<Operation2Scene>(this);		break;
+		case SCENE_ID::SCENE_ID_PLAY:       Instantiate<PlayScene>(this);			break;
+		case SCENE_ID::SCENE_ID_CLEAR:		Instantiate<ClearScene>(this);			break;
+		case SCENE_ID::SCENE_ID_OVER:		Instantiate<GameOverScene>(this);		break;
+		case SCENE_ID::SCENE_ID_BATTLE:		Instantiate<BattleScene>(this);			break;*/
+		case SCENE_ID::SCENE_ID_DEBUG:		Instantiate<DebugScene>(this);			break;
 		default:	break;
 		}
-		//pSound->SetEffectALLFalse();
+		pSound->SetEffectALLFalse();
 		currentSceneID_ = nextSceneID_;
 	}
 }
@@ -64,7 +86,7 @@ void SceneManager::Draw()
 
 void SceneManager::Release()
 {
-	//SAFE_RELEASE(pSound);
+	SAFE_RELEASE(pSound);
 }
 
 void SceneManager::ChangeScene(SCENE_ID next)

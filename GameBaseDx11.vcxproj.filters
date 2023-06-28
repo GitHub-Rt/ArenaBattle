@@ -70,7 +70,13 @@
       <UniqueIdentifier>{7d4ea5f2-7df5-4284-b28b-16d0c2762566}</UniqueIdentifier>
     </Filter>
     <Filter Include="11Manager">
-      <UniqueIdentifier>{df3daa10-435c-41db-9027-8c32ae6daa77}</UniqueIdentifier>
+      <UniqueIdentifier>{03bdf53a-7be4-443b-979d-2bd231ed69d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\HPGauge">
+      <UniqueIdentifier>{9539ce43-42a7-47f1-a05f-35648875f820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\HPGauge\GaugeObject">
+      <UniqueIdentifier>{4241aa46-f882-4e0e-9028-72ff56c22d7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -215,11 +221,20 @@
     <ClCompile Include="Character\EnemyBoss.cpp">
       <Filter>06Character\Enemy\EnemyObject</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Gauge.cpp">
-      <Filter>08UI</Filter>
-    </ClCompile>
     <ClCompile Include="Manager\EnemyManager.cpp">
       <Filter>11Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound\GameSound.cpp">
+      <Filter>09Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\PlayerGauge.cpp">
+      <Filter>08UI\HPGauge\GaugeObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\EnemyBossGauge.cpp">
+      <Filter>08UI\HPGauge\GaugeObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\HPGaugeBase.cpp">
+      <Filter>08UI\HPGauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,11 +382,20 @@
     <ClInclude Include="Character\EnemyBoss.h">
       <Filter>06Character\Enemy\EnemyObject</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Gauge.h">
-      <Filter>08UI</Filter>
-    </ClInclude>
     <ClInclude Include="Manager\EnemyManager.h">
       <Filter>11Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound\GameSound.h">
+      <Filter>09Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PlayerGauge.h">
+      <Filter>08UI\HPGauge\GaugeObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\EnemyBossGauge.h">
+      <Filter>08UI\HPGauge\GaugeObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\HPGaugeBase.h">
+      <Filter>08UI\HPGauge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

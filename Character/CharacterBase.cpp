@@ -57,6 +57,7 @@ void CharacterBase::Update()
 	if (IsEntered())
 	{
 		CharacterUpdate();
+
 		for (unsigned int nowState = (unsigned int)CharacterState::Idle; nowState <= (unsigned int)CharacterState::MAX_CharacterState; nowState++)
 		{
 			CharacterState nowAction = (CharacterState)nowState;
@@ -92,6 +93,8 @@ void CharacterBase::Update()
 				}
 			}
 		}
+
+		
 		
 	}
 	
@@ -170,6 +173,7 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 	}
 
 	pTarget->SetDamage(attackDamage);
+	pTarget->SetDamageStage(DamageStage::DamageStart);
 }
 
 XMVECTOR CharacterBase::GetFrontVector()
@@ -193,9 +197,6 @@ float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 	case SCENE_ID::SCENE_ID_BATTLE:
 	case SCENE_ID::SCENE_ID_DEBUG:
 		pStage = (StageBase*)FindObject("Stage");
-		break;
-	case SCENE_ID::SCENE_ID_TUTORIAL:
-		pStage = (StageBase*)FindObject("TutorialStage");
 		break;
 	case SCENE_ID::SCENE_ID_PLAY:
 		pStage = (StageBase*)FindObject("NormalField");

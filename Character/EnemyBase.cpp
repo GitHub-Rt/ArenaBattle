@@ -11,6 +11,11 @@ EnemyBase::~EnemyBase()
 
 }
 
+void EnemyBase::CharacterUpdate()
+{
+	EnemyUpdate();
+}
+
 void EnemyBase::Release()
 {
 	EnemyRelease();

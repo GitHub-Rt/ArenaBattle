@@ -168,12 +168,15 @@
     <ClCompile Include="Manager\EnemyManager.cpp" />
     <ClCompile Include="Scene\DebugScene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Sound\GameSound.cpp" />
     <ClCompile Include="Stage\BattleWall.cpp" />
     <ClCompile Include="Stage\NormalField.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Stage\StageBase.cpp" />
     <ClCompile Include="Stage\Wall.cpp" />
-    <ClCompile Include="UI\Gauge.cpp" />
+    <ClCompile Include="UI\EnemyBossGauge.cpp" />
+    <ClCompile Include="UI\HPGaugeBase.cpp" />
+    <ClCompile Include="UI\PlayerGauge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackModel\AttackModelBase.h" />
@@ -220,12 +223,15 @@
     <ClInclude Include="Manager\EnemyManager.h" />
     <ClInclude Include="Scene\DebugScene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Sound\GameSound.h" />
     <ClInclude Include="Stage\BattleWall.h" />
     <ClInclude Include="Stage\NormalField.h" />
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="Stage\StageBase.h" />
     <ClInclude Include="Stage\Wall.h" />
-    <ClInclude Include="UI\Gauge.h" />
+    <ClInclude Include="UI\EnemyBossGauge.h" />
+    <ClInclude Include="UI\HPGaugeBase.h" />
+    <ClInclude Include="UI\PlayerGauge.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

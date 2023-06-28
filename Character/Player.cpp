@@ -7,16 +7,15 @@
 #include "../Effect/PolyLine.h"
 #include "../Effect/PlayerEffect.h"
 
-#include "../UI/Gauge.h"
+#include "../UI/PlayerGauge.h"
 
 #include "../Scene/DebugScene.h"
 #include "../Character/Enemy.h"
+#include "../Manager/EnemyManager.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 1, 2, 1 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
-const XMFLOAT3 GaugePos = XMFLOAT3(-0.95f, 0.88f, 0);
-const XMFLOAT3 GaugeScale = XMFLOAT3(1.5f, 1.5f, 1.0f);
 
 void Player::SetData()
 {
@@ -100,11 +99,7 @@ void Player::Initialize()
 		jumpSpeed = JUMP_FIRST_SPEED;
 
 
-		pGauge = Instantiate<Gauge>(GetParent());
-		pGauge->SetGaugeScale(GaugeScale);
-		pGauge->SetGaugePosition(GaugePos.x, GaugePos.y);
-		pGauge->SetMaxHP(hp);
-
+		pGauge = Instantiate<PlayerGauge>(GetParent());
 
 		pLine = new PolyLine();
 		pLine->Load("Effect/Player/tex.png");
@@ -634,10 +629,18 @@ void Player::OnCollision(GameObject* pTarget)
 
 		if (IsStateSet(CharacterState::Attacking))
 		{
-			CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
+			int index = 0;
 
-			Enemy* pEnemy = (Enemy*)FindObject("Enemy");
-			pEnemy->SetDamageStage(DamageStage::DamageStart);
+			for (auto nowEnemy = EnemyManager::enemyList.begin(); nowEnemy < EnemyManager::enemyList.end(); nowEnemy++)
+			{
+				Enemy* pEnemy = EnemyManager::GetEnemyContent(index);
+				index++;
+
+				if (pEnemy->IsPlayerHitting())
+				{
+					CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
+				}
+			}
 		}
 	}
 }

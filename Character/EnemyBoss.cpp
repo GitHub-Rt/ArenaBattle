@@ -1,9 +1,10 @@
 #include "EnemyBoss.h"
+#include "../UI/EnemyBossGauge.h"
 
 EnemyBoss::EnemyBoss(GameObject* parent)
 	: EnemyBase(parent, "EnemyBoss")
 {
-
+	pGauge = nullptr;
 }
 
 EnemyBoss::~EnemyBoss()
@@ -18,7 +19,9 @@ void EnemyBoss::SetData()
 
 void EnemyBoss::Initialize()
 {
+	pGauge = Instantiate<EnemyBossGauge>(GetParent());
 
+	CharacterModelLoad("enemyBoss.fbx");
 }
 
 void EnemyBoss::EnemyRelease()
@@ -26,7 +29,7 @@ void EnemyBoss::EnemyRelease()
 
 }
 
-void EnemyBoss::CharacterUpdate()
+void EnemyBoss::EnemyUpdate()
 {
 
 }

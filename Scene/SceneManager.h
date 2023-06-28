@@ -1,7 +1,7 @@
 #pragma once
 #include "../Engine/global.h"
 #include "../Engine/GameObject.h"
-//#include "../Sound/GameSound.h"
+#include "../Sound/GameSound.h"
 
 //ゲームに登場するシーン
 enum class SCENE_ID
@@ -12,10 +12,9 @@ enum class SCENE_ID
 	SCENE_ID_OPERATION,		//コントローラー用操作説明
 	SCENE_ID_OPERATION2,	//キーボード用操作説明
 	SCENE_ID_PLAY,
+	SCENE_ID_BATTLE,
 	SCENE_ID_CLEAR,
 	SCENE_ID_OVER,
-	SCENE_ID_BATTLE,
-	SCENE_ID_TUTORIAL,
 	SCENE_ID_DEBUG,
 	MAX_SCENE_ID
 };
@@ -52,12 +51,12 @@ public:
 	/// サウンド情報を取得
 	/// </summary>
 	/// <returns></returns>
-	//GameSound* GetSound() { return pSound; }
+	GameSound* GetSound() { return pSound; }
 
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
 	SCENE_ID prevSceneID_;		//前回のシーン
 
-	//GameSound* pSound;
+	GameSound* pSound;
 };

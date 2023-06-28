@@ -1,6 +1,10 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
+class Enemy;
+
+const int ENEMY_COUNT = 1;
+
 class DebugScene : public GameObject
 {
 public:
@@ -10,4 +14,8 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
+private:
+	Enemy* pEnemy[ENEMY_COUNT];
+	int timer;
 };

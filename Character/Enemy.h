@@ -3,9 +3,6 @@
 
 enum class AttackState;
 
-class Gauge;
-class RedDot;
-
 enum class EnemyData
 {
 	AttackStartRange = 1,
@@ -21,7 +18,7 @@ public:
 	void SetData() override;
 	void Initialize() override;
 	void EnemyRelease() override;
-	void CharacterUpdate() override;
+	void EnemyUpdate() override;
 	void CharacterIdleAction() override;
 	void CharacterMove() override;
 	void CharacterAttack() override;
@@ -41,30 +38,12 @@ public:
 	// プレイヤーに触れているかどうか
 	bool IsPlayerHitting() { return isHittingPlayer; }
 
-	// HPゲージの位置をセットする関数
-	void SetGaugePosition(XMFLOAT3 position);
-
-	void GaugeDamage(float value);
-
 	void DrawEffect() override;
 	void CharacterStunAction() override;
 
 #ifdef _DEBUG
 
 	float GetHP() { return hp; }
-
-	XMFLOAT2 gaugePos;
-	bool isDebug;
-	void SetDebugPos(float x, float y) 
-	{ 
-		gaugePos.x = x, gaugePos.y = y; 
-		isDebug = true;
-	}
-
-	XMFLOAT2 getDebugPos()
-	{
-		return gaugePos;
-	}
 
 #endif
 
@@ -74,9 +53,6 @@ private:
 	// InternalDataCSVから値を格納する変数
 	float ATTACK_START_RANGE;		// 攻撃開始する範囲の長さ
 	int ATTACK_TIME;				// 攻撃時間
-
-	RedDot* pRedDot;
-	Gauge* pGauge;
 	
 	// 全体変数
 	float hp;	// 体力

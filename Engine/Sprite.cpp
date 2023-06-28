@@ -150,13 +150,13 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha)
 	memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));		// リソースへ値を送る
 
 
-	ID3D11SamplerState*			pSampler = pTexture_->GetSampler();
+	ID3D11SamplerState*	pSampler = pTexture_->GetSampler();
 	Direct3D::pContext_->PSSetSamplers(0, 1, &pSampler);
 
 	ID3D11ShaderResourceView*	pSRV = pTexture_->GetSRV();
 	Direct3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 
-	Direct3D::pContext_->Unmap(pConstantBuffer_, 0);									// GPUからのリソースアクセスを再開
+	Direct3D::pContext_->Unmap(pConstantBuffer_, 0);	// GPUからのリソースアクセスを再開
 
 	//ポリゴンメッシュを描画する
 	Direct3D::pContext_->DrawIndexed(6, 0, 0);

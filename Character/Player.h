@@ -3,7 +3,7 @@
 
 class PolyLine;
 class PlayerEffect;
-class Gauge;
+class PlayerGauge;
 
 // 攻撃の状態を管理
 enum class AttackState
@@ -100,7 +100,7 @@ private:
 	float MAX_DAMAGE_TIMER;					// 被ダメージ最大時間
 
 	// ポインタ
-	Gauge* pGauge;
+	PlayerGauge* pGauge;
 
 	// 全体変数
 	float hp;		// 体力
