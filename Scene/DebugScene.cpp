@@ -13,7 +13,8 @@
 #include "../Engine/Input.h"
 #include "SceneManager.h"
 
-const int EnemyTimer = 30;
+// 定数宣言
+const int EnemyTimer = 30;	// 敵が全滅してから再登場するまでのフレーム数
 
 DebugScene::DebugScene(GameObject* parent)
 	: GameObject(parent, "DebugScene")
@@ -32,7 +33,7 @@ void DebugScene::Initialize()
 	{
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
-	pBoss = Instantiate<EnemyBoss>(this);
+	//pBoss = Instantiate<EnemyBoss>(this);
 	
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
@@ -49,7 +50,7 @@ void DebugScene::Update()
 		PostQuitMessage(0);	//プログラム終了
 	}
 
-	/*if (EnemyManager::IsListEmpty())
+	if (EnemyManager::IsListEmpty())
 	{
 		timer++;
 		if (timer > EnemyTimer)
@@ -63,11 +64,11 @@ void DebugScene::Update()
 			}
 
 		}		
-	}*/
+	}
 	
-	if (pBoss->IsVisibled() == false && EnemyManager::IsListEmpty())
+	//if (pBoss->IsVisibled() == false && EnemyManager::IsListEmpty())
 	{
-		pBoss->BossEntry();
+		//pBoss->BossEntry();
 	}
 }
 

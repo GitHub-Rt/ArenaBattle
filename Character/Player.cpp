@@ -11,6 +11,7 @@
 
 #include "../Scene/DebugScene.h"
 #include "../Character/Enemy.h"
+#include "../Character/EnemyBoss.h"
 #include "../Manager/EnemyManager.h"
 
 // 定数宣言
@@ -185,6 +186,10 @@ void Player::CharacterUpdate()
 	{
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
+
+
+	CharacterCheckHP();
+
 }
 
 void Player::CharacterIdleAction()
@@ -380,7 +385,7 @@ void Player::DamageTakenMotion()
 {
 	if (damageTimer <= MAX_DAMAGE_TIMER)
 	{
-		const float VECTOR_MAGNIFICATION = 0.8f;	// 移動倍率
+		const float VECTOR_MAGNIFICATION = 0.6f;	// 移動倍率
 
 		damageTimer++;
 
@@ -644,9 +649,11 @@ void Player::OnCollision(GameObject* pTarget)
 						break;
 					case AttackState::NormalAttack:
 						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
+						pEnemy->SetDamageStage(DamageStage::DamageStart);
 						break;
 					case AttackState::HardAttack:
 						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, HARD_ATTACK_INCREASE_RATE);
+						pEnemy->SetDamageStage(DamageStage::DamageStart);
 						break;
 					default:
 						break;
@@ -664,15 +671,19 @@ void Player::OnCollision(GameObject* pTarget)
 
 		if (IsStateSet(CharacterState::Attacking))
 		{
+			EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+
 			switch (attackState)
 			{
 			case AttackState::NoAttack:
 				break;
 			case AttackState::NormalAttack:
 				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, NORMAL_ATTACK_INCREASE_RATE);
+				pBoss->SetDamageStage(DamageStage::DamageStart);
 				break;
 			case AttackState::HardAttack:
 				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, HARD_ATTACK_INCREASE_RATE);
+				pBoss->SetDamageStage(DamageStage::DamageStart);
 			default:
 				break;
 			}

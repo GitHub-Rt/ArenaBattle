@@ -41,6 +41,7 @@ void Enemy::SetData()
 {
 	ATTACK_START_RANGE = GetInternalData(CharacterID::NormalEnemy, (int)EnemyData::AttackStartRange);
 	ATTACK_TIME = GetInternalData(CharacterID::NormalEnemy, (int)EnemyData::AttackTime);
+	DAMAGE_TIME = GetInternalData(CharacterID::NormalEnemy, (int)EnemyData::DamageTimer);
 }
 
 void Enemy::Initialize()
@@ -66,14 +67,14 @@ void Enemy::Initialize()
 
 void Enemy::Draw()
 {
-	if (IsStateSet(CharacterState::Damaged) == false)
+	if (IsStateSet(CharacterState::Damaged))
 	{
-		ChangeDamageColor(false);
+		ChangeDamageColor();	// ƒ‚ƒfƒ‹‚ÌF‚ðÔ‚É•ÏX‚³‚¹‚é
 		CharacterDraw(hModel);
 	}
 	else
 	{
-		ChangeDamageColor();	// ƒ‚ƒfƒ‹‚ÌF‚ðÔ‚É•ÏX‚³‚¹‚é
+		ChangeDamageColor(false);
 		CharacterDraw(hModel);
 	}
 }
@@ -247,13 +248,19 @@ void Enemy::CharacterTakeDamage(float damage)
 	case DamageStage::DamageStart:
 		// •Ï”‚ÌXV
 		hp -= damage;
-		isHittingPlayer = false;		
+		isHittingPlayer = false;
+#ifdef _DEBUG
+		isDamage = true;
+#endif
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
 	case DamageStage::TakeDamage:
 		DamageMotion();
 		break;
-	case DamageStage::EndDamage:		
+	case DamageStage::EndDamage:
+#ifdef _DEBUG
+		isDamage = false;
+#endif
 		SetDamageStage(DamageStage::NoDamage);
 		break;
 	default:
@@ -265,53 +272,61 @@ void Enemy::CharacterTakeDamage(float damage)
 
 void Enemy::DamageMotion()
 {
-	const float NORMAL_DAMAGE_VECTOR = 1.2f;	// ’ÊíUŒ‚Žž‚ÌˆÚ“®”{—¦
-	const float HARD_DAMAGE_VECTOR = 1.5f;		// ‹­UŒ‚Žž‚ÌˆÚ“®”{—¦
-
-	Player* pPlayer = (Player*)FindObject("Player");
-	AttackState nowAttack = pPlayer->GetAttackState();
-
-	XMVECTOR vMove = GetFrontVector();
-
-	switch (nowAttack)
+	if (damageTimer < DAMAGE_TIME)
 	{
-	case AttackState::NoAttack:
-		break;
-	case AttackState::NormalAttack:
-		vMove *= NORMAL_DAMAGE_VECTOR;
-		break;
-	case AttackState::HardAttack:
-		vMove *= HARD_DAMAGE_VECTOR;
-		break;
-	default:
-		break;
-	}
+		const float NORMAL_DAMAGE_VECTOR = 0.4f;	// ’ÊíUŒ‚Žž‚ÌˆÚ“®”{—¦
+		const float HARD_DAMAGE_VECTOR = 0.8f;		// ‹­UŒ‚Žž‚ÌˆÚ“®”{—¦
 
-	
-	if (nowAttack == AttackState::NoAttack)
-	{
-		Robot* pRobot = (Robot*)FindObject("Robot");
-		if (pRobot->IsStateSet(CharacterState::Attacking))
+		damageTimer++;
+
+		Player* pPlayer = (Player*)FindObject("Player");
+		AttackState nowAttack = pPlayer->GetAttackState();
+
+		XMVECTOR vMove = GetFrontVector();
+
+		switch (nowAttack)
 		{
+		case AttackState::NoAttack:
+			break;
+		case AttackState::NormalAttack:
 			vMove *= NORMAL_DAMAGE_VECTOR;
+			break;
+		case AttackState::HardAttack:
+			vMove *= HARD_DAMAGE_VECTOR;
+			break;
+		default:
+			break;
+		}
+
+
+		if (nowAttack == AttackState::NoAttack)
+		{
+			Robot* pRobot = (Robot*)FindObject("Robot");
+			if (pRobot->IsStateSet(CharacterState::Attacking))
+			{
+				vMove *= NORMAL_DAMAGE_VECTOR;
+			}
+		}
+
+		XMFLOAT3 nextPos = { 0, 0, 0 };
+		XMStoreFloat3(&nextPos, vMove);
+
+		nextPos.x += transform_.position_.x;
+		nextPos.z += transform_.position_.z;
+
+		if (IsMoveLimit(nextPos) == false)
+		{
+			vPrevPos = XMLoadFloat3(&transform_.position_);
+
+			transform_.position_.x = nextPos.x;
+			transform_.position_.z = nextPos.z;
 		}
 	}
-
-	XMVECTOR vPos = XMVector3Normalize(XMLoadFloat3(&transform_.position_));
-	vMove += vPos;
-
-	// Œã•û‚Ö‚ÌˆÚ“®ƒxƒNƒgƒ‹
-	XMVECTOR vBackwardMove = -(XMVector3Normalize(vMove));
-
-	XMFLOAT3 nextPos = {0, 0, 0};
-	XMStoreFloat3(&nextPos, vBackwardMove);
-	if (IsMoveLimit(nextPos) == false)
+	else
 	{
-		transform_.position_.x = nextPos.x;
-		transform_.position_.z = nextPos.z;
+		damageTimer = 0;
+		SetDamageStage(DamageStage::EndDamage);
 	}
-
-	SetDamageStage(DamageStage::EndDamage);
 }
 
 void Enemy::CharacterCheckHP()

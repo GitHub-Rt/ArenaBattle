@@ -52,9 +52,9 @@ void imguiObject::Update()
             pPlayer = (Player*)FindObject("Player");
             if (pPlayer != nullptr)
             {
-                ImGui::Text("position_x : %g", pPlayer->GetPosition().x);
+                /*ImGui::Text("position_x : %g", pPlayer->GetPosition().x);
                 ImGui::Text("position_y : %g", pPlayer->GetPosition().y);
-                ImGui::Text("position_z : %g", pPlayer->GetPosition().z);
+                ImGui::Text("position_z : %g", pPlayer->GetPosition().z);*/
 
                 ImGui::Text("HP : %g", pPlayer->GetHP());
 
@@ -74,9 +74,9 @@ void imguiObject::Update()
             pRobot = (Robot*)FindObject("Robot");
             if (pRobot != nullptr)
             {
-                ImGui::Text("position_x : %g", pRobot->GetPosition().x);
+                /*ImGui::Text("position_x : %g", pRobot->GetPosition().x);
                 ImGui::Text("position_y : %g", pRobot->GetPosition().y);
-                ImGui::Text("position_z : %g", pRobot->GetPosition().z);
+                ImGui::Text("position_z : %g", pRobot->GetPosition().z);*/
 
                 std::string str = GetCharacterStateString(pRobot);
                 ImGui::Text(str.c_str());
@@ -96,21 +96,31 @@ void imguiObject::Update()
                     char numStr[256];
                     sprintf_s(numStr, "IndexNumber : %d", i);
 
+                   
                     if (ImGui::TreeNode(numStr))
                     {
+                        // Enemyî•ñ‚ðvector‚©‚çŽæ“¾
                         pEnemy = EnemyManager::GetEnemyContent(i);
+
+                        // ŽÀÛ‚ÌŠeEnemyî•ñ
                         if (pEnemy != nullptr)
                         {
-                            std::string str = "isDamage : ";
+                            std::string str = GetCharacterStateString(pEnemy);
+                            ImGui::Text(str.c_str());
+
+                            ImGui::Text("HP : %g", pEnemy->GetHP());
+
+
+                            std::string damegeStr = "isDamage : ";
                             if (pEnemy->IsDamage())
                             {
-                                str += "true";
+                                damegeStr += "true";
                             }
                             else
                             {
-                                str += "false";
+                                damegeStr += "false";
                             }
-                            ImGui::Text(str.c_str());
+                            ImGui::Text(damegeStr.c_str());
                         }
 
                         ImGui::TreePop();
