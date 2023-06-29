@@ -11,5 +11,16 @@ public:
     void Draw() override;
 
 private:
+
+    // Žg—p‚·‚é‰æ‘œ‚ÌŽí—Þ
+    enum class PlayerFramePict
+    {
+        PICT_FRAME = 0,
+        PICT_GREEN,
+        PICT_LGREEN,
+        PICT_RED,
+        PICT_MAX
+    };
+
     int hPict[5];
 };

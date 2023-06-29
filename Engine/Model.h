@@ -104,4 +104,6 @@ namespace Model
 	void ChangeColor(int handle, float red, float green, float blue, float alpha);
 
 	void RestoreOriginalColor(int handle);
+
+	void SetDamageColor(int handle, bool isDamage);
 };

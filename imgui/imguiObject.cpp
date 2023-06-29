@@ -6,12 +6,18 @@
 #include "../Character/Enemy.h"
 
 
+#include "../Manager/EnemyManager.h"
+
+
+#include <stdio.h>
+
 imguiObject::imguiObject(GameObject* parent)
     :GameObject(parent, "imguiObject")
 {
     pPlayer = nullptr;
     pRobot = nullptr;
     pEnemy = nullptr;
+    pBoss = nullptr;
 }
 
 imguiObject::~imguiObject()
@@ -82,18 +88,36 @@ void imguiObject::Update()
         // Enemyî•ñ
         if (ImGui::TreeNode("EnemyInformation"))
         {
-            pEnemy = (Enemy*)FindObject("Enemy");
-            if (pEnemy != nullptr)
+            if (EnemyManager::IsListEmpty() == false)
             {
-                ImGui::Text("position_x : %g", pEnemy->GetPosition().x);
-                ImGui::Text("position_y : %g", pEnemy->GetPosition().y);
-                ImGui::Text("position_z : %g", pEnemy->GetPosition().z);
+                int size = EnemyManager::GetVectorSize();
+                for (int i = 0; i < size; i++)
+                {
+                    char numStr[256];
+                    sprintf_s(numStr, "IndexNumber : %d", i);
 
-                ImGui::Text("HP : %g", pEnemy->GetHP());
+                    if (ImGui::TreeNode(numStr))
+                    {
+                        pEnemy = EnemyManager::GetEnemyContent(i);
+                        if (pEnemy != nullptr)
+                        {
+                            std::string str = "isDamage : ";
+                            if (pEnemy->IsDamage())
+                            {
+                                str += "true";
+                            }
+                            else
+                            {
+                                str += "false";
+                            }
+                            ImGui::Text(str.c_str());
+                        }
 
-                std::string str = GetCharacterStateString(pEnemy);
-                ImGui::Text(str.c_str());
+                        ImGui::TreePop();
+                    }
+                }
             }
+           
 
             ImGui::TreePop();
         }

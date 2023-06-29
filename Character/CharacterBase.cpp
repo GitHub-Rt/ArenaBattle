@@ -38,6 +38,7 @@ CharacterBase::CharacterBase(GameObject* parent, std::string fileName)
 	PlayerInternalDataCSV.Load("Character/Data/PlayerInternalData.csv");
 	RobotInternalDataCSV.Load("Character/Data/RobotInternalData.csv");
 	EnemyInternalDataCSV.Load("Character/Data/EnemyInternalData.csv");
+	EnemyBossInternalDataCSV.Load("Character/Data/EnemyBossInternalData.csv");
 
 	parameter.hp = 0;
 	parameter.attack = 0;
@@ -103,6 +104,7 @@ void CharacterBase::Update()
 void CharacterBase::Draw()
 {
 	CharacterDraw(hModel);
+	
 
 	DrawEffect();
 }
@@ -127,6 +129,11 @@ void CharacterBase::ColorChange(float red, float green, float blue, float alpha)
 void CharacterBase::RestoreOriginalColor()
 {
 	Model::RestoreOriginalColor(hModel);
+}
+
+void CharacterBase::ChangeDamageColor(bool isDamage)
+{
+	Model::SetDamageColor(hModel, isDamage);
 }
 
 void CharacterBase::CharacterDraw(int charaModel)
@@ -173,7 +180,6 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 	}
 
 	pTarget->SetDamage(attackDamage);
-	pTarget->SetDamageStage(DamageStage::DamageStart);
 }
 
 XMVECTOR CharacterBase::GetFrontVector()
@@ -402,7 +408,7 @@ float CharacterBase::GetInternalData(CharacterID id, int cal)
 		internalData = EnemyInternalDataCSV.GetValue(cal, INTERNALDATA);
 		break;
 	case CharacterID::EnemyBoss:
-		//internalData = EnemyBossInternalDataCSV.GetValue(cal, INTERNALDATA);
+		internalData = EnemyBossInternalDataCSV.GetValue(cal, INTERNALDATA);
 		break;
 	default:
 		break;
@@ -425,7 +431,7 @@ int CharacterBase::GetColumnCalCount(CharacterID id)
 		calCount = EnemyInternalDataCSV.GetColumnCalCount(INTERNALDATA);
 		break;
 	case CharacterID::EnemyBoss:
-		//calCount = InternalDataCSV.GetColumnCalCount(INTERNALDATA);
+		calCount = EnemyBossInternalDataCSV.GetColumnCalCount(INTERNALDATA);
 		break;
 	default:
 		break;
@@ -453,7 +459,7 @@ void CharacterBase::ChangeStateForIdle()
 {
 	bool isTrueState = false;
 
-
+	// ‚·‚×‚Ä‚Ìó‘Ôƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚È‚¢‚©‚Ç‚¤‚©‚ğ’²‚×‚é
 	for (unsigned int nowState = (unsigned int)CharacterState::Idle; nowState <= (unsigned int)CharacterState::MAX_CharacterState; nowState++)
 	{
 		CharacterState nowAction = (CharacterState)nowState;

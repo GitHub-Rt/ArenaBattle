@@ -99,5 +99,8 @@ public:
 	/// 元々のマテリアルの色に戻す
 	/// </summary>
 	void RestoreOriginalColor();
+
+
+	void SetDamageColor(bool isDamage);
 };
 

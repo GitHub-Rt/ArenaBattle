@@ -92,12 +92,18 @@ public:
 	/// <param name="red">Rの値</param>
 	/// <param name="green">Gの値</param>
 	/// <param name="blue">Bの値</param>
+	/// /// <param name="alpha">透明度</param>
 	void ColorChange(float red, float green, float blue, float alpha = 1);
 
 	/// <summary>
 	/// 元々のマテリアルの色に戻す関数
 	/// </summary>
 	void RestoreOriginalColor();
+
+	/// <summary>
+	/// マテリアルを赤に変化させる
+	/// </summary>
+	void ChangeDamageColor(bool isDamage = true);
 
 	/// <summary>
 	/// キャラクターをDrawする関数
@@ -331,6 +337,7 @@ private:
 	CsvReader PlayerInternalDataCSV;
 	CsvReader RobotInternalDataCSV;
 	CsvReader EnemyInternalDataCSV;
+	CsvReader EnemyBossInternalDataCSV;
 	Parameters parameter;
 
 	unsigned int characterStateFlg;	// ビットフラグ

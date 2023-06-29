@@ -41,7 +41,9 @@ class FbxParts
 		XMFLOAT4 speculer;		//スペキュラー（Lambertの場合は0）
 		XMFLOAT4 cameraPosition;//カメラの位置（ハイライトの計算に必要）
 		FLOAT	 shininess;		//ハイライトの強さ（MayaのCosinePower）
+		INT	 isDamage;		//ダメージの有無
 		BOOL	 isTexture;		//テクスチャの有無
+		
 	};
 
 	// マテリアル情報（質感の情報）
@@ -54,6 +56,7 @@ class FbxParts
 		XMFLOAT4	specular;			//鏡面反射光（スペキュラ）への反射強度
 		float		shininess;			//ハイライトの強さ（サイズ）
 		Texture*	pTexture;			//テクスチャ
+		int		isDamage;			//ダメージの有無
 	}*pMaterial_;
 
 	// ボーン構造体（関節情報）
@@ -170,5 +173,10 @@ public:
 	/// 元々のマテリアルの色に戻す
 	/// </summary>
 	void RestoreOriginalColor();
+
+	/// <summary>
+	/// 描画をダメージ仕様に変更する
+	/// </summary>
+	void SetDamageColor(bool isDamage);
 };
 

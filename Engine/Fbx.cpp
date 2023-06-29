@@ -168,3 +168,11 @@ void Fbx::RestoreOriginalColor()
 		parts_[k]->RestoreOriginalColor();
 	}
 }
+
+void Fbx::SetDamageColor(bool isDamage)
+{
+	for (int k = 0; k < parts_.size(); k++)
+	{
+		parts_[k]->SetDamageColor(isDamage);
+	}
+}

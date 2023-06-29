@@ -6,6 +6,7 @@ class CharacterBase;
 class Player;
 class Robot;
 class Enemy;
+class EnemyBoss;
 
 class imguiObject : public GameObject
 {
@@ -26,6 +27,7 @@ private:
     Player* pPlayer;
     Robot* pRobot;
     Enemy* pEnemy;
+    EnemyBoss* pBoss;
 
     std::string stateStr;
 

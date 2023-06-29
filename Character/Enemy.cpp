@@ -59,7 +59,9 @@ void Enemy::Initialize()
 		hp = GetParameterValue(CharacterID::NormalEnemy, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
 
-		
+		//ChangeDamageColor(false);
+
+		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
 }
 
@@ -75,12 +77,12 @@ void Enemy::EnemyUpdate()
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
 
-	CharacterCheckHP();
+	//CharacterCheckHP();
 }
 
 void Enemy::CharacterIdleAction()
 {
-	ChangeState(CharacterState::Moving);
+	//ChangeState(CharacterState::Moving);
 }
 
 void Enemy::CharacterMove()
@@ -233,15 +235,23 @@ void Enemy::CharacterTakeDamage(float damage)
 		// •Ï”‚ÌXV
 		hp -= damage;
 		isHittingPlayer = false;
+#ifdef _DEBUG
+		isDamage = true;
+#endif
 
-		//ColorChange(1, 0, 0);	// ƒ‚ƒfƒ‹‚ÌF•ÏX‚³‚¹‚é
+		ChangeDamageColor();	// ƒ‚ƒfƒ‹‚ÌF•ÏX‚³‚¹‚é
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
 	case DamageStage::TakeDamage:
 		DamageMotion();
 		break;
 	case DamageStage::EndDamage:
-		RestoreOriginalColor();
+
+#ifdef _DEBUG
+		isDamage = false;
+#endif
+
+		ChangeDamageColor(false);
 		SetDamageStage(DamageStage::NoDamage);
 		break;
 	default:
@@ -253,51 +263,51 @@ void Enemy::CharacterTakeDamage(float damage)
 
 void Enemy::DamageMotion()
 {
-	const float NORMAL_DAMAGE_VECTOR = 1.2f;	// ’ÊíUŒ‚Žž‚ÌˆÚ“®”{—¦
-	const float HARD_DAMAGE_VECTOR = 1.5f;		// ‹­UŒ‚Žž‚ÌˆÚ“®”{—¦
+	//const float NORMAL_DAMAGE_VECTOR = 1.2f;	// ’ÊíUŒ‚Žž‚ÌˆÚ“®”{—¦
+	//const float HARD_DAMAGE_VECTOR = 1.5f;		// ‹­UŒ‚Žž‚ÌˆÚ“®”{—¦
 
-	Player* pPlayer = (Player*)FindObject("Player");
-	AttackState nowAttack = pPlayer->GetAttackState();
+	//Player* pPlayer = (Player*)FindObject("Player");
+	//AttackState nowAttack = pPlayer->GetAttackState();
 
-	XMVECTOR vMove = GetFrontVector();
+	//XMVECTOR vMove = GetFrontVector();
 
-	switch (nowAttack)
-	{
-	case AttackState::NoAttack:
-		break;
-	case AttackState::NormalAttack:
-		vMove *= NORMAL_DAMAGE_VECTOR;
-		break;
-	case AttackState::HardAttack:
-		vMove *= HARD_DAMAGE_VECTOR;
-		break;
-	default:
-		break;
-	}
+	//switch (nowAttack)
+	//{
+	//case AttackState::NoAttack:
+	//	break;
+	//case AttackState::NormalAttack:
+	//	vMove *= NORMAL_DAMAGE_VECTOR;
+	//	break;
+	//case AttackState::HardAttack:
+	//	vMove *= HARD_DAMAGE_VECTOR;
+	//	break;
+	//default:
+	//	break;
+	//}
 
-	
-	if (nowAttack == AttackState::NoAttack)
-	{
-		Robot* pRobot = (Robot*)FindObject("Robot");
-		if (pRobot->IsStateSet(CharacterState::Attacking))
-		{
-			vMove *= NORMAL_DAMAGE_VECTOR;
-		}
-	}
+	//
+	//if (nowAttack == AttackState::NoAttack)
+	//{
+	//	Robot* pRobot = (Robot*)FindObject("Robot");
+	//	if (pRobot->IsStateSet(CharacterState::Attacking))
+	//	{
+	//		vMove *= NORMAL_DAMAGE_VECTOR;
+	//	}
+	//}
 
-	XMVECTOR vPos = XMVector3Normalize(XMLoadFloat3(&transform_.position_));
-	vMove += vPos;
+	//XMVECTOR vPos = XMVector3Normalize(XMLoadFloat3(&transform_.position_));
+	//vMove += vPos;
 
-	// Œã•û‚Ö‚ÌˆÚ“®ƒxƒNƒgƒ‹
-	XMVECTOR vBackwardMove = -(XMVector3Normalize(vMove));
+	//// Œã•û‚Ö‚ÌˆÚ“®ƒxƒNƒgƒ‹
+	//XMVECTOR vBackwardMove = -(XMVector3Normalize(vMove));
 
-	XMFLOAT3 nextPos = {0, 0, 0};
-	XMStoreFloat3(&nextPos, vBackwardMove);
-	if (IsMoveLimit(nextPos) == false)
-	{
-		transform_.position_.x = nextPos.x;
-		transform_.position_.z = nextPos.z;
-	}
+	//XMFLOAT3 nextPos = {0, 0, 0};
+	//XMStoreFloat3(&nextPos, vBackwardMove);
+	//if (IsMoveLimit(nextPos) == false)
+	//{
+	//	transform_.position_.x = nextPos.x;
+	//	transform_.position_.z = nextPos.z;
+	//}
 
 	SetDamageStage(DamageStage::EndDamage);
 }
@@ -326,7 +336,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 		{
 			if (IsStateSet(CharacterState::Attacking) && pPlayer->GetDamageState() == DamageStage::NoDamage)
 			{
-				CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
+				//CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
+				pPlayer->SetDamageStage(DamageStage::DamageStart);
 			}
 		}
 		else
@@ -334,16 +345,14 @@ void Enemy::OnCollision(GameObject* pTarget)
 			// ƒvƒŒƒCƒ„[‚ªUŒ‚’†‚¾‚Á‚½‚çEnemy‚ÍUŒ‚ó‘Ô‚ð‚â‚ß‚é
 			ClearState(CharacterState::Attacking);
 		}
-		
-
-
 	}
+
 
 	if (pTarget->GetObjectName() == "RobotBullet")
 	{
 		CharacterDamageCalculation(CharacterID::Robot, CharacterID::NormalEnemy);
 		SetDamageStage(DamageStage::DamageStart);
-	
+
 		pTarget->KillMe();
 	}
 }

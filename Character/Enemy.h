@@ -43,7 +43,9 @@ public:
 
 #ifdef _DEBUG
 
-	float GetHP() { return hp; }
+	bool isDamage;
+
+	bool IsDamage() { return isDamage; }
 
 #endif
 

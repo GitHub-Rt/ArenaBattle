@@ -1,15 +1,7 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
-// 使用する画像の種類
-enum class FramePict
-{
-	PICT_FRAME = 0,
-	PICT_GREEN,
-	PICT_LGREEN,
-	PICT_RED,
-	PICT_MAX
-};
+
 
 //定数宣言
 const float DMG_SPEED = 0.0025f;      //ダメージバーの速度

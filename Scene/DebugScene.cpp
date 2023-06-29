@@ -18,6 +18,8 @@ const int EnemyTimer = 30;
 DebugScene::DebugScene(GameObject* parent)
 	: GameObject(parent, "DebugScene")
 {
+	pBoss = nullptr;
+
 }
 
 void DebugScene::Initialize()
@@ -26,12 +28,11 @@ void DebugScene::Initialize()
 
 	Instantiate<Stage>(this);
 
-	/*for (int i = 0; i < ENEMY_COUNT; i++)
+	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		pEnemy[i] = Instantiate<Enemy>(this);
-		EnemyManager::AddEnemyList(pEnemy[i]);
-	}*/
-	Instantiate<EnemyBoss>(this);
+		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+	}
+	//pBoss = Instantiate<EnemyBoss>(this);
 	
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
@@ -54,17 +55,20 @@ void DebugScene::Update()
 		if (timer > EnemyTimer)
 		{
 			timer = 0;
+			
 
 			for (int i = 0; i < ENEMY_COUNT; i++)
 			{
-				pEnemy[i] = Instantiate<Enemy>(this);
-				EnemyManager::AddEnemyList(pEnemy[i]);
+				EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 			}
 
 		}		
 	}*/
-
-
+	
+	/*if (pBoss->IsVisibled() == false && enemyCount > MAX_ENEMY_COUNT)
+	{
+		pBoss->BossEntry();
+	}*/
 }
 
 void DebugScene::Draw()

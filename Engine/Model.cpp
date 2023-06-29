@@ -204,4 +204,9 @@ namespace Model
 		_datas[handle]->pFbx->RestoreOriginalColor();
 	}
 
+	void SetDamageColor(int handle, bool isDamage)
+	{
+		_datas[handle]->pFbx->SetDamageColor(isDamage);
+	}
+
 }

@@ -24,9 +24,10 @@ cbuffer global
 	float4		g_vecSpeculer;		// スペキュラーカラー（ハイライトの色）
 	float4		g_vecCameraPosition;// 視点（カメラの位置）
 	float		g_shuniness;		// ハイライトの強さ（テカリ具合）
+	int			g_isDamage;			// ダメージを受けているかどうか
 	bool		g_isTexture;		// テクスチャ貼ってあるかどうか
-
-
+	
+	
 };
 
 //───────────────────────────────────────
@@ -108,8 +109,18 @@ float4 PS(VS_OUT inData) : SV_Target
 	}
 	else
 	{
-		//マテリアルの色
-		diffuse = g_vecDiffuse;
+		// ダメージの有無
+		if (g_isDamage == 1)
+		{
+			// 赤色で表示させる
+			diffuse = float4(1, 0, 0, 1);
+		}
+		else
+		{
+			//マテリアルの色
+			diffuse = g_vecDiffuse;
+		}
+		
 	}
 
 	//環境光（アンビエント）

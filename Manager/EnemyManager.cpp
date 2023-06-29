@@ -1,6 +1,7 @@
 #include "EnemyManager.h"
 #include "../Character/Enemy.h"
 
+
 namespace EnemyManager {
 
 	std::vector<Enemy*> enemyList;
@@ -54,6 +55,11 @@ namespace EnemyManager {
 
 		// 該当しなかったら、サイズよりも1多い値を返す
 		return enemyList.size() + 1;
+	}
+
+	int GetVectorSize()
+	{
+		return enemyList.size();
 	}
 
 	Enemy* GetEnemyContent(int index)

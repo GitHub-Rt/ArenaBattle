@@ -20,8 +20,13 @@ namespace EnemyManager
 	// リスト内の該当インデックス番号を取得する
 	int GetListTargetNumber(Enemy* pEnemy);
 
+	// vectorサイズを取得する関数
+	int GetVectorSize();
+
 	// 該当番号の情報を取得する
 	Enemy* GetEnemyContent(int index);
+
+
 
 	extern std::vector<Enemy*> enemyList;
 };

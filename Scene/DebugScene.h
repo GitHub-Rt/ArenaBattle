@@ -1,9 +1,9 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
-class Enemy;
+class EnemyBoss;
 
-const int ENEMY_COUNT = 1;
+const int ENEMY_COUNT = 3;
 
 class DebugScene : public GameObject
 {
@@ -16,6 +16,6 @@ public:
 	void Release() override;
 
 private:
-	Enemy* pEnemy[ENEMY_COUNT];
+	EnemyBoss* pBoss;
 	int timer;
 };

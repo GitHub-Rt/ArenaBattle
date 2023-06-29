@@ -6,7 +6,7 @@ const XMFLOAT3 GaugeScale = XMFLOAT3(1.5f, 1.5f, 1.0f);
 PlayerGauge::PlayerGauge(GameObject* parent)
 	: HPGaugeBase(parent, "PlayerGauge")
 {
-    for (int i = 0; i < (int)FramePict::PICT_MAX; i++)
+    for (int i = 0; i < (int)PlayerFramePict::PICT_MAX; i++)
     {
         hPict[i] = -1;
     }
@@ -37,7 +37,7 @@ void PlayerGauge::Initialize()
         };
 
         //ロード
-        for (int i = 0; i < (int)FramePict::PICT_MAX; i++)
+        for (int i = 0; i < (int)PlayerFramePict::PICT_MAX; i++)
         {
             hPict[i] = GaugeImageLoad(fileName[i]);
             assert(hPict[i] >= 0);
@@ -57,7 +57,7 @@ void PlayerGauge::Draw()
         //緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= stopRatio;
-        GaugeImageDraw(hPict[(int)FramePict::PICT_GREEN], gaugeTrans);
+        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
     }
 
 
@@ -67,12 +67,12 @@ void PlayerGauge::Draw()
         //黄緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= stopRatio;
-        GaugeImageDraw(hPict[(int)FramePict::PICT_LGREEN], gaugeTrans);
+        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_LGREEN], gaugeTrans);
 
         //緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= moveRatio;
-        GaugeImageDraw(hPict[(int)FramePict::PICT_GREEN], gaugeTrans);
+        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
     }
 
     //ダメージ中
@@ -81,17 +81,17 @@ void PlayerGauge::Draw()
         //赤ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= moveRatio;
-        GaugeImageDraw(hPict[(int)FramePict::PICT_RED], gaugeTrans);
+        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_RED], gaugeTrans);
 
         //緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= stopRatio;
-        GaugeImageDraw(hPict[(int)FramePict::PICT_GREEN], gaugeTrans);
+        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
     }
 
 
 
     //枠
     gaugeTrans = transform_;
-    GaugeImageDraw(hPict[(int)FramePict::PICT_FRAME], gaugeTrans);
+    GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_FRAME], gaugeTrans);
 }

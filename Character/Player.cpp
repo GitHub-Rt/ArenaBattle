@@ -638,9 +638,45 @@ void Player::OnCollision(GameObject* pTarget)
 
 				if (pEnemy->IsPlayerHitting())
 				{
-					CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
+					switch (attackState)
+					{
+					case AttackState::NoAttack:
+						break;
+					case AttackState::NormalAttack:
+						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
+						break;
+					case AttackState::HardAttack:
+						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, HARD_ATTACK_INCREASE_RATE);
+						break;
+					default:
+						break;
+					}
+
+					
 				}
 			}
+		}
+	}
+
+	if (pTarget->GetObjectName() == "EnemyBoss")
+	{
+		XMStoreFloat3(&transform_.position_, vPrevPos);
+
+		if (IsStateSet(CharacterState::Attacking))
+		{
+			switch (attackState)
+			{
+			case AttackState::NoAttack:
+				break;
+			case AttackState::NormalAttack:
+				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, NORMAL_ATTACK_INCREASE_RATE);
+				break;
+			case AttackState::HardAttack:
+				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, HARD_ATTACK_INCREASE_RATE);
+			default:
+				break;
+			}
+			
 		}
 	}
 }
