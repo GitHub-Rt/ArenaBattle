@@ -82,6 +82,12 @@ public:
 	void CharacterModelLoad(std::string fileName);
 
 	/// <summary>
+	/// モデル番号を返す
+	/// </summary>
+	/// <returns></returns>
+	int GetCharacterModelHandle() { return hModel; }
+
+	/// <summary>
 	/// キャラクターに当たり判定を追加する関数
 	/// </summary>
 	void CharacterAddCollider(XMFLOAT3 size, XMFLOAT3 center = XMFLOAT3(0,0,0));

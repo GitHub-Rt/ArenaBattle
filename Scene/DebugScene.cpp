@@ -32,7 +32,7 @@ void DebugScene::Initialize()
 	{
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
-	//pBoss = Instantiate<EnemyBoss>(this);
+	pBoss = Instantiate<EnemyBoss>(this);
 	
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
@@ -65,10 +65,10 @@ void DebugScene::Update()
 		}		
 	}*/
 	
-	/*if (pBoss->IsVisibled() == false && enemyCount > MAX_ENEMY_COUNT)
+	if (pBoss->IsVisibled() == false && EnemyManager::IsListEmpty())
 	{
 		pBoss->BossEntry();
-	}*/
+	}
 }
 
 void DebugScene::Draw()

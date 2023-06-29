@@ -455,9 +455,8 @@ void FbxParts::Draw(Transform& transform)
 		cb.shininess = pMaterial_[i].shininess;
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
 		cb.lightDirection = XMFLOAT4(0, -1, 0, 0);
-		cb.isDamage = pMaterial_[i].isDamage;
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
-		
+		cb.isDamage = pMaterial_[i].isDamage;
 		
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのリソースアクセスを一時止める
@@ -645,7 +644,7 @@ void FbxParts::SetDamageColor(bool isDamage)
 		for (DWORD i = 0; i < materialCount_; i++)
 		{
 			// ダメージを受けたことを通告する
-			pMaterial_[i].isDamage = 1;
+			pMaterial_[i].isDamage = true;
 		}
 	}
 	else
@@ -653,7 +652,7 @@ void FbxParts::SetDamageColor(bool isDamage)
 		for (DWORD i = 0; i < materialCount_; i++)
 		{
 			// ダメージを受けていないことを通告する
-			pMaterial_[i].isDamage = 0;
+			pMaterial_[i].isDamage = false;
 		}
 	}
 }

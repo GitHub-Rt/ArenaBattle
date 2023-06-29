@@ -17,6 +17,7 @@ public:
 
 	void SetData() override;
 	void Initialize() override;
+	void Draw() override;
 	void EnemyRelease() override;
 	void EnemyUpdate() override;
 	void CharacterIdleAction() override;
@@ -58,7 +59,7 @@ private:
 	
 	// 全体変数
 	float hp;	// 体力
-	
+	int hModel;	// モデル番号
 
 	// 移動周りの変数
 	XMVECTOR vPrevPos;				// 前回の位置ベクトル
