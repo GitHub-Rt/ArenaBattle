@@ -53,7 +53,7 @@ public:
 	void CharacterTakeDamage(float damage) override;
 	void CharacterCheckHP() override;
 	void DrawEffect() override;
-	void OnCollision(GameObject* pTarget) override;
+	void OnCollision(GameObject* pTarget, Collider* nowCollider) override;
 
 	// カメラ周り
 	void NormalCamera();	// 通常時カメラ関数
@@ -63,7 +63,8 @@ public:
 	void HardAttackAction();	// 強攻撃アクション
 
 	// 被ダメージモーション周り
-	void DamageTakenMotion();
+	void DamageMotion();
+	void SetDamageDirection(XMVECTOR dir) { vTraveling = dir; }
 
 	// HPゲージ周り
 	void HPDamage(float value);		// HPゲージ減少、hp減少
@@ -130,6 +131,7 @@ private:
 
 	// 被ダメージ周りの変数
 	int damageTimer;				// ダメージタイマー
+	XMVECTOR vTraveling;			// 進行方向ベクトル
 
 	// カメラ周りの変数
 	float angleX;				// 水平方向のカメラ回転角度

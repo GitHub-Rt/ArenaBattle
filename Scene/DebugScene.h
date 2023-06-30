@@ -3,7 +3,7 @@
 
 class EnemyBoss;
 
-const int ENEMY_COUNT = 3;
+const int ENEMY_COUNT = 5;
 
 class DebugScene : public GameObject
 {

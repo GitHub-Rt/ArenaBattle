@@ -15,7 +15,7 @@
 #include "../Manager/EnemyManager.h"
 
 // 定数宣言
-const XMFLOAT3 HIT_TEST_RANGE = { 1, 2, 1 };	// 当たり判定枠
+const XMFLOAT3 HIT_TEST_RANGE = { 4, 4, 4 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
 
 void Player::SetData()
@@ -69,6 +69,7 @@ Player::Player(GameObject* parent)
 	dodgeTimer = 0;
 
 	damageTimer = 0;
+	vTraveling = { 0,0,0,0 };
 
 	angleX = 0;
 	angleY = 0;
@@ -99,8 +100,8 @@ void Player::Initialize()
 		hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
 
-
 		pGauge = Instantiate<PlayerGauge>(GetParent());
+		
 
 		pLine = new PolyLine();
 		pLine->Load("Effect/Player/tex.png");
@@ -189,7 +190,6 @@ void Player::CharacterUpdate()
 
 
 	CharacterCheckHP();
-
 }
 
 void Player::CharacterIdleAction()
@@ -345,6 +345,10 @@ void Player::HardAttackAction()
 
 void Player::CharacterCheckHP()
 {
+	if (hp <= 0)
+	{
+		//KillMe();
+	}
 }
 
 void Player::CharacterTakeDamage(float damage)
@@ -364,11 +368,10 @@ void Player::CharacterTakeDamage(float damage)
 	case DamageStage::DamageStart:
 		// HPゲージを減らす
 		HPDamage(damage);
-		ColorChange(1, 0, 0);	// モデルの色変更
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
 	case DamageStage::TakeDamage:
-		DamageTakenMotion();
+		DamageMotion();
 		break;
 	case DamageStage::EndDamage:
 		RestoreOriginalColor();
@@ -381,16 +384,21 @@ void Player::CharacterTakeDamage(float damage)
 	
 }
 
-void Player::DamageTakenMotion()
+void Player::DamageMotion()
 {
 	if (damageTimer <= MAX_DAMAGE_TIMER)
 	{
-		const float VECTOR_MAGNIFICATION = 0.6f;	// 移動倍率
+		const float VECTOR_MAGNIFICATION = 0.8f;	// 移動倍率
 
 		damageTimer++;
+		ColorChange(1, 0, 0);	// モデルの色変更
 
-		// 進行方向ベクトルを取得
-		XMVECTOR vTraveling = -(GetFrontVector());
+		// 進行方向ベクトルの取得、調整
+		if ( XMVector3EqualR(vTraveling, XMVectorZero()) )
+		{
+			// 中身がすべて0だったら自身のベクトルを反転させてセットさせる
+			vTraveling = -(GetFrontVector());
+		}
 		vTraveling *= VECTOR_MAGNIFICATION;
 
 		XMFLOAT3 motionPos = { 0,0,0 };
@@ -588,7 +596,8 @@ void Player::CharacterDodingAction()
 	{
 		dodgeTimer++;
 
-		ColorChange(0, 0, 1, 0.5f);
+		// 回避中はモデルの色を変更させる
+		ColorChange(0.5f, 0.5f, 0.8f, 0.5f);
 
 		XMFLOAT3 nextPos = transform_.position_;
 		nextPos.x += movingDistance.x * DODGE_MOVING_DISTANCE_MAGNIFICATION;
@@ -626,11 +635,11 @@ void Player::DrawEffect()
 	}
 }
 
-void Player::OnCollision(GameObject* pTarget)
+void Player::OnCollision(GameObject* pTarget, Collider* nowCollider)
 {
 	if (pTarget->GetObjectName() == "Enemy")
 	{
-		XMStoreFloat3(&transform_.position_, vPrevPos);
+		//XMStoreFloat3(&transform_.position_, vPrevPos);
 
 		if (IsStateSet(CharacterState::Attacking))
 		{
@@ -639,7 +648,6 @@ void Player::OnCollision(GameObject* pTarget)
 			for (auto nowEnemy = EnemyManager::enemyList.begin(); nowEnemy < EnemyManager::enemyList.end(); nowEnemy++)
 			{
 				Enemy* pEnemy = EnemyManager::GetEnemyContent(index);
-				index++;
 
 				if (pEnemy->IsPlayerHitting())
 				{
@@ -648,44 +656,52 @@ void Player::OnCollision(GameObject* pTarget)
 					case AttackState::NoAttack:
 						break;
 					case AttackState::NormalAttack:
-						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, NORMAL_ATTACK_INCREASE_RATE);
-						pEnemy->SetDamageStage(DamageStage::DamageStart);
+						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, index, NORMAL_ATTACK_INCREASE_RATE);
 						break;
 					case AttackState::HardAttack:
-						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, HARD_ATTACK_INCREASE_RATE);
-						pEnemy->SetDamageStage(DamageStage::DamageStart);
+						CharacterDamageCalculation(CharacterID::Player, CharacterID::NormalEnemy, index, HARD_ATTACK_INCREASE_RATE);
 						break;
 					default:
 						break;
 					}
 
-					
+					pEnemy->SetDamageStage(DamageStage::DamageStart);
 				}
+
+				index++;
 			}
 		}
 	}
 
 	if (pTarget->GetObjectName() == "EnemyBoss")
 	{
-		XMStoreFloat3(&transform_.position_, vPrevPos);
+		// 今回の当たり判定が外側ではなく内側の当たり判定の枠だったら以前の位置に戻す
+		Collider* check = pTarget->GetColliderListFront();
+		if (nowCollider != check)
+		{
+			XMStoreFloat3(&transform_.position_, vPrevPos);
+		}
 
 		if (IsStateSet(CharacterState::Attacking))
 		{
 			EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-
-			switch (attackState)
+			
+			if (pBoss->GetDamageState() == DamageStage::NoDamage)
 			{
-			case AttackState::NoAttack:
-				break;
-			case AttackState::NormalAttack:
-				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, NORMAL_ATTACK_INCREASE_RATE);
-				pBoss->SetDamageStage(DamageStage::DamageStart);
-				break;
-			case AttackState::HardAttack:
-				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, HARD_ATTACK_INCREASE_RATE);
-				pBoss->SetDamageStage(DamageStage::DamageStart);
-			default:
-				break;
+				switch (attackState)
+				{
+				case AttackState::NoAttack:
+					break;
+				case AttackState::NormalAttack:
+					CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, NORMAL_ATTACK_INCREASE_RATE);
+					pBoss->SetDamageStage(DamageStage::DamageStart);
+					break;
+				case AttackState::HardAttack:
+					CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, HARD_ATTACK_INCREASE_RATE);
+					pBoss->SetDamageStage(DamageStage::DamageStart);
+				default:
+					break;
+				}
 			}
 			
 		}

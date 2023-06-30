@@ -221,6 +221,17 @@ void GameObject::AddCollider(Collider* collider)
 }
 
 
+Collider* GameObject::GetColliderListFront()
+{
+	if (colliderList_.size() == 0)
+	{
+		return nullptr;
+	}
+
+	return colliderList_.front();
+
+}
+
 //Õ“Ë”»’è
 void GameObject::Collision(GameObject * pTarget)
 {
@@ -239,7 +250,7 @@ void GameObject::Collision(GameObject * pTarget)
 			if ((*i)->IsHit(*j))
 			{
 				//“–‚½‚Á‚½
-				this->OnCollision(pTarget);
+				this->OnCollision(pTarget, *j);
 			}
 		}
 	}

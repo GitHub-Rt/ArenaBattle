@@ -17,7 +17,6 @@ private:
         PICT_RED,
         PICT_MAX
     };
-
 	int hPict[2];
 };
 

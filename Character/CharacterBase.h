@@ -3,6 +3,8 @@
 #include "../Engine/Model.h"
 #include "../Engine/CsvReader.h"
 
+#include "../Manager/EnemyManager.h"
+
 #include <cmath>
 #include <corecrt_math_defines.h>
 
@@ -90,7 +92,7 @@ public:
 	/// <summary>
 	/// キャラクターに当たり判定を追加する関数
 	/// </summary>
-	void CharacterAddCollider(XMFLOAT3 size, XMFLOAT3 center = XMFLOAT3(0,0,0));
+	void CharacterAddCollider(XMFLOAT3 size, XMFLOAT3 center = XMFLOAT3(0,2,0));
 
 	/// <summary>
 	/// マテリアルの色を変更する関数
@@ -123,15 +125,17 @@ public:
 	/// </summary>
 	/// <param name="attackChara">攻撃を行ったキャラクターのID</param>
 	/// <param name="target">攻撃を受けたキャラクターID</param>
+	/// <param name="indexNumber">どのEnemyかを判別させるため(基本的にはsize + 1)</param>
 	/// <param name="magnification">ダメージ倍率</param>
-	void CharacterDamageCalculation(CharacterID attackChara, CharacterID target, float magnification = 1);
+	void CharacterDamageCalculation(CharacterID attackChara, CharacterID target, int indexNumber = EnemyManager::GetVectorSize() + 1, float magnification = 1);
 
 	/// <summary>
 	/// ダメージ量を該当キャラクターにセットする関数
 	/// </summary>
 	/// <param name="target">該当キャラクターのID</param>
 	/// <param name="attackDamage">与えるダメージ量</param>
-	void SetTakeDamageStart(CharacterID target, float attackDamage);
+	/// <param name="indexNumber">どのEnemyかを判別させるため(基本的にはsize + 1)</param>
+	void SetTakeDamageStart(CharacterID target, float attackDamage, int indexNumber = EnemyManager::GetVectorSize() + 1);
 
 	/// <summary>
 	/// ダメージ段階を変更する関数

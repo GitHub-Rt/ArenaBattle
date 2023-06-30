@@ -6,7 +6,7 @@
 #include "../Manager/EnemyManager.h"
 
 // 定数宣言
-const XMFLOAT3 HIT_TEST_RANGE = { 5, 8, 5 };	// 当たり判定枠
+const XMFLOAT3 HIT_TEST_RANGE = { 5, 4, 5 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.6f;			// ジャンプの初速度
 const XMFLOAT3 GaugeScale = XMFLOAT3(0.3f, 0.7f, 0);
 
@@ -298,7 +298,7 @@ void Enemy::DamageMotion()
 			break;
 		}
 
-
+		// プレイヤーが攻撃状態ではないときはRobotの攻撃
 		if (nowAttack == AttackState::NoAttack)
 		{
 			Robot* pRobot = (Robot*)FindObject("Robot");
@@ -331,22 +331,26 @@ void Enemy::DamageMotion()
 
 void Enemy::CharacterCheckHP()
 {
-	if (hp < 0)
+	if (hp <= 0)
 	{
 		EnemyManager::RemoveEnemy(this);
 		KillMe();
 	}
 }
 
-void Enemy::OnCollision(GameObject* pTarget)
+void Enemy::OnCollision(GameObject* pTarget, Collider* nowCollider)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
-		isHittingPlayer = true;
-
-		XMStoreFloat3(&transform_.position_, vPrevPos);
+		
 
 		Player* pPlayer = (Player*)FindObject("Player");
+
+		if (pPlayer->IsStateSet(CharacterState::Dodging) == false)
+		{
+			XMStoreFloat3(&transform_.position_, vPrevPos);
+			isHittingPlayer = true;
+		}
 
 		// プレイヤーが攻撃中ではなく、敵が攻撃中でプレイヤーがダメージを負ってない状態だったらダメージ処理を開始させる
 		if (pPlayer->IsStateSet(CharacterState::Attacking) == false)
@@ -355,6 +359,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 			{
 				CharacterDamageCalculation(CharacterID::NormalEnemy, CharacterID::Player);
 				pPlayer->SetDamageStage(DamageStage::DamageStart);
+				pPlayer->SetDamageDirection(-(GetFrontVector()));	// 自身の反転ベクトルを渡す
 			}
 		}
 		else
@@ -367,7 +372,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 	if (pTarget->GetObjectName() == "RobotBullet")
 	{
-		CharacterDamageCalculation(CharacterID::Robot, CharacterID::NormalEnemy);
+		CharacterDamageCalculation(CharacterID::Robot, CharacterID::NormalEnemy, EnemyManager::GetListTargetNumber(this));
 		SetDamageStage(DamageStage::DamageStart);
 
 		pTarget->KillMe();

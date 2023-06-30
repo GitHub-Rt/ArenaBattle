@@ -187,13 +187,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Camera::SetPosition(XMFLOAT3(5, 30, -1));
 				Camera::SetTarget(XMFLOAT3(0, 0, 0));
 				Camera::Update();
-				Direct3D::lightView_ = Camera::GetViewMatrix();
-				Direct3D::BeginDrawToTexture();
+				//Direct3D::lightView_ = Camera::GetViewMatrix();
+				//Direct3D::BeginDrawToTexture();
 
 
 				//全オブジェクトを描画
 				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のDrawが呼ばれる
-				pRootObject->DrawSub();
+				//pRootObject->DrawSub();
 
 				//描画終了
 				//Direct3D::EndDraw();

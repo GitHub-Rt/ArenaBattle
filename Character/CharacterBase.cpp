@@ -143,7 +143,7 @@ void CharacterBase::CharacterDraw(int charaModel)
 	Model::Draw(hModel);
 }
 
-void CharacterBase::CharacterDamageCalculation(CharacterID attackChara, CharacterID target, float magnification)
+void CharacterBase::CharacterDamageCalculation(CharacterID attackChara, CharacterID target, int indexNumber, float magnification)
 {
 	// 攻撃を行ったキャラと受けたキャラのパラメータを取得してくる
 	Parameters attackParameter = GetParameter(attackChara);
@@ -153,11 +153,11 @@ void CharacterBase::CharacterDamageCalculation(CharacterID attackChara, Characte
 	float attackDamage = attackParameter.attack * magnification - targetParameter.defense;
 
 	
-	SetTakeDamageStart(target, attackDamage);
+	SetTakeDamageStart(target, attackDamage, indexNumber);
 	
 }
 
-void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
+void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage, int indexNumber)
 {
 	CharacterBase* pTarget = nullptr;
 
@@ -170,7 +170,7 @@ void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage)
 		pTarget = (CharacterBase*)FindObject("Robot");
 		break;
 	case CharacterID::NormalEnemy:
-		pTarget = (CharacterBase*)FindObject("Enemy");
+		pTarget = (CharacterBase*)EnemyManager::GetEnemyContent(indexNumber);
 		break;
 	case CharacterID::EnemyBoss:
 		pTarget = (CharacterBase*)FindObject("EnemyBoss");
@@ -194,6 +194,8 @@ XMVECTOR CharacterBase::GetFrontVector()
 
 float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 {
+	const float START_PLUS_Y = 100;	// 高い位置からレイを発射させるため
+
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 	SCENE_ID nowScene = pManager->GetSceneID();
 	StageBase* pStage = nullptr;
@@ -215,14 +217,17 @@ float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 	{
 		groundHundle = pStage->GetModelHandle();
 
+
 		RayCastData data;
 		data.start = position;
+		data.start.y += START_PLUS_Y;
 		data.dir = RAY_DIRECTION;
 		Model::RayCast(groundHundle, &data);
 
 		if (data.hit)
 		{
-			return data.dist;
+			// 高くした値を取り除いて返す
+			return data.dist - START_PLUS_Y;
 		}
 	}
 }

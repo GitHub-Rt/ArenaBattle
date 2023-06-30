@@ -1,4 +1,5 @@
 #include "PlayerGauge.h"
+#include "../Character/Player.h"
 
 const XMFLOAT3 GaugePos = XMFLOAT3(-0.95f, 0.88f, 0);
 const XMFLOAT3 GaugeScale = XMFLOAT3(1.5f, 1.5f, 1.0f);
@@ -19,7 +20,10 @@ PlayerGauge::~PlayerGauge()
 
 void PlayerGauge::Initialize()
 {
-    SetMaxHP(100);
+    Player* pPlayer = (Player*)FindObject("Player");
+    float hp = pPlayer->GetParameterValue(CharacterID::Player, CharacterStatus::HP);
+
+    SetMaxHP(hp);
     SetGaugeScale(GaugeScale);
     SetGaugePosition(GaugePos.x, GaugePos.y);
 

@@ -31,9 +31,9 @@ void DebugScene::Initialize()
 
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+		//EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
-	//pBoss = Instantiate<EnemyBoss>(this);
+	pBoss = Instantiate<EnemyBoss>(this);
 	
 	Instantiate<Player>(this);
 	Instantiate<Robot>(this);
@@ -50,25 +50,24 @@ void DebugScene::Update()
 		PostQuitMessage(0);	//ƒvƒƒOƒ‰ƒ€I—¹
 	}
 
-	if (EnemyManager::IsListEmpty())
-	{
-		timer++;
-		if (timer > EnemyTimer)
-		{
-			timer = 0;
-			
-
-			for (int i = 0; i < ENEMY_COUNT; i++)
-			{
-				EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
-			}
-
-		}		
-	}
+	//// “G‚ª‚·‚×‚Ä“|‚³‚ê‚½‚çˆê’èŽžŠÔŒo‰ßŒãAÄ“oê‚·‚é
+	//if (EnemyManager::IsListEmpty())
+	//{
+	//	timer++;
+	//	if (timer > EnemyTimer)
+	//	{
+	//		timer = 0;
+	//		
+	//		for (int i = 0; i < ENEMY_COUNT; i++)
+	//		{
+	//			EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+	//		}
+	//	}		
+	//}
 	
-	//if (pBoss->IsVisibled() == false && EnemyManager::IsListEmpty())
+	if (pBoss->IsVisibled() == false && EnemyManager::IsListEmpty())
 	{
-		//pBoss->BossEntry();
+		pBoss->BossEntry();
 	}
 }
 

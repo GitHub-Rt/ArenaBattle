@@ -21,6 +21,7 @@ public:
     std::string GetCharacterStateString(CharacterBase* pTarget);
 
     std::string GetPlayerAttackStateString();
+    std::string GetEnemyBossAttackStateString();
 
 private:
 

@@ -4,7 +4,7 @@
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
 #include "../Character/Enemy.h"
-
+#include "../Character/EnemyBoss.h"
 
 #include "../Manager/EnemyManager.h"
 
@@ -52,9 +52,9 @@ void imguiObject::Update()
             pPlayer = (Player*)FindObject("Player");
             if (pPlayer != nullptr)
             {
-                /*ImGui::Text("position_x : %g", pPlayer->GetPosition().x);
+                ImGui::Text("position_x : %g", pPlayer->GetPosition().x);
                 ImGui::Text("position_y : %g", pPlayer->GetPosition().y);
-                ImGui::Text("position_z : %g", pPlayer->GetPosition().z);*/
+                ImGui::Text("position_z : %g", pPlayer->GetPosition().z);
 
                 ImGui::Text("HP : %g", pPlayer->GetHP());
 
@@ -96,7 +96,6 @@ void imguiObject::Update()
                     char numStr[256];
                     sprintf_s(numStr, "IndexNumber : %d", i);
 
-                   
                     if (ImGui::TreeNode(numStr))
                     {
                         // Enemyî•ñ‚ðvector‚©‚çŽæ“¾
@@ -131,6 +130,31 @@ void imguiObject::Update()
 
             ImGui::TreePop();
         }
+
+        // EnemyBossî•ñ
+        if (ImGui::TreeNode("EnemyBossInformation"))
+        {
+           pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+
+            if (pBoss != nullptr)
+            {
+                ImGui::Text("position_x : %g", pBoss->GetPosition().x);
+                ImGui::Text("position_y : %g", pBoss->GetPosition().y);
+                ImGui::Text("position_z : %g", pBoss->GetPosition().z);
+
+                ImGui::Text("HP : %g", pBoss->GetHP());
+
+                std::string str = GetCharacterStateString(pBoss);
+                ImGui::Text(str.c_str());
+
+                std::string attack = GetEnemyBossAttackStateString();
+                ImGui::Text(attack.c_str());
+            }
+            
+
+            ImGui::TreePop();
+        }
+
 
         ImGui::TreePop();
     }
@@ -221,6 +245,41 @@ std::string imguiObject::GetPlayerAttackStateString()
     default:
         break;
     }
+
+    return attackStateStr + nowAttackState;
+}
+
+std::string imguiObject::GetEnemyBossAttackStateString()
+{
+    std::string nowAttackState = "";
+
+    BossAttackState nowState = pBoss->GetAttackState();
+
+    switch (nowState)
+    {
+    case BossAttackState::NoAttack:
+        nowAttackState = "NoAttack";
+        break;
+    case BossAttackState::BulletAttack:
+        nowAttackState = "BulletAttack";
+        break;
+    case BossAttackState::SpiralMoveAttack:
+        nowAttackState = "SpiralMoveAttack";
+        break;
+    case BossAttackState::WavesAttack:
+        nowAttackState = "WavesAttack";
+        break;
+    case BossAttackState::JumpAttack:
+        nowAttackState = "JumpAttack";
+        break;
+    case BossAttackState::SpecialAttack:
+        nowAttackState = "SpecialAttack/";
+        break;
+    default:
+        break;
+    }
+
+    
 
     return attackStateStr + nowAttackState;
 }

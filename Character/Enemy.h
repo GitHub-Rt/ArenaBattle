@@ -26,7 +26,7 @@ public:
 	void CharacterAttack() override;
 	void CharacterTakeDamage(float damage) override;
 	void CharacterCheckHP() override;
-	void OnCollision(GameObject* pTarget) override;
+	void OnCollision(GameObject* pTarget, Collider* nowCollider) override;
 
 
 	void ModelRotate(XMVECTOR vMove);

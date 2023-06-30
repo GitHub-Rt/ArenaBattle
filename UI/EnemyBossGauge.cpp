@@ -1,5 +1,5 @@
 #include "EnemyBossGauge.h"
-
+#include "../Character/EnemyBoss.h"
 const XMFLOAT3 GaugePos = XMFLOAT3(-0.9f, -0.9f, 0);
 const XMFLOAT3 GaugeScale = XMFLOAT3(4.5f, 2.5f, 1.0f);
 
@@ -19,7 +19,10 @@ EnemyBossGauge::~EnemyBossGauge()
 
 void EnemyBossGauge::Initialize()
 {
-    SetMaxHP(100);
+    EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+    float hp = pBoss->GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP);
+    
+    SetMaxHP(hp);
     SetGaugeScale(GaugeScale);
     SetGaugePosition(GaugePos.x, GaugePos.y);
     SetGaugeInformation();

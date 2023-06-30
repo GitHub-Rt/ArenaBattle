@@ -81,7 +81,7 @@ void Robot::CharacterUpdate()
 
 void Robot::CharacterMove()
 {
-	if (pPlayer->IsStateSet(CharacterState::Moving) || pPlayer->IsStateSet(CharacterState::Attacking))
+	if (pPlayer->IsStateSet(CharacterState::Jumping) == false)
 	{
 		XMFLOAT3 playerPos = pPlayer->GetPosition();
 		playerPos.x += POS_X;
