@@ -73,7 +73,11 @@ void Robot::CharacterUpdate()
 		ClearState(CharacterState::Moving);
 	}
 	
-	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
+	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) 
+#ifndef NDEBUG
+		|| Input::IsKey(DIK_LSHIFT)
+#endif
+		)
 	{
 		ChangeState(CharacterState::Attacking);
 	}
@@ -81,32 +85,29 @@ void Robot::CharacterUpdate()
 
 void Robot::CharacterMove()
 {
-	if (pPlayer->IsStateSet(CharacterState::Jumping) == false)
+	XMFLOAT3 playerPos = pPlayer->GetPosition();
+	playerPos.x += POS_X;
+	playerPos.y += POS_Y;
+	playerPos.z += POS_Z;
+
+	if (transform_.position_.x != playerPos.x ||
+		transform_.position_.z != playerPos.z)
 	{
-		XMFLOAT3 playerPos = pPlayer->GetPosition();
-		playerPos.x += POS_X;
-		playerPos.y += POS_Y;
-		playerPos.z += POS_Z;
+		ChangeState(CharacterState::Moving);
 
-		if (transform_.position_.x != playerPos.x ||
-			transform_.position_.z != playerPos.z)
-		{
-			ChangeState(CharacterState::Moving);
+		XMFLOAT3 nowPos = GetPosition();
+		XMVECTOR vNowPos = XMLoadFloat3(&nowPos);
+		XMVECTOR vPoint = XMLoadFloat3(&playerPos);
+		XMVECTOR vMove = vPoint - vNowPos;
+		XMVector3Normalize(vMove);
+		vMove *= MOVESPEED;
 
-			XMFLOAT3 nowPos = GetPosition();
-			XMVECTOR vNowPos = XMLoadFloat3(&nowPos);
-			XMVECTOR vPoint = XMLoadFloat3(&playerPos);
-			XMVECTOR vMove = vPoint - vNowPos;
-			XMVector3Normalize(vMove);
-			vMove *= MOVESPEED;
-
-			XMFLOAT3 move;
-			XMStoreFloat3(&move, vMove);
+		XMFLOAT3 move;
+		XMStoreFloat3(&move, vMove);
 
 
-			transform_.position_.x += move.x;
-			transform_.position_.z += move.z;
-		}
+		transform_.position_.x += move.x;
+		transform_.position_.z += move.z;
 	}
 	else
 	{
@@ -119,7 +120,11 @@ void Robot::CharacterAttack()
 	bulletTimer++;
 	if (bulletTimer >= BETWEEN_BULLETTIMER)
 	{
-		if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
+		if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)
+#ifndef NDEBUG
+			|| Input::IsKey(DIK_LSHIFT)
+#endif			
+			)
 		{
 			bulletTimer = 0;
 

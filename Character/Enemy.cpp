@@ -55,6 +55,8 @@ void Enemy::Initialize()
 
 	// •Ï”‚Ì‰Šú‰»
 	{
+		// Œ»İ‚Åî•ñ‰Šú‰»‚µ‚Äƒ|ƒWƒVƒ‡ƒ“‚ğŒˆ’è‚³‚¹‚é
+		srand((unsigned int)time(NULL));	
 		transform_.position_.x = (float)(rand() % 100 - 50);
 		transform_.position_.z = 15;
 

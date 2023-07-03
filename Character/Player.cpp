@@ -217,7 +217,22 @@ void Player::CharacterMove()
 {
 	const float MOVING_DISTANCE_ADJUSTMENT = 0.5f;	// プレイヤーの移動量の調節
 
+	// 入力チェック
 	XMFLOAT3 move = Input::GetPadStickL();
+
+#ifndef NDUBUG
+	// キーボード用
+	if (Input::IsKey(DIK_W))
+		move.y += 1;
+	if (Input::IsKey(DIK_A))
+		move.x -= 1;
+	if (Input::IsKey(DIK_S))
+		move.y -= 1;
+	if (Input::IsKey(DIK_D))
+		move.x += 1;
+#endif
+
+	// 入力が行われていなかったら状態を下す
 	if (move.x == 0 && move.y == 0)
 	{
 		ClearState(CharacterState::Moving);
@@ -435,7 +450,7 @@ void Player::NormalCamera()
 		const float CAMERA_UPWARD_MAXIMUM_VALUE = 1.0f;		// カメラ上方向の最大値
 		const float CAMERA_DOWNWARD_MAXIMUM_VALUE = 0.0f;	// カメラ下方向の最大値
 
-#ifdef NDEBUG
+#ifndef NDEBUG
 		XMFLOAT3 mouseMove = Input::GetMouseMove();
 
 		// マウスの稼働範囲を一定にする
@@ -460,7 +475,7 @@ void Player::NormalCamera()
 		// カメラの回転する角度を設定
 		// 水平方向回転
 		if (Input::GetPadStickR().x > 0
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| mouseMove.x > 0
 #endif
 			)
@@ -468,7 +483,7 @@ void Player::NormalCamera()
 			angleX += CAMERA_ANGLE_SPEED_X;
 		}
 		else if (Input::GetPadStickR().x < 0
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| mouseMove.x < 0
 #endif
 			)
@@ -478,7 +493,7 @@ void Player::NormalCamera()
 
 		// 垂直方向回転
 		if (Input::GetPadStickR().y < 0
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| mouseMove.y < 0
 #endif
 			)
@@ -490,7 +505,7 @@ void Player::NormalCamera()
 			}
 		}
 		else if (Input::GetPadStickR().y > 0
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| mouseMove.y > 0
 #endif
 			)
@@ -724,18 +739,30 @@ bool Player::IsMoveEntry()
 {
 	// コントローラー用
 	XMFLOAT3 move = Input::GetPadStickL();
-	if (move.x != 0 || move.y != 0)
+	if (move.x != 0 || move.y != 0
+#ifndef NDUBUG
+		|| Input::IsKeyDown(DIK_W) || Input::IsKeyDown(DIK_A) || Input::IsKeyDown(DIK_S) || Input::IsKeyDown(DIK_D)
+#endif // !NDUBUG
+		)
 	{
 		return true;
 	}
 	return false;
+
+
+
+
 }
 
 bool Player::IsDodEntry()
 {
 	// コントローラー用
 	float trrigerR = Input::GetPadTrrigerR();
-	if (isTrrigerReset && trrigerR != 0)
+	if (isTrrigerReset && trrigerR != 0
+#ifndef NDEBUG
+		 || Input::IsKeyDown(DIK_LCONTROL)
+#endif
+		)
 	{
 		isTrrigerReset = false;
 		return true;
@@ -749,7 +776,7 @@ bool Player::IsAttackEntry()
 	{
 		// 通常攻撃
 		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| Input::IsMouseButtonDown(MouseBottunCode::LeftClick)
 #endif
 			)
@@ -761,7 +788,7 @@ bool Player::IsAttackEntry()
 
 		// 強攻撃
 		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y)
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| Input::IsMouseButtonDown(MouseBottunCode::RightClick)
 #endif
 			)
@@ -779,8 +806,8 @@ bool Player::IsAttackEntry()
 bool Player::IsRecoverEntry()
 {
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_X) 
-#ifdef NDEBUG
-		|| Input::GetMouseMove().z != 0)
+#ifndef NDEBUG
+		|| Input::GetMouseMove().z != 0
 #endif
 		)
 	{
@@ -795,7 +822,7 @@ bool Player::IsJumpEntry()
 	{
 
 		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A)
-#ifdef NDEBUG
+#ifndef NDEBUG
 			|| Input::IsKeyDown(DIK_SPACE)
 #endif	
 			)
