@@ -50,27 +50,45 @@ namespace Input
 		pMouseDevice_->SetCooperativeLevel(hWnd_, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	}
 
+	// コントローラーの接続状況
+	bool IsControllerConnected()
+	{
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+		// 0番目のコントローラーの状態を取得
+		DWORD result = XInputGetState(0, &state);
+
+		// XInputGetStateの戻り値がERROR_SUCCESSの場合、コントローラーが接続されている
+		return result == ERROR_SUCCESS;
+	}
+
 
 	//更新
 	void Update()
 	{
-		//キーボード
-		pKeyDevice_->Acquire();
-		memcpy(prevKeyState_, keyState_, sizeof(keyState_));
-		pKeyDevice_->GetDeviceState(sizeof(keyState_), &keyState_);
-
-		//マウス
-		pMouseDevice_->Acquire();
-		memcpy(&prevMouseState_, &mouseState_, sizeof(mouseState_));
-		pMouseDevice_->GetDeviceState(sizeof(mouseState_), &mouseState_);
-
-		//コントローラー
-		for (int i = 0; i < MAX_PAD_NUM; i++)
+		// 接続状況の確認
+		if (IsControllerConnected())
 		{
-			memcpy(&prevControllerState_[i], &controllerState_[i], sizeof(controllerState_[i]));
-			XInputGetState(i, &controllerState_[i]);
+			//コントローラー
+			for (int i = 0; i < MAX_PAD_NUM; i++)
+			{
+				memcpy(&prevControllerState_[i], &controllerState_[i], sizeof(controllerState_[i]));
+				XInputGetState(i, &controllerState_[i]);
+			}
 		}
+		else
+		{
+			//キーボード
+			pKeyDevice_->Acquire();
+			memcpy(prevKeyState_, keyState_, sizeof(keyState_));
+			pKeyDevice_->GetDeviceState(sizeof(keyState_), &keyState_);
 
+			//マウス
+			pMouseDevice_->Acquire();
+			memcpy(&prevMouseState_, &mouseState_, sizeof(mouseState_));
+			pMouseDevice_->GetDeviceState(sizeof(mouseState_), &mouseState_);
+		}
 	}
 
 

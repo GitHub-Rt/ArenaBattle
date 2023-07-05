@@ -328,22 +328,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	//マウスが動いた
 	case WM_MOUSEMOVE:
-#if _DEBUG
-		//通常通りマウスを描画する
-		Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
-		ShowCursor(TRUE);
-		
-		return 0;
-#endif
-
-		//マウスカーゾルが動かなくなるようにしつつ非表示にする
-		RECT r;
-		GetWindowRect(hWnd, &r);
-		LPARAM width = (double)r.left + HALF_WIDTH;
-		LPARAM height = (double)r.top + HALF_HEIGHT;
-		Input::SetMouseMove(LOWORD(width), LOWORD(height));
-		ShowCursor(FALSE);
-
+		if (Input::IsControllerConnected())
+		{
+			//通常通りマウスを描画する
+			Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
+			ShowCursor(TRUE);
+		}
+		else
+		{
+			//マウスカーゾルが動かなくなるようにしつつ非表示にする
+			RECT r;
+			GetWindowRect(hWnd, &r);
+			LPARAM width = (double)r.left + HALF_WIDTH;
+			LPARAM height = (double)r.top + HALF_HEIGHT;
+			Input::SetMouseMove(LOWORD(width), LOWORD(height));
+			ShowCursor(FALSE);
+		}
 		return 0;
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);

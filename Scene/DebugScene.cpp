@@ -31,7 +31,7 @@ void DebugScene::Initialize()
 
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		//EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
 	pBoss = Instantiate<EnemyBoss>(this);
 	

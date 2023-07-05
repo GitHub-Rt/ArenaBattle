@@ -12,7 +12,6 @@ RobotBullet::RobotBullet(GameObject* parent)
 	: AttackModelBase(parent, "RobotBullet")
 {
     pRobot = nullptr;
-
     travelingDirection = XMFLOAT3(0, 0, 0);
 }
 
@@ -31,7 +30,7 @@ void RobotBullet::Initialize()
 
 void RobotBullet::AttackModelUpdate()
 {
-    const float MOVING_VECTOR_MAGNIFICATION = 1.5f; // 移動ベクトル倍率
+    const float MOVING_VECTOR_MAGNIFICATION = 1.5f;        // 移動ベクトル倍率
     const int BULLET_MAX_TIMER = 120;                      // 弾が消えるまでの時間
 
     travelingDirection.y = 0;

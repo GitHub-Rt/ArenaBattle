@@ -28,6 +28,10 @@ namespace Input
 	//引数：hWnd	ウィンドウハンドル
 	void Initialize(HWND hWnd);
 
+	// コントローラーの接続状態を確認する関数
+	// 戻り値がtrue → コントローラーが接続されている
+	bool IsControllerConnected();
+
 	//更新
 	void Update();
 

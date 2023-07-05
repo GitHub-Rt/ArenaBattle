@@ -14,6 +14,7 @@
 #include "../Character/EnemyBoss.h"
 #include "../Manager/EnemyManager.h"
 
+
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 4, 4, 4 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
@@ -217,20 +218,12 @@ void Player::CharacterMove()
 {
 	const float MOVING_DISTANCE_ADJUSTMENT = 0.5f;	// プレイヤーの移動量の調節
 
-	// 入力チェック
 	XMFLOAT3 move = Input::GetPadStickL();
+	if (Input::IsKey(DIK_W)) move.y += 1;
+	if (Input::IsKey(DIK_A)) move.x -= 1;
+	if (Input::IsKey(DIK_S)) move.y -= 1;
+	if (Input::IsKey(DIK_D)) move.x += 1;
 
-#ifndef NDUBUG
-	// キーボード用
-	if (Input::IsKey(DIK_W))
-		move.y += 1;
-	if (Input::IsKey(DIK_A))
-		move.x -= 1;
-	if (Input::IsKey(DIK_S))
-		move.y -= 1;
-	if (Input::IsKey(DIK_D))
-		move.x += 1;
-#endif
 
 	// 入力が行われていなかったら状態を下す
 	if (move.x == 0 && move.y == 0)
@@ -331,6 +324,8 @@ void Player::NormalAttackAction()
 		}
 		else
 		{
+			vPrevPos = XMLoadFloat3(&transform_.position_);
+
 			transform_.position_.x = motionPos.x;
 			transform_.position_.z = motionPos.z;
 		}
@@ -444,78 +439,32 @@ void Player::NormalCamera()
 
 	// カメラの回転角度とベクトル設定
 	{
-		const float MOUSE_OPERATIONG_RANGE = 1.0f;			// マウスの稼働範囲
+		const float CAMERA_MOUSE_SENSITIVITY = 0.05f;		// カメラの移動量(感度)
 		const float CAMERA_ANGLE_SPEED_X = 0.05f;			// カメラの横方向回転スピード
-		const float CAMERA_ANGLE_SPEED_Y = 0.025f;			// カメラの縦方向回転スピード
+		const float CAMERA_ANGLE_SPEED_Y = 0.0125f;			// カメラの縦方向回転スピード
 		const float CAMERA_UPWARD_MAXIMUM_VALUE = 1.0f;		// カメラ上方向の最大値
 		const float CAMERA_DOWNWARD_MAXIMUM_VALUE = 0.0f;	// カメラ下方向の最大値
 
-#ifndef NDEBUG
-		XMFLOAT3 mouseMove = Input::GetMouseMove();
-
-		// マウスの稼働範囲を一定にする
-		if (mouseMove.x > MOUSE_OPERATIONG_RANGE)
+		
+		XMFLOAT3 cameraMove;
+		if (Input::IsControllerConnected())
 		{
-			mouseMove.x = 1;
+			cameraMove = Input::GetPadStickR();
+			cameraMove.y *= -1;		// 垂直方向は反転させる
 		}
-		else if (mouseMove.x < -MOUSE_OPERATIONG_RANGE)
+		else
 		{
-			mouseMove.x = -1;
+			cameraMove = Input::GetMouseMove();
+			cameraMove.x *= CAMERA_MOUSE_SENSITIVITY;
+			cameraMove.y *= CAMERA_MOUSE_SENSITIVITY;
 		}
-
-		if (mouseMove.y > MOUSE_OPERATIONG_RANGE)
-		{
-			mouseMove.y = 1;
-		}
-		else if (mouseMove.y < -MOUSE_OPERATIONG_RANGE)
-		{
-			mouseMove.y = -1;
-		}
-#endif
+		
 		// カメラの回転する角度を設定
-		// 水平方向回転
-		if (Input::GetPadStickR().x > 0
-#ifndef NDEBUG
-			|| mouseMove.x > 0
-#endif
-			)
-		{
-			angleX += CAMERA_ANGLE_SPEED_X;
-		}
-		else if (Input::GetPadStickR().x < 0
-#ifndef NDEBUG
-			|| mouseMove.x < 0
-#endif
-			)
-		{
-			angleX -= CAMERA_ANGLE_SPEED_X;
-		}
+		angleX += cameraMove.x * CAMERA_ANGLE_SPEED_X;
+		angleY += cameraMove.y * CAMERA_ANGLE_SPEED_Y;
 
-		// 垂直方向回転
-		if (Input::GetPadStickR().y < 0
-#ifndef NDEBUG
-			|| mouseMove.y < 0
-#endif
-			)
-		{
-			angleY += CAMERA_ANGLE_SPEED_Y;
-			if (angleY > CAMERA_UPWARD_MAXIMUM_VALUE)
-			{
-				angleY = CAMERA_UPWARD_MAXIMUM_VALUE;
-			}
-		}
-		else if (Input::GetPadStickR().y > 0
-#ifndef NDEBUG
-			|| mouseMove.y > 0
-#endif
-			)
-		{
-			angleY -= CAMERA_ANGLE_SPEED_Y;
-			if (angleY < CAMERA_DOWNWARD_MAXIMUM_VALUE)
-			{
-				angleY = CAMERA_DOWNWARD_MAXIMUM_VALUE;
-			}
-		}
+		// 垂直方向を制限する
+		angleY = min(max(angleY, CAMERA_DOWNWARD_MAXIMUM_VALUE) , CAMERA_UPWARD_MAXIMUM_VALUE);
 	}
 
 	// それぞれの回転角度に応じて回転行列を作成
@@ -737,36 +686,28 @@ void Player::HPRecovery(float value)
 
 bool Player::IsMoveEntry()
 {
-	// コントローラー用
-	XMFLOAT3 move = Input::GetPadStickL();
-	if (move.x != 0 || move.y != 0
-#ifndef NDUBUG
-		|| Input::IsKeyDown(DIK_W) || Input::IsKeyDown(DIK_A) || Input::IsKeyDown(DIK_S) || Input::IsKeyDown(DIK_D)
-#endif // !NDUBUG
-		)
-	{
+
+	if (Input::GetPadStickL().x != 0 || 
+		Input::GetPadStickL().y != 0 ||
+		Input::IsKeyDown(DIK_W) ||
+		Input::IsKeyDown(DIK_A) ||
+		Input::IsKeyDown(DIK_S) ||
+		Input::IsKeyDown(DIK_D) )
+	{ 
 		return true;
 	}
+
 	return false;
-
-
-
-
 }
 
 bool Player::IsDodEntry()
 {
-	// コントローラー用
-	float trrigerR = Input::GetPadTrrigerR();
-	if (isTrrigerReset && trrigerR != 0
-#ifndef NDEBUG
-		 || Input::IsKeyDown(DIK_LCONTROL)
-#endif
-		)
+	if (isTrrigerReset && Input::GetPadTrrigerR() != 0	|| Input::IsKeyDown(DIK_LSHIFT) )
 	{
 		isTrrigerReset = false;
 		return true;
 	}
+
 	return false;
 }
 
@@ -775,11 +716,7 @@ bool Player::IsAttackEntry()
 	if (attackState == AttackState::NoAttack)
 	{
 		// 通常攻撃
-		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B)
-#ifndef NDEBUG
-			|| Input::IsMouseButtonDown(MouseBottunCode::LeftClick)
-#endif
-			)
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B) ||Input::IsMouseButtonDown(MouseBottunCode::LeftClick) )
 		{
 			attackState = AttackState::NormalAttack;
 			//pSound->EffectPlay(SoundEffect::NormalAttack);
@@ -787,15 +724,11 @@ bool Player::IsAttackEntry()
 		}
 
 		// 強攻撃
-		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y)
-#ifndef NDEBUG
-			|| Input::IsMouseButtonDown(MouseBottunCode::RightClick)
-#endif
-			)
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y) ||Input::IsMouseButtonDown(MouseBottunCode::RightClick) )
 		{
 			attackState = AttackState::HardAttack;
 			//pSound->EffectPlay(SoundEffect::HardAttack);
-			
+
 			return true;
 		}
 	}
@@ -805,11 +738,7 @@ bool Player::IsAttackEntry()
 
 bool Player::IsRecoverEntry()
 {
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_X) 
-#ifndef NDEBUG
-		|| Input::GetMouseMove().z != 0
-#endif
-		)
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_X) || Input::GetMouseMove().z != 0 )
 	{
 		return true;
 	}
@@ -820,12 +749,7 @@ bool Player::IsJumpEntry()
 {
 	if (IsStateSet(CharacterState::Jumping) == false)
 	{
-
-		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A)
-#ifndef NDEBUG
-			|| Input::IsKeyDown(DIK_SPACE)
-#endif	
-			)
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_SPACE))
 		{
 			beforeJumpY = transform_.position_.y;
 			return true;

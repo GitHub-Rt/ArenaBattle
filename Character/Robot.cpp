@@ -21,7 +21,6 @@ void Robot::SetData()
 	BETWEEN_BULLETTIMER = GetInternalData(CharacterID::Robot, (int)RobotData::BulletTimer);
 }
 
-
 Robot::Robot(GameObject* parent)
 	:CharacterBase(parent, "Robot")
 {
@@ -73,13 +72,17 @@ void Robot::CharacterUpdate()
 		ClearState(CharacterState::Moving);
 	}
 	
-	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) 
-#ifndef NDEBUG
-		|| Input::IsKey(DIK_LSHIFT)
-#endif
-		)
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKeyDown(DIK_LCONTROL))
 	{
-		ChangeState(CharacterState::Attacking);
+		if (IsStateSet(CharacterState::Attacking))
+		{
+			bulletTimer = 0;
+			ClearState(CharacterState::Attacking);
+		}
+		else
+		{
+			ChangeState(CharacterState::Attacking);
+		}
 	}
 }
 
@@ -120,36 +123,25 @@ void Robot::CharacterAttack()
 	bulletTimer++;
 	if (bulletTimer >= BETWEEN_BULLETTIMER)
 	{
-		if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)
-#ifndef NDEBUG
-			|| Input::IsKey(DIK_LSHIFT)
-#endif			
-			)
-		{
-			bulletTimer = 0;
+		bulletTimer = 0;
 
-			RobotBullet* pBullet = Instantiate<RobotBullet>(GetParent());
+		RobotBullet* pBullet = Instantiate<RobotBullet>(GetParent());
 
-			XMFLOAT3 root = Model::GetBonePosition(GetCharacterModel(), "root");
-			XMFLOAT3 tip = Model::GetBonePosition(GetCharacterModel(), "tip");
+		XMFLOAT3 root = Model::GetBonePosition(GetCharacterModel(), "root");
+		XMFLOAT3 tip = Model::GetBonePosition(GetCharacterModel(), "tip");
 
-			XMVECTOR vRoot = XMLoadFloat3(&root);
-			XMVECTOR vTip = XMLoadFloat3(&tip);
+		XMVECTOR vRoot = XMLoadFloat3(&root);
+		XMVECTOR vTip = XMLoadFloat3(&tip);
 
-			XMVECTOR vMove = vTip - vRoot;
-			vMove = XMVector3Normalize(vMove);
+		XMVECTOR vMove = vTip - vRoot;
+		vMove = XMVector3Normalize(vMove);
 
-			XMFLOAT3 move;
-			XMStoreFloat3(&move, vMove);
+		XMFLOAT3 move;
+		XMStoreFloat3(&move, vMove);
 
-			pBullet->SetPosition(tip);
-			pBullet->SetMoveDirection(move);
-			pBullet->SetAttackPower(GetParameterValue(CharacterID::Robot, CharacterStatus::AttackPower));
-		}
-		else
-		{
-			ClearState(CharacterState::Attacking);
-		}
+		pBullet->SetPosition(tip);
+		pBullet->SetMoveDirection(move);
+		pBullet->SetAttackPower(GetParameterValue(CharacterID::Robot, CharacterStatus::AttackPower));
 	}
 	
 }
@@ -190,40 +182,4 @@ void Robot::CharacterIdleAction()
 	{
 		ChangeState(CharacterState::Moving);
 	}
-
-
-	if (Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKey(DIK_LSHIFT))
-	{
-		ChangeState(CharacterState::Attacking);
-	}
-}
-
-void Robot::CharacterCheckHP()
-{
-
-}
-
-void Robot::CharacterJumpAction()
-{
-
-}
-
-void Robot::CharacterDodingAction()
-{
-
-}
-
-void Robot::CharacterStunAction()
-{
-
-}
-
-void Robot::CharacterTakeDamage(float damage)
-{
-
-}
-
-void Robot::DrawEffect()
-{
-
 }
