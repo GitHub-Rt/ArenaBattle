@@ -212,7 +212,7 @@ public:
 	/// ó‘Ô‚ğæ“¾‚·‚é(ó‘Ô‚ª—§‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ•Ô‚·)
 	/// </summary>
 	/// <param name="state"></param>
-	/// <returns></returns>
+	/// <returns>ó‘Ô‚ª—§‚Á‚Ä‚¢‚½‚çtrue</returns>
 	bool IsStateSet(CharacterState state) const { return (characterStateFlg & (unsigned int)state) != 0; }
 
 	/// <summary>

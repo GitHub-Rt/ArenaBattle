@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 
 class EnemyBoss;
+class Player;
 
 const int ENEMY_COUNT = 3;
 
@@ -17,5 +18,6 @@ public:
 
 private:
 	EnemyBoss* pBoss;
+	Player* pPlayer;
 	int timer;
 };

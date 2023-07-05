@@ -2,4 +2,4 @@ Parameter,MAX_HP,AttackPower,DefensePower
 Player,100,40,15
 Robot,0,15,0
 NormalEnemy,50,16,5
-BossEnemy,500,25,10
+BossEnemy,1000,25,10

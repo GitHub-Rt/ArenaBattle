@@ -46,14 +46,12 @@ Player::Player(GameObject* parent)
 	RECOVERY_POTION_NUMBER = 0;
 	RECOVERY_QUANTITY = 0;
 
-
 	pGauge = nullptr;
 
 	hp = 0;
 
-
 	isTrrigerReset = true;
-
+	isInputReception = true;
 
 	movingDistance = XMFLOAT3(0, 0, 0);
 	vPrevPos = { 0,0,0,0 };
@@ -218,6 +216,7 @@ void Player::CharacterMove()
 {
 	const float MOVING_DISTANCE_ADJUSTMENT = 0.5f;	// プレイヤーの移動量の調節
 
+
 	XMFLOAT3 move = Input::GetPadStickL();
 	if (Input::IsKey(DIK_W)) move.y += 1;
 	if (Input::IsKey(DIK_A)) move.x -= 1;
@@ -226,9 +225,10 @@ void Player::CharacterMove()
 
 
 	// 入力が行われていなかったら状態を下す
-	if (move.x == 0 && move.y == 0)
+	if (move.x == 0 && move.y == 0 || isInputReception == false)
 	{
 		ClearState(CharacterState::Moving);
+		return;
 	}
 
 	XMVECTOR travelingDirection = XMVectorSet(move.x, 0, move.y, 0);
@@ -289,24 +289,12 @@ void Player::CharacterAttack()
 
 void Player::NormalAttackAction()
 {
-	const float VECTOR_LENGTH_AT_NORMAL_ATTACK = 0.5f;	// 通常攻撃時のベクトルの長さ
-
 	// エフェクト
 	pEffect->SetEmitterPosition(transform_.position_, EmitterType::Ventilation);
 	XMFLOAT3 dir = { 0,0,0 };
 	XMStoreFloat3(&dir, GetFrontVector());
 	pEffect->SetDirection(dir, transform_.rotate_);
 	pEffect->StartEffectAtNormalAttack();
-
-
-	// 方向のベクトルを取得して移動量に変換
-	attackVector = GetFrontVector();
-	attackVector *= VECTOR_LENGTH_AT_NORMAL_ATTACK;
-	XMFLOAT3 motionPos;
-	XMStoreFloat3(&motionPos, attackVector);
-
-	motionPos.x += transform_.position_.x;
-	motionPos.z += transform_.position_.z;
 
 	if (attackTimer > NORMAL_ATTACK_TIME)
 	{
@@ -317,18 +305,6 @@ void Player::NormalAttackAction()
 	else
 	{
 		attackTimer++;
-
-		if (IsMoveLimit(motionPos))
-		{
-			XMStoreFloat3(&motionPos, vPrevPos);
-		}
-		else
-		{
-			vPrevPos = XMLoadFloat3(&transform_.position_);
-
-			transform_.position_.x = motionPos.x;
-			transform_.position_.z = motionPos.z;
-		}
 	}
 }
 
@@ -485,7 +461,7 @@ void Player::NormalCamera()
 	// カメラに移動行列を適用させる
 	XMVECTOR vCameraPosition = XMVector3TransformCoord(vCamera, mMoving);
 
-	// カメラの方向ベクトルを保存
+	// カメラの方向ベクトル
 	XMVECTOR cameraVector = XMVector3Normalize(vCameraPosition);
 	XMStoreFloat3(&cameraDirection, cameraVector);
 
@@ -686,15 +662,17 @@ void Player::HPRecovery(float value)
 
 bool Player::IsMoveEntry()
 {
-
-	if (Input::GetPadStickL().x != 0 || 
-		Input::GetPadStickL().y != 0 ||
-		Input::IsKeyDown(DIK_W) ||
-		Input::IsKeyDown(DIK_A) ||
-		Input::IsKeyDown(DIK_S) ||
-		Input::IsKeyDown(DIK_D) )
-	{ 
-		return true;
+	if (isInputReception)
+	{
+		if (Input::GetPadStickL().x != 0 ||
+			Input::GetPadStickL().y != 0 ||
+			Input::IsKeyDown(DIK_W) ||
+			Input::IsKeyDown(DIK_A) ||
+			Input::IsKeyDown(DIK_S) ||
+			Input::IsKeyDown(DIK_D))
+		{
+			return true;
+		}
 	}
 
 	return false;
@@ -702,34 +680,40 @@ bool Player::IsMoveEntry()
 
 bool Player::IsDodEntry()
 {
-	if (isTrrigerReset && Input::GetPadTrrigerR() != 0	|| Input::IsKeyDown(DIK_LSHIFT) )
+	if (isInputReception)
 	{
-		isTrrigerReset = false;
-		return true;
-	}
 
+		if (isTrrigerReset && Input::GetPadTrrigerR() != 0 || Input::IsKeyDown(DIK_LSHIFT))
+		{
+			isTrrigerReset = false;
+			return true;
+		}
+	}
 	return false;
 }
 
 bool Player::IsAttackEntry()
 {
-	if (attackState == AttackState::NoAttack)
+	if (isInputReception)
 	{
-		// 通常攻撃
-		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B) ||Input::IsMouseButtonDown(MouseBottunCode::LeftClick) )
+		if (attackState == AttackState::NoAttack)
 		{
-			attackState = AttackState::NormalAttack;
-			//pSound->EffectPlay(SoundEffect::NormalAttack);
-			return true;
-		}
+			// 通常攻撃
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B) || Input::IsMouseButtonDown(MouseBottunCode::LeftClick))
+			{
+				attackState = AttackState::NormalAttack;
+				//pSound->EffectPlay(SoundEffect::NormalAttack);
+				return true;
+			}
 
-		// 強攻撃
-		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y) ||Input::IsMouseButtonDown(MouseBottunCode::RightClick) )
-		{
-			attackState = AttackState::HardAttack;
-			//pSound->EffectPlay(SoundEffect::HardAttack);
+			// 強攻撃
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y) || Input::IsMouseButtonDown(MouseBottunCode::RightClick))
+			{
+				attackState = AttackState::HardAttack;
+				//pSound->EffectPlay(SoundEffect::HardAttack);
 
-			return true;
+				return true;
+			}
 		}
 	}
 
@@ -738,24 +722,30 @@ bool Player::IsAttackEntry()
 
 bool Player::IsRecoverEntry()
 {
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_X) || Input::GetMouseMove().z != 0 )
+	if (isInputReception)
 	{
-		return true;
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_X) || Input::GetMouseMove().z != 0)
+		{
+			return true;
+		}
 	}
 	return false;
 }
 
 bool Player::IsJumpEntry()
 {
-	if (IsStateSet(CharacterState::Jumping) == false)
+	if (isInputReception)
 	{
-		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_SPACE))
+		if (IsStateSet(CharacterState::Jumping) == false)
 		{
-			beforeJumpY = transform_.position_.y;
-			return true;
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_SPACE))
+			{
+				beforeJumpY = transform_.position_.y;
+				return true;
+			}
 		}
 	}
-
+	
 	return false;
 }
 

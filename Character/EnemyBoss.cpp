@@ -2,6 +2,7 @@
 #include "../UI/EnemyBossGauge.h"
 
 #include "Player.h"
+//#include "../AttackModel/"
 
 // ’è”éŒ¾
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18,18,18 };	//outside‚Ì“–‚½‚è”»’è˜g
@@ -14,7 +15,17 @@ EnemyBoss::EnemyBoss(GameObject* parent)
 	pPlayer = nullptr;
 	pGauge = nullptr;
 
-	bossAttackState = BossAttackState::NoAttack;
+	bossAttackState = (unsigned int)BossAttackState::NoAttack;
+	bossAIState = BossAIState::Allowance;
+	
+	attackIntervalTimer = 0;
+
+	hp = 0;
+
+	isWarningStart = false;
+
+	damageTimer = 0;
+	totalDamages = 0;
 }
 
 EnemyBoss::~EnemyBoss()
@@ -27,6 +38,8 @@ void EnemyBoss::SetData()
 	ENTRY_FIRST_POS_Y = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::EntryFirstPosY);
 	ATTACK_INTERVAL_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::AttackIntervalTime);
 	DAMAGE_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::DamageTime);
+	RATE_FOR_MAX_STRENGTH = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::RateForMaxStrength);
+	TOTAL_DAMAGES_UP_AI_LEVEl = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TotalDamagesUpAILevel);
 }
 
 void EnemyBoss::Initialize()
@@ -79,7 +92,31 @@ void EnemyBoss::EnemyUpdate()
 
 void EnemyBoss::CharacterIdleAction()
 {
+	attackIntervalTimer++;
 
+	// AIƒŒƒxƒ‹‚ÅUŒ‚ŠÔŠuŠÔ‚ğ•Ï“®‚³‚¹‚é
+	if (attackIntervalTimer >= ATTACK_INTERVAL_TIME / (int)bossAIState)
+	{
+		attackIntervalTimer = 0;
+
+		AttackTypeSelection();
+		ChangeState(CharacterState::Attacking);
+	}
+
+	// Å‘å‘Ì—Í‚É‘Î‚µ‚ÄŒ»İ‘Ì—Í‚ÌŠ„‡‚ªˆê’èˆÈ‰º‚É‚È‚Á‚½‚ç“ÁêUŒ‚‚ğs‚¤
+	if (isSpecialAttack == false && hp <= GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP) / RATE_FOR_MAX_STRENGTH)
+	{
+		isSpecialAttack = true;
+		attackIntervalTimer = 0;
+
+		// AIó‘Ô‚ğÅ‘åó‘Ô‚É‚·‚é
+		bossAIState = BossAIState::Caution;
+
+		// “ÁêUŒ‚‚ğs‚¤
+		ChangeAttackState(BossAttackState::SpecialAttack);
+		
+		ChangeState(CharacterState::Attacking);
+	}
 }
 
 void EnemyBoss::CharacterMove()
@@ -87,9 +124,114 @@ void EnemyBoss::CharacterMove()
 
 }
 
+void EnemyBoss::AttackTypeSelection()
+{
+	int type = 0;
+
+	switch (bossAIState)
+	{
+	case BossAIState::Allowance:
+		ChangeAttackState(BossAttackState::BulletAttack);
+		break;
+	case BossAIState::Normal:
+		std::srand(unsigned(time(NULL)));
+		bossAttackState = (unsigned int)(1 << rand() % 4 + 1);
+		break;
+	case BossAIState::Caution:
+		std::srand(unsigned(time(NULL)));
+		type = rand() % 2 + 1;
+		if (type == 1)
+		{
+			ChangeAttackState(BossAttackState::BulletAttack);
+			ChangeAttackState(BossAttackState::SpiralMoveAttack);
+		}
+		else
+		{
+			ChangeAttackState(BossAttackState::WavesAttack);
+			ChangeAttackState(BossAttackState::JumpAttack);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 void EnemyBoss::CharacterAttack()
 {
+	for (unsigned int nowState = (unsigned int)BossAttackState::NoAttack; nowState <= (unsigned int)BossAttackState::MaxAttackState; nowState++)
+	{
+		BossAttackState nowAttack = (BossAttackState)nowState;
 
+		switch (nowAttack)
+		{
+		case BossAttackState::NoAttack:
+			ClearState(CharacterState::Attacking);
+			break;
+		case BossAttackState::BulletAttack:
+			BulletAttackAction();
+			break;
+		case BossAttackState::SpiralMoveAttack:
+			SpiralMoveAttackAction();
+			break;
+		case BossAttackState::WavesAttack:
+			WavesAttackAction();
+			break;
+		case BossAttackState::JumpAttack:
+			JumpAttackAction();
+			break;
+		case BossAttackState::SpecialAttack:
+			SpecialAttackAction();
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void EnemyBoss::BulletAttackAction()
+{
+
+}
+
+void EnemyBoss::SpiralMoveAttackAction()
+{
+
+}
+
+void EnemyBoss::WavesAttackAction()
+{
+
+}
+
+void EnemyBoss::JumpAttackAction()
+{
+
+}
+
+void EnemyBoss::SpecialAttackAction()
+{
+
+}
+
+void EnemyBoss::AttackVariableReset(BossAttackState nowState)
+{
+	switch (nowState)
+	{
+	case BossAttackState::NoAttack:
+		break;
+	case BossAttackState::BulletAttack:
+		break;
+	case BossAttackState::SpiralMoveAttack:
+		break;
+	case BossAttackState::WavesAttack:
+		break;
+	case BossAttackState::JumpAttack:
+		break;
+	case BossAttackState::SpecialAttack:
+		break;
+	default:
+		break;
+	}
 }
 
 void EnemyBoss::CharacterTakeDamage(float damage)
@@ -102,8 +244,7 @@ void EnemyBoss::CharacterTakeDamage(float damage)
 		ClearState(CharacterState::Damaged);
 		break;
 	case DamageStage::DamageStart:
-		pGauge->Damage(damage);
-		hp -= damage;
+		Damage(damage);
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
 	case DamageStage::TakeDamage:
@@ -115,6 +256,19 @@ void EnemyBoss::CharacterTakeDamage(float damage)
 		break;
 	default:
 		break;
+	}
+}
+
+void EnemyBoss::Damage(float damage)
+{
+	pGauge->Damage(damage);
+	hp -= damage;
+	totalDamages += damage;
+
+	// ˆê’èˆÈãƒ_ƒ[ƒW‚ğ—^‚¦‚½‚çAIƒŒƒxƒ‹‚ğˆê’iŠKã‚°‚é
+	if (totalDamages >= TOTAL_DAMAGES_UP_AI_LEVEl)
+	{
+		bossAIState = BossAIState::Normal;
 	}
 }
 
@@ -134,7 +288,10 @@ void EnemyBoss::DamageMotion()
 
 void EnemyBoss::CharacterCheckHP()
 {
-
+	if (hp < 0)
+	{
+		//KillMe();
+	}
 }
 
 void EnemyBoss::DrawEffect()
@@ -157,19 +314,27 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 		{
 			// UŒ‚”{—¦‚Ìİ’è
 			float atackMagnification = 1.0f;
-			switch (bossAttackState)
+
+			for (unsigned int nowState = (unsigned int)BossAttackState::NoAttack; nowState <= (unsigned int)BossAttackState::MaxAttackState; nowState++)
 			{
-			case BossAttackState::NoAttack:
-				break;
-			case BossAttackState::SpiralMoveAttack:
-				//atackMagnification =
-				break;
-			case BossAttackState::JumpAttack:
-				//atackMagnification =
-				break;
-			default:
-				break;
+				BossAttackState nowAttack = (BossAttackState)nowState;
+
+				switch (nowAttack)
+				{
+				case BossAttackState::NoAttack:
+					break;
+				case BossAttackState::SpiralMoveAttack:
+					//atackMagnification =
+					break;
+				case BossAttackState::JumpAttack:
+					//atackMagnification =
+					break;
+				default:
+					break;
+				}
+
 			}
+			
 
 			CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
 			pPlayer->SetDamageStage(DamageStage::DamageStart);
@@ -188,12 +353,54 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 	}
 }
 
-void EnemyBoss::BossEntry()
+void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource)
 {
+	// UŒ‚”{—¦‚Ìİ’è
+	float atackMagnification = 1.0f;
+
+	// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹•Ê‚É”{—¦‚ğİ’è
+	switch (attackSource)
+	{
+	case BossAttackModelHandle::Bullet:
+		//atackMagnification =
+		break;
+	case BossAttackModelHandle::Wave:
+		//atackMagnification =
+		break;
+	default:
+		break;
+	}
+
+	
+	CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
+	pPlayer->SetDamageStage(DamageStage::DamageStart);
+	pPlayer->SetDamageDirection(-(GetFrontVector()));
+}
+
+bool EnemyBoss::BossEntry()
+{
+	const float FAIL_SPEED = 0.5f;
+
 	// •`‰æ‚ğ‹–‰Â‚·‚é
 	Visible();
 
-	ProcessStart();
+	if (isWarningStart == false)
+	{
+		isWarningStart = true;
+
+		// Warning‚Ì‰æ‘œ‰Šú‰»
+	}
+
+	if (transform_.position_.y > ENTRY_POS_Y)
+	{
+		transform_.position_.y -= FAIL_SPEED;
+		return false;
+	}
+	else
+	{
+		transform_.position_.y = ENTRY_POS_Y;
+		return true;
+	}
 }
 
 void EnemyBoss::ProcessStart()
@@ -202,4 +409,40 @@ void EnemyBoss::ProcessStart()
 
 	// XVˆ—‚ğ‹–‰Â‚·‚é
 	Enter();
+}
+
+void EnemyBoss::ChangeAttackState(BossAttackState nextState)
+{
+	bossAttackState |= (unsigned int)nextState;
+
+	if (IsAttackState(BossAttackState::NoAttack) && nextState != BossAttackState::NoAttack)
+	{
+		ClearAttackState(BossAttackState::NoAttack);
+	}
+}
+
+void EnemyBoss::ClearAttackState(BossAttackState state)
+{
+	bossAttackState &= ~(unsigned int)state;
+	ChangeForNoAttack();
+}
+
+void EnemyBoss::ChangeForNoAttack()
+{
+	bool isTrueAttackState = false;
+
+	for (unsigned int nowState = (unsigned int)BossAttackState::NoAttack; nowState < (unsigned int)BossAttackState::MaxAttackState; nowState++)
+	{
+		BossAttackState nowAttack = (BossAttackState)nowState;
+
+		if (IsAttackState(nowAttack))
+		{
+			isTrueAttackState = true;
+		}
+	}
+
+	if (isTrueAttackState == false)
+	{
+		ChangeAttackState(BossAttackState::NoAttack);
+	}
 }

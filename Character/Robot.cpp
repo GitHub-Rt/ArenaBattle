@@ -72,6 +72,7 @@ void Robot::CharacterUpdate()
 		ClearState(CharacterState::Moving);
 	}
 	
+	// ’eUŒ‚‚ÌØ‚è‘Ö‚¦
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsKeyDown(DIK_LCONTROL))
 	{
 		if (IsStateSet(CharacterState::Attacking))
@@ -83,6 +84,13 @@ void Robot::CharacterUpdate()
 		{
 			ChangeState(CharacterState::Attacking);
 		}
+	}
+
+	// ƒ{ƒX‚Ì“oê’†(ƒvƒŒƒCƒ„[‚ª“ü—Í‚ðs‚¦‚È‚¢‚Æ‚«)‚ÍUŒ‚ó‘Ô‚ð‚â‚ß‚é
+	if (pPlayer->IsInputReception() == false)
+	{
+		bulletTimer = 0;
+		ClearState(CharacterState::Attacking);
 	}
 }
 

@@ -253,33 +253,42 @@ std::string imguiObject::GetEnemyBossAttackStateString()
 {
     std::string nowAttackState = "";
 
-    BossAttackState nowState = pBoss->GetAttackState();
-
-    switch (nowState)
+    for (unsigned int nowState = (unsigned int)BossAttackState::NoAttack; nowState <= (unsigned int)BossAttackState::MaxAttackState; nowState++)
     {
-    case BossAttackState::NoAttack:
-        nowAttackState = "NoAttack";
-        break;
-    case BossAttackState::BulletAttack:
-        nowAttackState = "BulletAttack";
-        break;
-    case BossAttackState::SpiralMoveAttack:
-        nowAttackState = "SpiralMoveAttack";
-        break;
-    case BossAttackState::WavesAttack:
-        nowAttackState = "WavesAttack";
-        break;
-    case BossAttackState::JumpAttack:
-        nowAttackState = "JumpAttack";
-        break;
-    case BossAttackState::SpecialAttack:
-        nowAttackState = "SpecialAttack/";
-        break;
-    default:
-        break;
-    }
+        BossAttackState nowAttack = (BossAttackState)nowState;
 
+        if (pBoss->IsAttackState(nowAttack))
+        {
+            switch (nowAttack)
+            {
+            case BossAttackState::NoAttack:
+                nowAttackState = "NoAttack";
+                break;
+            case BossAttackState::BulletAttack:
+                nowAttackState += "BulletAttack, ";
+                break;
+            case BossAttackState::SpiralMoveAttack:
+                nowAttackState += "SpiralMoveAttack, ";
+                break;
+            case BossAttackState::WavesAttack:
+                nowAttackState += "WavesAttack, ";
+                break;
+            case BossAttackState::JumpAttack:
+                nowAttackState += "JumpAttack, ";
+                break;
+            case BossAttackState::SpecialAttack:
+                nowAttackState = "SpecialAttack, ";
+                break;
+            default:
+                break;
+            }
+        }
+    }
     
+    if (nowAttackState == "")
+    {
+        nowAttackState = "Unknown";
+    }
 
     return attackStateStr + nowAttackState;
 }

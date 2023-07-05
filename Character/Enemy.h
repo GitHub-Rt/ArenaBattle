@@ -40,8 +40,8 @@ public:
 	// ƒvƒŒƒCƒ„[‚ÉG‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	bool IsPlayerHitting() { return isHittingPlayer; }
 
-	void DrawEffect() override;
-	void CharacterStunAction() override;
+	void DrawEffect() override {};
+	void CharacterStunAction() override {};
 
 #ifdef _DEBUG
 

@@ -378,11 +378,3 @@ void Enemy::OnCollision(GameObject* pTarget, Collider* nowCollider)
 		pTarget->KillMe();
 	}
 }
-
-void Enemy::DrawEffect()
-{
-}
-
-void Enemy::CharacterStunAction()
-{
-}

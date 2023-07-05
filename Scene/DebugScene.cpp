@@ -31,11 +31,11 @@ void DebugScene::Initialize()
 
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+		//EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
 	pBoss = Instantiate<EnemyBoss>(this);
 	
-	Instantiate<Player>(this);
+	pPlayer = Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 
 	
@@ -70,9 +70,17 @@ void DebugScene::Update()
 	//	}		
 	//}
 	
-	if (pBoss->IsVisibled() == false && EnemyManager::IsListEmpty())
+	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty())
 	{
-		pBoss->BossEntry();
+		// プレイヤーの入力を受け付けなくする
+		pPlayer->SetInputReception(false);
+
+		if (pBoss->BossEntry())
+		{
+			// プレイヤーの入力受付を再開する
+			pPlayer->SetInputReception(true);
+			pBoss->ProcessStart();
+		}
 	}
 }
 

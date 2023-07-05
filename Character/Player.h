@@ -70,6 +70,9 @@ public:
 	void HPDamage(float value);		// HPゲージ減少、hp減少
 	void HPRecovery(float value);	// HPゲージ増加、hp増加
 	
+	// 入力の受付を行うかどうか
+	void SetInputReception(bool nextState) { isInputReception = nextState; }
+	bool IsInputReception() { return isInputReception; }
 
 	// 各入力が行われたかどうか
 	bool IsMoveEntry();			// 動き周りの入力
@@ -107,7 +110,8 @@ private:
 	float hp;		// 体力
 
 	// 入力周りの変数
-	bool isTrrigerReset;
+	bool isTrrigerReset;		// 回避の入力をリセットしたかどうか
+	bool isInputReception;		// 入力を受け付けるかどうか
 
 	// 移動周りの変数
 	XMFLOAT3 movingDistance;	// 移動量
