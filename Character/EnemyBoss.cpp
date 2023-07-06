@@ -66,8 +66,9 @@ void EnemyBoss::Initialize()
 	// 変数の初期化
 	{
 		// 着地点のy座標を設定
-		ENTRY_POS_Y = transform_.position_.y - PositionAdjustment(transform_.position_);
-
+		transform_.position_.y -= PositionAdjustment(transform_.position_);
+		ENTRY_POS_Y = transform_.position_.y;
+		firstPos = transform_.position_;
 		transform_.position_.y = ENTRY_FIRST_POS_Y;
 
 
@@ -127,6 +128,15 @@ void EnemyBoss::CharacterIdleAction()
 void EnemyBoss::AttackTypeSelection()
 {
 	int type = 0;
+
+#ifdef _DEBUG
+
+	// 動作確認用
+
+	//ChangeAttackState(BossAttackState::SpiralMoveAttack);
+	//return;
+
+#endif
 
 	switch (bossAIState)
 	{
@@ -252,6 +262,49 @@ void EnemyBoss::BulletAttackCal(std::string dirName)
 
 void EnemyBoss::SpiralMoveAttackAction()
 {
+	const float RADIUS_STEP = 1.9f;				// 半径の増加率
+	const float ANGLE_STEP = 0.05f;				// 回転角度の増加率
+	const float MOVING_MAGNIFICATION = 0.01f;	// 移動量倍率
+	
+	// 位置設定用変数
+	float nextPosX, nextPosZ;
+
+	if (isEndLine)
+	{// 内側に狭まる
+		spiralAngle -= ANGLE_STEP;
+		spiralRadius -= RADIUS_STEP;
+
+		nextPosX = spiralRadius * sin(spiralAngle);
+		nextPosZ = spiralRadius * cos(spiralAngle);
+	}
+	else
+	{// 外側に広がる
+		spiralAngle += ANGLE_STEP;
+		spiralRadius += RADIUS_STEP;
+
+		nextPosX = spiralRadius * cos(spiralAngle);
+		nextPosZ = spiralRadius * sin(spiralAngle);
+	}
+
+	
+	
+
+	// 螺旋移動
+	transform_.position_.x = nextPosX * MOVING_MAGNIFICATION;
+	transform_.position_.z = nextPosZ * MOVING_MAGNIFICATION;
+
+	// 端に到達したかどうか
+	if (IsMoveLimit(transform_.position_) && isEndLine == false)
+	{
+		isEndLine = true;
+	}
+
+	// 初期位置周辺に戻ってきたかどうか
+	if (isEndLine && IsFirstPosAround(transform_.position_))
+	{
+		transform_.position_ = firstPos;
+		AttackVariableReset(BossAttackState::SpiralMoveAttack);
+	}
 
 }
 
@@ -281,6 +334,9 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 		bulletTimer = 0;
 		break;
 	case BossAttackState::SpiralMoveAttack:
+		isEndLine = false;
+		spiralAngle = 0;
+		spiralRadius = 0;
 		break;
 	case BossAttackState::WavesAttack:
 		break;
@@ -509,4 +565,16 @@ void EnemyBoss::ChangeForNoAttack()
 	{
 		ChangeAttackState(BossAttackState::NoAttack);
 	}
+}
+
+bool EnemyBoss::IsFirstPosAround(XMFLOAT3 pos)
+{
+	const float POS_ERROR_RANGE = 0.025f;			// 初期位置の誤差範囲
+
+	if (pos.x * pos.x + pos.z * pos.z <= POS_ERROR_RANGE)
+	{
+		return true;
+	}
+
+	return false;
 }

@@ -102,6 +102,10 @@ public:
 	// Update等の処理を開始する関数
 	void ProcessStart();
 
+
+	// 初期位置周辺に戻ってきたかどうか(戻ってきたらtrue)
+	bool IsFirstPosAround(XMFLOAT3 pos);
+
 #ifdef  _DEBUG
 
 	float GetHP() { return hp; }
@@ -124,10 +128,12 @@ private:
 	// その他の定数
 	float ENTRY_POS_Y;				// 着地時のy座標
 	
+	
 	// 全体変数
 	Player* pPlayer;
 	unsigned int bossAttackState;
 	BossAIState bossAIState;
+	XMFLOAT3 firstPos;
 
 	// 攻撃全体周りの変数
 	int attackIntervalTimer;
@@ -138,6 +144,10 @@ private:
 
 
 	// 渦巻移動攻撃周りの変数
+	float spiralAngle;		// 回転角度
+	float spiralRadius;		// 半径
+	bool isEndLine;			// 端に到達したかどうか
+
 
 	// 波状攻撃の変数
 
