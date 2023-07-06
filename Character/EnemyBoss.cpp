@@ -2,7 +2,7 @@
 #include "../UI/EnemyBossGauge.h"
 
 #include "Player.h"
-//#include "../AttackModel/"
+#include "../AttackModel/EnemyBossBullet.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18,18,18 };	//outsideの当たり判定枠
@@ -19,6 +19,10 @@ EnemyBoss::EnemyBoss(GameObject* parent)
 	bossAIState = BossAIState::Allowance;
 	
 	attackIntervalTimer = 0;
+
+
+	bulletTimer = 0;
+	bulletCount = 0;
 
 	hp = 0;
 
@@ -40,6 +44,12 @@ void EnemyBoss::SetData()
 	DAMAGE_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::DamageTime);
 	RATE_FOR_MAX_STRENGTH = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::RateForMaxStrength);
 	TOTAL_DAMAGES_UP_AI_LEVEl = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TotalDamagesUpAILevel);
+	BULLET_ATK_INTERVAL_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkIntervalTime);
+	BULLET_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMaxCount);
+	BULLET_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMagnification);
+
+
+
 }
 
 void EnemyBoss::Initialize()
@@ -48,7 +58,6 @@ void EnemyBoss::Initialize()
 	SetParameter(CharacterID::EnemyBoss);
 
 	CharacterModelLoad("enemyBoss.fbx");
-	
 	
 	CharacterAddCollider(HIT_TEST_RANGE_OUTSIDE);
 	CharacterAddCollider(HIT_TEST_RANGE_INSIDE);
@@ -63,15 +72,12 @@ void EnemyBoss::Initialize()
 
 
 		hp = GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP);
-		
+		maxHp = hp;
 
 		// 各種該当状態を拒否
 		Leave();		// Update
 		Invisible();	// Draw
 	}
-	
-
-	
 }
 
 void EnemyBoss::EnemyRelease()
@@ -87,7 +93,6 @@ void EnemyBoss::EnemyUpdate()
 	}
 
 	CharacterCheckHP();
-
 }
 
 void EnemyBoss::CharacterIdleAction()
@@ -104,7 +109,7 @@ void EnemyBoss::CharacterIdleAction()
 	}
 
 	// 最大体力に対して現在体力の割合が一定以下になったら特殊攻撃を行う
-	if (isSpecialAttack == false && hp <= GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP) / RATE_FOR_MAX_STRENGTH)
+	if (isSpecialAttack == false && hp <= maxHp / RATE_FOR_MAX_STRENGTH)
 	{
 		isSpecialAttack = true;
 		attackIntervalTimer = 0;
@@ -117,11 +122,6 @@ void EnemyBoss::CharacterIdleAction()
 		
 		ChangeState(CharacterState::Attacking);
 	}
-}
-
-void EnemyBoss::CharacterMove()
-{
-
 }
 
 void EnemyBoss::AttackTypeSelection()
@@ -162,35 +162,92 @@ void EnemyBoss::CharacterAttack()
 	{
 		BossAttackState nowAttack = (BossAttackState)nowState;
 
-		switch (nowAttack)
+		if (IsAttackState(nowAttack))
 		{
-		case BossAttackState::NoAttack:
-			ClearState(CharacterState::Attacking);
-			break;
-		case BossAttackState::BulletAttack:
-			BulletAttackAction();
-			break;
-		case BossAttackState::SpiralMoveAttack:
-			SpiralMoveAttackAction();
-			break;
-		case BossAttackState::WavesAttack:
-			WavesAttackAction();
-			break;
-		case BossAttackState::JumpAttack:
-			JumpAttackAction();
-			break;
-		case BossAttackState::SpecialAttack:
-			SpecialAttackAction();
-			break;
-		default:
-			break;
+			switch (nowAttack)
+			{
+			case BossAttackState::NoAttack:
+				ClearState(CharacterState::Attacking);
+				break;
+			case BossAttackState::BulletAttack:
+				BulletAttackAction();
+				break;
+			case BossAttackState::SpiralMoveAttack:
+				SpiralMoveAttackAction();
+				break;
+			case BossAttackState::WavesAttack:
+				WavesAttackAction();
+				break;
+			case BossAttackState::JumpAttack:
+				JumpAttackAction();
+				break;
+			case BossAttackState::SpecialAttack:
+				SpecialAttackAction();
+				break;
+			default:
+				break;
+			}
 		}
+		
 	}
 }
 
 void EnemyBoss::BulletAttackAction()
 {
+	const float BULLET_ATK_ROTATE_ME = 0.5f;
+	
+	transform_.rotate_.y += BULLET_ATK_ROTATE_ME;
+	bulletTimer++;
 
+	if (bulletTimer == BULLET_ATK_INTERVAL_TIME)
+	{
+		bulletTimer = 0;
+
+		// 前後左右に弾を出す
+		BulletAttackCal("FRONT");
+		BulletAttackCal("BACK");
+		BulletAttackCal("RIGHT");
+		BulletAttackCal("LEFT");
+
+
+		bulletCount++;
+	}
+
+	// 攻撃を終えるかどうかの確認
+	if (bulletCount == BULLET_ATK_MAX_COUNT)
+	{
+		AttackVariableReset(BossAttackState::BulletAttack);
+	}
+}
+
+void EnemyBoss::BulletAttackCal(std::string dirName)
+{
+	const float LENGTH_HALF = 0.5f;	// 移動ベクトルの長さ調整
+
+	EnemyBossBullet* pBullet = Instantiate<EnemyBossBullet>(GetParent());
+
+	XMFLOAT3 rootPos, tipPos;			// ボーンポジション用
+	XMFLOAT3 moveDir;					// 進行方向
+
+	rootPos = Model::GetBonePosition(GetCharacterModel(), dirName + "_Root");
+	tipPos = Model::GetBonePosition(GetCharacterModel(), dirName + "_Tip");
+
+	XMVECTOR vRoot = XMLoadFloat3(&rootPos);
+	XMVECTOR vTip = XMLoadFloat3(&tipPos);
+
+	XMVECTOR vMove = vTip - vRoot;
+	if (dirName == "BACK")
+	{
+		vMove *= -1;	// 後ろ方向の時はベクトルの向きを反転
+	}
+	vMove = XMVector3Normalize(vMove);
+
+	vMove *= LENGTH_HALF;
+
+	XMStoreFloat3(&moveDir, vMove);
+
+	pBullet->SetPosition(tipPos);
+	pBullet->SetMoveDirection(moveDir);
 }
 
 void EnemyBoss::SpiralMoveAttackAction()
@@ -220,6 +277,8 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 	case BossAttackState::NoAttack:
 		break;
 	case BossAttackState::BulletAttack:
+		bulletCount = 0;
+		bulletTimer = 0;
 		break;
 	case BossAttackState::SpiralMoveAttack:
 		break;
@@ -232,6 +291,9 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 	default:
 		break;
 	}
+
+	ClearAttackState(nowState);
+	ChangeAttackState(BossAttackState::NoAttack);
 }
 
 void EnemyBoss::CharacterTakeDamage(float damage)
@@ -353,8 +415,10 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 	}
 }
 
-void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource)
+void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XMVECTOR vec)
 {
+	pPlayer = (Player*)FindObject("Player");
+
 	// 攻撃倍率の設定
 	float atackMagnification = 1.0f;
 
@@ -362,7 +426,7 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource)
 	switch (attackSource)
 	{
 	case BossAttackModelHandle::Bullet:
-		//atackMagnification =
+		atackMagnification = BULLET_ATK_MAGNIFICATION;
 		break;
 	case BossAttackModelHandle::Wave:
 		//atackMagnification =
@@ -374,7 +438,7 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource)
 	
 	CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
 	pPlayer->SetDamageStage(DamageStage::DamageStart);
-	pPlayer->SetDamageDirection(-(GetFrontVector()));
+	pPlayer->SetDamageDirection(vec);
 }
 
 bool EnemyBoss::BossEntry()
@@ -435,7 +499,7 @@ void EnemyBoss::ChangeForNoAttack()
 	{
 		BossAttackState nowAttack = (BossAttackState)nowState;
 
-		if (IsAttackState(nowAttack))
+		if (IsAttackState(nowAttack) && isTrueAttackState == false)
 		{
 			isTrueAttackState = true;
 		}

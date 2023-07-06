@@ -50,7 +50,6 @@ void Enemy::Initialize()
 	SetParameter(CharacterID::NormalEnemy);
 
 	CharacterModelLoad("enemy.fbx");
-	hModel = GetCharacterModelHandle();
 	CharacterAddCollider(HIT_TEST_RANGE);
 
 	// •Ï”‚Ì‰Šú‰»
@@ -70,13 +69,13 @@ void Enemy::Draw()
 	if (IsStateSet(CharacterState::Damaged))
 	{
 		ChangeDamageColor();	// ƒ‚ƒfƒ‹‚ÌF‚ğÔ‚É•ÏX‚³‚¹‚é
-		CharacterDraw(hModel);
 	}
 	else
 	{
 		ChangeDamageColor(false);
-		CharacterDraw(hModel);
 	}
+
+	CharacterDraw(GetCharacterModel());
 }
 
 void Enemy::EnemyRelease()

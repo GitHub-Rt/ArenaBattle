@@ -549,6 +549,8 @@ void Player::CharacterDodingAction()
 		}
 		else
 		{
+			vPrevPos = XMLoadFloat3(&transform_.position_);
+
 			// 移動
 			transform_.position_.x = nextPos.x;
 			transform_.position_.z = nextPos.z;

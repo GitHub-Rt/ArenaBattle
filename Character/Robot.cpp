@@ -67,7 +67,7 @@ void Robot::CharacterUpdate()
 
 	CharacterMove();
 
-	if (pPlayer->IsStateSet(CharacterState::Idle))
+	if (pPlayer->IsStateSet(CharacterState::Idle) && IsStateSet(CharacterState::Moving))
 	{
 		ClearState(CharacterState::Moving);
 	}
@@ -149,7 +149,6 @@ void Robot::CharacterAttack()
 
 		pBullet->SetPosition(tip);
 		pBullet->SetMoveDirection(move);
-		pBullet->SetAttackPower(GetParameterValue(CharacterID::Robot, CharacterStatus::AttackPower));
 	}
 	
 }

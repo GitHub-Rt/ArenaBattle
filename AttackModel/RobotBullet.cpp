@@ -78,8 +78,3 @@ void RobotBullet::InitialPositionPreference()
     vPos = XMVector3TransformCoord(vPos, mRotate);
     XMStoreFloat3(&transform_.position_, vPos);
 }
-
-void RobotBullet::SetAttackPower(float value)
-{
-    attackPower = value;
-}

@@ -78,6 +78,9 @@
     <Filter Include="08UI\HPGauge\GaugeObject">
       <UniqueIdentifier>{4241aa46-f882-4e0e-9028-72ff56c22d7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07AttackModel\EnemyBoss">
+      <UniqueIdentifier>{72366e91-6bbb-4b2f-847a-04b724d2e8d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -235,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="UI\HPGaugeBase.cpp">
       <Filter>08UI\HPGauge</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackModel\EnemyBossBullet.cpp">
+      <Filter>07AttackModel\EnemyBoss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="UI\HPGaugeBase.h">
       <Filter>08UI\HPGauge</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackModel\EnemyBossBullet.h">
+      <Filter>07AttackModel\EnemyBoss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -63,7 +63,6 @@ private:
 	
 	// 全体変数
 	float hp;	// 体力
-	int hModel;	// モデル番号
 
 	// 移動周りの変数
 	XMVECTOR vPrevPos;				// 前回の位置ベクトル

@@ -3,6 +3,7 @@
 
 class Player;
 class EnemyBossGauge;
+class EnemyBossBullet;
 
 enum class EnemyBossData
 {
@@ -11,6 +12,9 @@ enum class EnemyBossData
 	DamageTime,
 	RateForMaxStrength,
 	TotalDamagesUpAILevel,
+	BulletAtkIntervalTime,
+	BulletAtkMaxCount,
+	BulletAtkMagnification,
 };
 
 enum class BossAttackState
@@ -49,7 +53,7 @@ public:
 	void EnemyRelease() override;
 	void EnemyUpdate() override;
 	void CharacterIdleAction() override;
-	void CharacterMove() override;
+	void CharacterMove() override {};
 	void CharacterAttack() override;
 	void CharacterTakeDamage(float damage) override;
 	void CharacterCheckHP() override;
@@ -74,10 +78,13 @@ public:
 	bool IsAttackState(BossAttackState state) { return (bossAttackState & (unsigned int)state) != 0; }
 
 	// 攻撃モデルとプレイヤーのダメージ処理
-	void AttackModelDamageToPlayer(BossAttackModelHandle attackSource);
+	void AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XMVECTOR vec);
 
 	// 各攻撃の関数
+
 	void BulletAttackAction();
+	// 弾攻撃に必要な計算を行いスタートさせる関数
+	void BulletAttackCal(std::string dirName);
 	void SpiralMoveAttackAction();
 	void WavesAttackAction();
 	void JumpAttackAction();
@@ -110,6 +117,9 @@ private:
 	int DAMAGE_TIME;				// 被ダメージ時間
 	int RATE_FOR_MAX_STRENGTH;		// 特殊攻撃を行う際の最大体力に対する割合
 	int TOTAL_DAMAGES_UP_AI_LEVEl;	// AIレベルを上げる合計ダメージ量
+	int BULLET_ATK_INTERVAL_TIME;	// 弾攻撃の間隔時間
+	int BULLET_ATK_MAX_COUNT;		// 弾攻撃の最大回数
+	float BULLET_ATK_MAGNIFICATION;	// 弾攻撃の倍率
 
 	// その他の定数
 	float ENTRY_POS_Y;				// 着地時のy座標
@@ -123,6 +133,9 @@ private:
 	int attackIntervalTimer;
 	
 	// 弾攻撃周りの変数
+	int bulletTimer;	// 攻撃間隔
+	int bulletCount;	// 攻撃回数
+
 
 	// 渦巻移動攻撃周りの変数
 
@@ -136,6 +149,7 @@ private:
 
 	// 体力周りの変数
 	EnemyBossGauge* pGauge;
+	float maxHp;
 	float hp;
 
 	// 登場演出周りの変数

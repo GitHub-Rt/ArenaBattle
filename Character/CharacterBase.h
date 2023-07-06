@@ -84,10 +84,10 @@ public:
 	void CharacterModelLoad(std::string fileName);
 
 	/// <summary>
-	/// モデル番号を返す
+	/// キャラクターのモデル番号を取得する関数
 	/// </summary>
 	/// <returns></returns>
-	int GetCharacterModelHandle() { return hModel; }
+	int GetCharacterModel() { return hModel; }
 
 	/// <summary>
 	/// キャラクターに当たり判定を追加する関数
@@ -167,11 +167,7 @@ public:
 	/// <param name="defense_"></param>
 	void SetParameter(int hp_, int attack_, int defense_);
 
-	/// <summary>
-	/// キャラクターのモデル番号を取得する関数
-	/// </summary>
-	/// <returns></returns>
-	int GetCharacterModel() { return hModel; }
+	
 
 	/// <summary>
 	/// 受けるダメージ量を返す
