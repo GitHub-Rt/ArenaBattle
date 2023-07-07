@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "../AttackModel/EnemyBossBullet.h"
+#include "../AttackModel/EnemyBossWaves.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18,18,18 };	//outsideの当たり判定枠
@@ -47,6 +48,8 @@ void EnemyBoss::SetData()
 	BULLET_ATK_INTERVAL_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkIntervalTime);
 	BULLET_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMaxCount);
 	BULLET_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMagnification);
+	WAVES_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMaxCount);
+	WAVES_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMagnification);
 
 
 
@@ -133,8 +136,8 @@ void EnemyBoss::AttackTypeSelection()
 
 	// 動作確認用
 
-	//ChangeAttackState(BossAttackState::SpiralMoveAttack);
-	//return;
+	ChangeAttackState(BossAttackState::WavesAttack);
+	return;
 
 #endif
 
@@ -310,6 +313,38 @@ void EnemyBoss::SpiralMoveAttackAction()
 
 void EnemyBoss::WavesAttackAction()
 {
+	const int WAVES_ATK_BEFORE_TIME = 60;		// 攻撃前の上昇時間
+	const float WAVES_JUMP_SPEED_STEP = 0.0125f;	// 攻撃前のジャンプ増加値
+
+	if (wavesCount < WAVES_ATK_MAX_COUNT)
+	{
+		// 上昇させる
+		if (wavesJumpTimer < WAVES_ATK_BEFORE_TIME)
+		{
+			wavesJumpTimer++;
+
+			
+			wavesJumpSpeed += WAVES_JUMP_SPEED_STEP;
+			transform_.position_.y += wavesJumpSpeed;
+		}
+		else
+		{
+
+			wavesJumpTimer = 0;
+			wavesJumpSpeed = 0;
+
+			// 床に着地
+			transform_.position_.y -= PositionAdjustment(transform_.position_);
+
+			// 波状攻撃を行う
+			Instantiate<EnemyBossWaves>(GetParent());
+			wavesCount++;
+		}
+	}
+	else
+	{
+		AttackVariableReset(BossAttackState::WavesAttack);
+	}
 
 }
 
@@ -339,6 +374,9 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 		spiralRadius = 0;
 		break;
 	case BossAttackState::WavesAttack:
+		wavesCount = 0;
+		wavesJumpTimer = 0;
+		wavesJumpSpeed = 0;
 		break;
 	case BossAttackState::JumpAttack:
 		break;

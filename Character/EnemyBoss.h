@@ -15,6 +15,8 @@ enum class EnemyBossData
 	BulletAtkIntervalTime,
 	BulletAtkMaxCount,
 	BulletAtkMagnification,
+	WavesAtkMaxCount,
+	WavesAtkMagnification,
 };
 
 enum class BossAttackState
@@ -124,6 +126,8 @@ private:
 	int BULLET_ATK_INTERVAL_TIME;	// ’eUŒ‚‚ÌŠÔŠuŠÔ
 	int BULLET_ATK_MAX_COUNT;		// ’eUŒ‚‚ÌÅ‘å‰ñ”
 	float BULLET_ATK_MAGNIFICATION;	// ’eUŒ‚‚Ì”{—¦
+	int WAVES_ATK_MAX_COUNT;		// ”góUŒ‚‚ÌÅ‘å‰ñ”
+	float WAVES_ATK_MAGNIFICATION;	// ”góUŒ‚‚Ì”{—¦
 
 	// ‚»‚Ì‘¼‚Ì’è”
 	float ENTRY_POS_Y;				// ’…’n‚ÌyÀ•W
@@ -150,8 +154,13 @@ private:
 
 
 	// ”góUŒ‚‚Ì•Ï”
+	int wavesCount;			// UŒ‚‰ñ”
+	float wavesJumpSpeed;	// ”góUŒ‚‘O‚Ìã¸•Ï”
+	int wavesJumpTimer;		// ã¸ŠÔ
+
 
 	// ƒWƒƒƒ“ƒvUŒ‚ü‚è‚Ì•Ï”
+
 
 	// “ÁêUŒ‚ü‚è‚Ì•Ï”
 	bool isSpecialAttack;	// “ÁêUŒ‚‚ğs‚Á‚½‚©‚Ç‚¤‚©

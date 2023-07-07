@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="AttackModel\AttackModelBase.cpp" />
     <ClCompile Include="AttackModel\EnemyBossBullet.cpp" />
+    <ClCompile Include="AttackModel\EnemyBossWaves.cpp" />
     <ClCompile Include="AttackModel\RobotBullet.cpp" />
     <ClCompile Include="Character\CharacterBase.cpp" />
     <ClCompile Include="Character\Enemy.cpp" />
@@ -182,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="AttackModel\AttackModelBase.h" />
     <ClInclude Include="AttackModel\EnemyBossBullet.h" />
+    <ClInclude Include="AttackModel\EnemyBossWaves.h" />
     <ClInclude Include="AttackModel\RobotBullet.h" />
     <ClInclude Include="Character\CharacterBase.h" />
     <ClInclude Include="Character\Enemy.h" />

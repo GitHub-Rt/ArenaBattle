@@ -48,12 +48,6 @@
     <Filter Include="05Stage\StageObject">
       <UniqueIdentifier>{801e51c1-9e2a-4492-a11e-e3efd871bf36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="07AttackModel">
-      <UniqueIdentifier>{39642c0d-4bf7-4119-afae-9a6ccdd025e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="07AttackModel\Player">
-      <UniqueIdentifier>{44704878-154d-45a4-8798-eca34055580b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="08UI">
       <UniqueIdentifier>{9c867248-dce2-40b7-9320-a9d2adcb5487}</UniqueIdentifier>
     </Filter>
@@ -77,6 +71,12 @@
     </Filter>
     <Filter Include="08UI\HPGauge\GaugeObject">
       <UniqueIdentifier>{4241aa46-f882-4e0e-9028-72ff56c22d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07AttackModel">
+      <UniqueIdentifier>{39642c0d-4bf7-4119-afae-9a6ccdd025e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07AttackModel\Player">
+      <UniqueIdentifier>{44704878-154d-45a4-8798-eca34055580b}</UniqueIdentifier>
     </Filter>
     <Filter Include="07AttackModel\EnemyBoss">
       <UniqueIdentifier>{72366e91-6bbb-4b2f-847a-04b724d2e8d4}</UniqueIdentifier>
@@ -242,6 +242,9 @@
     <ClCompile Include="AttackModel\EnemyBossBullet.cpp">
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClCompile>
+    <ClCompile Include="AttackModel\EnemyBossWaves.cpp">
+      <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -404,6 +407,9 @@
       <Filter>08UI\HPGauge</Filter>
     </ClInclude>
     <ClInclude Include="AttackModel\EnemyBossBullet.h">
+      <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackModel\EnemyBossWaves.h">
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClInclude>
   </ItemGroup>
