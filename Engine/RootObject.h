@@ -17,6 +17,7 @@ public:
 	void Release() override;
 
 	// プレイヤーの通常カメラ関数を呼ぶ関数(シャドーマップ後のカメラセットのため)
-	void PlayerCamera();
+	XMFLOAT3 PlayerCameraPos();
+	XMFLOAT3 PlayerCameraFocas();
 };
 

@@ -30,8 +30,14 @@ void RootObject::Release()
 {
 }
 
-void RootObject::PlayerCamera()
+XMFLOAT3 RootObject::PlayerCameraPos()
 {
 	Player* pPlayer = (Player*)FindObject("Player");
-	pPlayer->NormalCamera();
+	return pPlayer->GetCameraPosition();
+}
+
+XMFLOAT3 RootObject::PlayerCameraFocas()
+{
+	Player* pPlayer = (Player*)FindObject("Player");
+	return pPlayer->GetCameraFocas();
 }

@@ -446,15 +446,15 @@ void FbxParts::Draw(Transform& transform)
 		cb.world =		XMMatrixTranspose(transform.GetWorldMatrix());
 		cb.normalTrans =	XMMatrixTranspose(transform.matRotate_ * XMMatrixInverse(nullptr, transform.matScale_));
 
-		cb.mWLP = XMMatrixTranspose(transform.GetWorldMatrix() * Direct3D::lightView_ * Camera::GetProjectionMatrix());
-		cb.mWLPT = XMMatrixTranspose(transform.GetWorldMatrix() * Direct3D::lightView_ * Camera::GetProjectionMatrix() * Direct3D::clipToUV_);
+		cb.mWLP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetLightView() * Camera::GetShadowProjectionMatrix());
+		cb.mWLPT = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetLightView() * Camera::GetShadowProjectionMatrix() * Direct3D::clipToUV_);
 
 		cb.ambient = pMaterial_[i].ambient;
 		cb.diffuse = pMaterial_[i].diffuse;
 		cb.speculer = pMaterial_[i].specular;
 		cb.shininess = pMaterial_[i].shininess;
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
-		cb.lightDirection = XMFLOAT4(0, -1, 0, 0);
+		cb.lightDirection = XMFLOAT4(15, -20, 2, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
 		cb.isDamage = pMaterial_[i].isDamage;
 		

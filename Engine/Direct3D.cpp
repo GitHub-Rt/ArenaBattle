@@ -51,7 +51,7 @@ namespace Direct3D
 	int						screenWidth_ = 0;
 	int						screenHeight_ = 0;
 
-
+	SHADER_TYPE nowShaderType = Direct3D::SHADER_3D;
 
 	//初期化処理
 	HRESULT Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
@@ -212,17 +212,13 @@ namespace Direct3D
 
 
 
-
-
-
 		//コリジョン表示するか
 		isDrawCollision_ = GetPrivateProfileInt("DEBUG", "ViewCollider", 0, ".\\setup.ini") != 0;
-
 
 		screenWidth_ = screenWidth;
 		screenHeight_ = screenHeight;
 
-
+		///////////////影の処理////////////////////
 		//深度を描きこむテクスチャ
 		D3D11_TEXTURE2D_DESC texdec;
 		texdec.Width = screenWidth_;
@@ -259,12 +255,10 @@ namespace Direct3D
 		//カメラから見たある点が、ライタから見た時どの位置になるかを求めるために必要な行列
 		XMFLOAT4X4 clip;
 		ZeroMemory(&clip, sizeof(XMFLOAT4X4));
-		clip._11 = 0.5;
-		clip._22 = -0.5;
-		clip._33 = 1;
-		clip._41 = 0.5;
-		clip._42 = 0.5;
-		clip._44 = 1;
+		clip = { 0.5,    0,   0,   0,
+				   0, -0.5,   0,   0,
+				   0,    0, 1.0,   0,
+				 0.5,  0.5,   0, 1.0 };
 
 		clipToUV_ = XMLoadFloat4x4(&clip);
 
@@ -454,6 +448,7 @@ namespace Direct3D
 	//今から描画するShaderBundleを設定
 	void SetShader(SHADER_TYPE type)
 	{
+		nowShaderType = type;
 		pContext_->RSSetState(shaderBundle[type].pRasterizerState);
 		pContext_->VSSetShader(shaderBundle[type].pVertexShader, NULL, 0);                         // 頂点シェーダをセット
 		pContext_->PSSetShader(shaderBundle[type].pPixelShader, NULL, 0);                          // ピクセルシェーダをセット
@@ -472,6 +467,7 @@ namespace Direct3D
 		pContext_->OMSetDepthStencilState(pDepthStencilState[blendMode], 0);
 	}
 
+	//テクスチャへ深度情報を描く
 	void Direct3D::BeginDrawToTexture()
 	{
 		pContext_->OMSetRenderTargets(1, &pDepthTargetView, pDepthStencilView);
@@ -492,6 +488,8 @@ namespace Direct3D
 	//描画開始
 	void BeginDraw()
 	{
+		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);
+
 		//何か準備できてないものがあったら諦める
 		if (NULL == pDevice_) return;
 		if (NULL == pContext_) return;

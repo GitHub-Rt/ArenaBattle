@@ -27,8 +27,13 @@ namespace Camera
 	//ビュー行列を取得
 	XMMATRIX GetViewMatrix();
 
+	XMMATRIX GetLightView();
+
 	//プロジェクション行列を取得
 	XMMATRIX GetProjectionMatrix();
+
+	//シャドウ用のプロジェクション行列を取得
+	XMMATRIX GetShadowProjectionMatrix();
 
 	//ビルボード用回転行列を取得
 	XMMATRIX GetBillboardMatrix();

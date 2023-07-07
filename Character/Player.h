@@ -35,6 +35,11 @@ public:
 	// カメラの方向ベクトルを返す
 	XMFLOAT3 GetCameraDirection() { return cameraDirection; }
 
+
+	// カメラのポジション、焦点を返す
+	XMFLOAT3 GetCameraPosition() { return cameraPosition; }
+	XMFLOAT3 GetCameraFocas() { return cameraFocus; }
+
 	// 攻撃状態を返す
 	AttackState GetAttackState() { return attackState; }
 
@@ -108,6 +113,8 @@ private:
 
 	// 全体変数
 	float hp;		// 体力
+	XMFLOAT3 cameraPosition;	// カメラのポジション
+	XMFLOAT3 cameraFocus;		// カメラの焦点
 
 	// 入力周りの変数
 	bool isTrrigerReset;		// 回避の入力をリセットしたかどうか

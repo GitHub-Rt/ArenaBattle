@@ -474,9 +474,11 @@ void Player::NormalCamera()
 	XMVECTOR vCameraFocus = vCameraInverse + vPosition;
 
 	// カメラをセット
-	XMFLOAT3 cameraPosition, cameraFocus;
+	
 	XMStoreFloat3(&cameraPosition, vCameraPosition);
 	XMStoreFloat3(&cameraFocus, vCameraFocus);
+
+
 	Camera::SetPosition(cameraPosition);
 	Camera::SetTarget(cameraFocus);
 }

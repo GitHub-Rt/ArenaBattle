@@ -143,21 +143,12 @@ float4 PS(VS_OUT inData) : SV_Target
 	inData.LightTexCoord /= inData.LightTexCoord.w;
 	float TexValue = g_texDepth.Sample(g_sampler, inData.LightTexCoord).r;
 
-
+	//LighViewPosの正規化
 	float LightLength = inData.LighViewPos.z / inData.LighViewPos.w;
-	if (TexValue + 0.003 < LightLength) //ライトビューでの長さが短い（ライトビューでは遮蔽物がある） 
+	if (LightLength - TexValue > 0.002) //ライトビューでの長さが短い（ライトビューでは遮蔽物がある） 
 	{
-		color *= 0.6; //影（明るさを 60%） 
+		color *= 0.6; //影（明るさを調節） 
 	}
 	color.a = diffuse.a;
 	return color;
-
-	/*if (g_isDamage)
-	{
-		return float4(1, 0, 0, 1);
-	}
-	else
-	{
-		return float4(1,1,1,1);
-	}*/
 }

@@ -11,6 +11,10 @@ SamplerState	g_sampler : register(s0);	//サンプラー
 cbuffer global
 {
 	float4x4	g_matWVP;			// ワールド・ビュー・プロジェクションの合成行列
+	float4x4	g_matNormalTrans;	// 法線の変換行列（回転行列と拡大の逆行列）
+	float4x4	g_matWorld;			// ワールド変換行列
+
+	float4x4	g_mWLP;				//ワールド・”ライトビュー”・プロジェクションの合成
 
 };
 
@@ -29,7 +33,7 @@ struct VS_OUT
 VS_OUT VS(float4 pos : POSITION)
 {
 	VS_OUT outData;
-	outData.Pos = mul(pos, g_matWVP);
+	outData.Pos = mul(pos, g_mWLP);
 	outData.Depth = outData.Pos;
 
 	return outData;
@@ -40,6 +44,7 @@ VS_OUT VS(float4 pos : POSITION)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+	//ポリゴン表面の補間座標のz成分をw成分で割ると座標のZ値となる
 	float4 color = inData.Depth.z / inData.Depth.w;
 	color.a = 1;  //透明にはしたくない 
 	return color;

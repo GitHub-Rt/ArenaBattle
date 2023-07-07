@@ -177,33 +177,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//全オブジェクトの更新処理
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->UpdateSub();
-				
+
+
+				//シャドウマップ作成
+				Direct3D::BeginDrawToTexture();
+				pRootObject->DrawSub();
+				Direct3D::EndDraw();
+
+				// カメラの更新				
+				Camera::Update();
 
 				//エフェクトの更新
 				VFX::Update();
-
-				// シャドウマップ作成
-				//ライトの位置から見た画像を、遠くは白、近くは黒のグレースケールで表す
-				Camera::SetPosition(XMFLOAT3(5, 30, -1));
-				Camera::SetTarget(XMFLOAT3(0, 0, 0));
-				Camera::Update();
-				//Direct3D::lightView_ = Camera::GetViewMatrix();
-				//Direct3D::BeginDrawToTexture();
-
-
-				//全オブジェクトを描画
-				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のDrawが呼ばれる
-				//pRootObject->DrawSub();
-
-				//描画終了
-				//Direct3D::EndDraw();
-
-
-				// 通常の描画
-				pRootObject->PlayerCamera();
-				Camera::Update();
 				
-				//このフレームの描画開始
+
+				//このフレームの描画開始(通常の描画)
 				Direct3D::BeginDraw();
 
 				//全オブジェクトを描画
