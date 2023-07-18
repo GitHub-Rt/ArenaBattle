@@ -245,6 +245,12 @@
     <ClCompile Include="AttackModel\EnemyBossWaves.cpp">
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClCompile>
+    <ClCompile Include="AttackModel\EnemyBossJumpArea.cpp">
+      <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackModel\EnemyBossSpecialArea.cpp">
+      <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -410,6 +416,12 @@
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClInclude>
     <ClInclude Include="AttackModel\EnemyBossWaves.h">
+      <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackModel\EnemyBossJumpArea.h">
+      <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackModel\EnemyBossSpecialArea.h">
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClInclude>
   </ItemGroup>

@@ -127,6 +127,8 @@
   <ItemGroup>
     <ClCompile Include="AttackModel\AttackModelBase.cpp" />
     <ClCompile Include="AttackModel\EnemyBossBullet.cpp" />
+    <ClCompile Include="AttackModel\EnemyBossJumpArea.cpp" />
+    <ClCompile Include="AttackModel\EnemyBossSpecialArea.cpp" />
     <ClCompile Include="AttackModel\EnemyBossWaves.cpp" />
     <ClCompile Include="AttackModel\RobotBullet.cpp" />
     <ClCompile Include="Character\CharacterBase.cpp" />
@@ -183,6 +185,8 @@
   <ItemGroup>
     <ClInclude Include="AttackModel\AttackModelBase.h" />
     <ClInclude Include="AttackModel\EnemyBossBullet.h" />
+    <ClInclude Include="AttackModel\EnemyBossJumpArea.h" />
+    <ClInclude Include="AttackModel\EnemyBossSpecialArea.h" />
     <ClInclude Include="AttackModel\EnemyBossWaves.h" />
     <ClInclude Include="AttackModel\RobotBullet.h" />
     <ClInclude Include="Character\CharacterBase.h" />

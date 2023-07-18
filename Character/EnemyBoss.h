@@ -17,6 +17,9 @@ enum class EnemyBossData
 	BulletAtkMagnification,
 	WavesAtkMaxCount,
 	WavesAtkMagnification,
+	JumpAtkMaxCount,
+	JumpAtkBetTimer,
+	JumpAtkMagnification,
 };
 
 enum class BossAttackState
@@ -128,6 +131,9 @@ private:
 	float BULLET_ATK_MAGNIFICATION;	// 弾攻撃の倍率
 	int WAVES_ATK_MAX_COUNT;		// 波状攻撃の最大回数
 	float WAVES_ATK_MAGNIFICATION;	// 波状攻撃の倍率
+	int JUMP_ATK_MAX_COUNT;			// ジャンプ攻撃の最大回数
+	int JUMP_ATK_BET_TIMER;			// ジャンプ攻撃の間隔時間
+	float JUMP_ATK_MAGNIFICATION;	// ジャンプ攻撃の攻撃倍率
 
 	// その他の定数
 	float ENTRY_POS_Y;				// 着地時のy座標
@@ -160,6 +166,11 @@ private:
 
 
 	// ジャンプ攻撃周りの変数
+	float jumpSpeed;			// ジャンプ攻撃の上昇
+	int jumpBetTimer;			// ジャンプ攻撃の間隔
+	int jumpCount;				// ジャンプ攻撃の攻撃回数
+	XMFLOAT3 landingPosition;	// 着地地点(プレイヤーのポジション)
+	bool isPointGetting;		// 着地地点の情報を取得したかどうか
 
 
 	// 特殊攻撃周りの変数
