@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "../AttackModel/EnemyBossBullet.h"
 #include "../AttackModel/EnemyBossWaves.h"
+#include "../AttackModel/EnemyBossJumpArea.h"
 
 // ’è”éŒ¾
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18, 9,18 };	//outside‚Ì“–‚½‚è”»’è˜g
@@ -370,6 +371,8 @@ void EnemyBoss::JumpAttackAction()
 				// ƒ‚ƒfƒ‹‚Å—Ž‚¿‚éêŠ‚ð‰ÂŽ‹‰»‚³‚¹‚é
 				pPlayer = (Player*)FindObject("Player");
 				landingPosition = pPlayer->GetPosition();
+				pArea = Instantiate<EnemyBossJumpArea>(GetParent());
+				pArea->SetArea(landingPosition);
 			}
 
 			jumpSpeed += JUMP_ATK_JUMP_STEP;
@@ -382,6 +385,12 @@ void EnemyBoss::JumpAttackAction()
 			transform_.position_.x = landingPosition.x;
 			transform_.position_.y -= PositionAdjustment(transform_.position_);
 			transform_.position_.z = landingPosition.z;
+
+			if (pArea != nullptr)
+			{
+				pArea->KillMe();
+				pArea = nullptr;
+			}
 
 			// ƒWƒƒƒ“ƒvUŒ‚Œã‚É­‚µ’âŽ~‚³‚¹‚é(‘OŒã‚ÌƒJƒEƒ“ƒg‚Ì‚½‚ß“ñ”{‚É‚·‚é)
 			if (jumpBetTimer > JUMP_ATK_BET_TIMER * 2)

@@ -1,8 +1,6 @@
 #pragma once
 #include "AttackModelBase.h"
 
-class EnemyBoss;
-
 class EnemyBossJumpArea : public AttackModelBase
 {
 public:
@@ -17,7 +15,11 @@ public:
 	
 
 private:
-	EnemyBoss* pBoss;
 	Transform moveArea;
+
+	int hModelFloor;	// 床のモデルハンドル
+	int hModelCircle;	// 動かす円のモデルハンドル
+
+	int scaleTimer;		// 拡縮計測タイマー
 };
 

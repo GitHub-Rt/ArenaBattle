@@ -4,6 +4,7 @@
 class Player;
 class EnemyBossGauge;
 class EnemyBossBullet;
+class EnemyBossJumpArea;
 
 enum class EnemyBossData
 {
@@ -170,6 +171,7 @@ private:
 	int jumpBetTimer;			// ジャンプ攻撃の間隔
 	int jumpCount;				// ジャンプ攻撃の攻撃回数
 	XMFLOAT3 landingPosition;	// 着地地点(プレイヤーのポジション)
+	EnemyBossJumpArea* pArea;
 	bool isPointGetting;		// 着地地点の情報を取得したかどうか
 
 

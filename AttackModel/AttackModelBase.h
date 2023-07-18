@@ -14,11 +14,15 @@ public:
 	void Release() override;
 
 	void AttackModelLoad(std::string fileName);
+	int AttackModelLoadInt(std::string fileName);
 	void AttackModelDraw(int modelHandle);
+	void AttackModelDraw(int modelHandle, Transform trans);
 	void AttackModelAddBoxCollider(XMFLOAT3 size, XMFLOAT3 center = XMFLOAT3(0, 0, 0));
 	void AttackModelAddSphereCollider(float radius, XMFLOAT3 center = XMFLOAT3(0, 0, 0));
 
 	SCENE_ID GetSceneID();
+
+	float PositionAdjustment(XMFLOAT3 pos);
 
 	// çsìÆîÕàÕäOÇ»ÇÁtrueÇï‘Ç∑
 	bool IsMoveLimit(XMFLOAT3 nextPosition);
