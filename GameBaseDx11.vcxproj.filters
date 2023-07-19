@@ -66,12 +66,6 @@
     <Filter Include="11Manager">
       <UniqueIdentifier>{03bdf53a-7be4-443b-979d-2bd231ed69d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="08UI\HPGauge">
-      <UniqueIdentifier>{9539ce43-42a7-47f1-a05f-35648875f820}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08UI\HPGauge\GaugeObject">
-      <UniqueIdentifier>{4241aa46-f882-4e0e-9028-72ff56c22d7b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="07AttackModel">
       <UniqueIdentifier>{39642c0d-4bf7-4119-afae-9a6ccdd025e1}</UniqueIdentifier>
     </Filter>
@@ -80,6 +74,15 @@
     </Filter>
     <Filter Include="07AttackModel\EnemyBoss">
       <UniqueIdentifier>{72366e91-6bbb-4b2f-847a-04b724d2e8d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject">
+      <UniqueIdentifier>{4f0b044b-0376-45b4-9288-ae8f7a7662ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\HPGauge">
+      <UniqueIdentifier>{9539ce43-42a7-47f1-a05f-35648875f820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\HPGauge\GaugeObject">
+      <UniqueIdentifier>{4241aa46-f882-4e0e-9028-72ff56c22d7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,13 +234,13 @@
       <Filter>09Sound</Filter>
     </ClCompile>
     <ClCompile Include="UI\PlayerGauge.cpp">
-      <Filter>08UI\HPGauge\GaugeObject</Filter>
+      <Filter>08UI\UIObject\HPGauge\GaugeObject</Filter>
     </ClCompile>
     <ClCompile Include="UI\EnemyBossGauge.cpp">
-      <Filter>08UI\HPGauge\GaugeObject</Filter>
+      <Filter>08UI\UIObject\HPGauge\GaugeObject</Filter>
     </ClCompile>
     <ClCompile Include="UI\HPGaugeBase.cpp">
-      <Filter>08UI\HPGauge</Filter>
+      <Filter>08UI\UIObject\HPGauge</Filter>
     </ClCompile>
     <ClCompile Include="AttackModel\EnemyBossBullet.cpp">
       <Filter>07AttackModel\EnemyBoss</Filter>
@@ -250,6 +253,15 @@
     </ClCompile>
     <ClCompile Include="AttackModel\EnemyBossSpecialArea.cpp">
       <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\RecoveryPosion.cpp">
+      <Filter>08UI\UIObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Warning.cpp">
+      <Filter>08UI\UIObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIBase.cpp">
+      <Filter>08UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -404,13 +416,13 @@
       <Filter>09Sound</Filter>
     </ClInclude>
     <ClInclude Include="UI\PlayerGauge.h">
-      <Filter>08UI\HPGauge\GaugeObject</Filter>
+      <Filter>08UI\UIObject\HPGauge\GaugeObject</Filter>
     </ClInclude>
     <ClInclude Include="UI\EnemyBossGauge.h">
-      <Filter>08UI\HPGauge\GaugeObject</Filter>
+      <Filter>08UI\UIObject\HPGauge\GaugeObject</Filter>
     </ClInclude>
     <ClInclude Include="UI\HPGaugeBase.h">
-      <Filter>08UI\HPGauge</Filter>
+      <Filter>08UI\UIObject\HPGauge</Filter>
     </ClInclude>
     <ClInclude Include="AttackModel\EnemyBossBullet.h">
       <Filter>07AttackModel\EnemyBoss</Filter>
@@ -423,6 +435,15 @@
     </ClInclude>
     <ClInclude Include="AttackModel\EnemyBossSpecialArea.h">
       <Filter>07AttackModel\EnemyBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\RecoveryPosion.h">
+      <Filter>08UI\UIObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Warning.h">
+      <Filter>08UI\UIObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIBase.h">
+      <Filter>08UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

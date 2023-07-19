@@ -181,6 +181,9 @@
     <ClCompile Include="UI\EnemyBossGauge.cpp" />
     <ClCompile Include="UI\HPGaugeBase.cpp" />
     <ClCompile Include="UI\PlayerGauge.cpp" />
+    <ClCompile Include="UI\RecoveryPosion.cpp" />
+    <ClCompile Include="UI\UIBase.cpp" />
+    <ClCompile Include="UI\Warning.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackModel\AttackModelBase.h" />
@@ -240,6 +243,9 @@
     <ClInclude Include="UI\EnemyBossGauge.h" />
     <ClInclude Include="UI\HPGaugeBase.h" />
     <ClInclude Include="UI\PlayerGauge.h" />
+    <ClInclude Include="UI\RecoveryPosion.h" />
+    <ClInclude Include="UI\UIBase.h" />
+    <ClInclude Include="UI\Warning.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
