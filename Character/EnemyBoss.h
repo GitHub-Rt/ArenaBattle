@@ -89,11 +89,14 @@ public:
 	// 攻撃モデルとプレイヤーのダメージ処理
 	void AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XMVECTOR vec);
 
+	// 攻撃開始までの時間を計測して攻撃を開始させる関数
+	void AttackStartTimer();
+
+
 	// 各攻撃の関数
 
 	void BulletAttackAction();
-	// 弾攻撃に必要な計算を行いスタートさせる関数
-	void BulletAttackCal(std::string dirName);
+	void BulletAttackCal(std::string dirName);	// 弾攻撃に必要な計算を行いスタートさせる関数
 	void SpiralMoveAttackAction();
 	void WavesAttackAction();
 	void JumpAttackAction();
@@ -168,7 +171,6 @@ private:
 
 	// 波状攻撃の変数
 	int wavesCount;			// 攻撃回数
-	float wavesJumpSpeed;	// 波状攻撃前の上昇変数
 	int wavesJumpTimer;		// 上昇時間
 
 

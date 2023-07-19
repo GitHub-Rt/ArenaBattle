@@ -101,20 +101,9 @@ void EnemyBoss::EnemyUpdate()
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
 
-	CharacterCheckHP();
-}
-
-void EnemyBoss::CharacterIdleAction()
-{
-	attackIntervalTimer++;
-
-	// AIレベルで攻撃間隔時間を変動させる
-	if (attackIntervalTimer >= ATTACK_INTERVAL_TIME / (int)bossAIState)
+	if (IsStateSet(CharacterState::Attacking) == false)
 	{
-		attackIntervalTimer = 0;
-
-		AttackTypeSelection();
-		ChangeState(CharacterState::Attacking);
+		AttackStartTimer();
 	}
 
 	// 最大体力に対して現在体力の割合が一定以下になったら特殊攻撃を行う
@@ -128,7 +117,28 @@ void EnemyBoss::CharacterIdleAction()
 
 		// 特殊攻撃を行う
 		ChangeAttackState(BossAttackState::SpecialAttack);
-		
+
+		ChangeState(CharacterState::Attacking);
+	}
+	
+	CharacterCheckHP();
+}
+
+void EnemyBoss::CharacterIdleAction()
+{
+	
+}
+
+void EnemyBoss::AttackStartTimer()
+{
+	attackIntervalTimer++;
+
+	// AIレベルで攻撃間隔時間を変動させる
+	if (attackIntervalTimer >= ATTACK_INTERVAL_TIME / (int)bossAIState)
+	{
+		attackIntervalTimer = 0;
+
+		AttackTypeSelection();
 		ChangeState(CharacterState::Attacking);
 	}
 }
@@ -140,9 +150,9 @@ void EnemyBoss::AttackTypeSelection()
 #ifdef _DEBUG
 
 	// 動作確認用
-
-	ChangeAttackState(BossAttackState::SpecialAttack);
-	return;
+	bossAIState = BossAIState::Caution;
+	//ChangeAttackState(BossAttackState::JumpAttack);
+	//return;
 
 #endif
 
@@ -157,16 +167,18 @@ void EnemyBoss::AttackTypeSelection()
 		break;
 	case BossAIState::Caution:
 		std::srand(unsigned(time(NULL)));
-		type = rand() % 2 + 1;
+		type = rand() % 3 + 1;
 		if (type == 1)
 		{
 			ChangeAttackState(BossAttackState::BulletAttack);
+		}
+		else if(type == 2)
+		{
 			ChangeAttackState(BossAttackState::SpiralMoveAttack);
 		}
 		else
 		{
-			ChangeAttackState(BossAttackState::WavesAttack);
-			ChangeAttackState(BossAttackState::JumpAttack);
+			ChangeAttackState(BossAttackState::JumpAttack);	// WavesAttackも同時に行う
 		}
 		break;
 	default:
@@ -270,9 +282,9 @@ void EnemyBoss::BulletAttackCal(std::string dirName)
 
 void EnemyBoss::SpiralMoveAttackAction()
 {
-	const float RADIUS_STEP = 1.9f;				// 半径の増加率
+	const float RADIUS_STEP = 1.7f;				// 半径の増加率
 	const float ANGLE_STEP = 0.05f;				// 回転角度の増加率
-	const float MOVING_MAGNIFICATION = 0.01f;	// 移動量倍率
+	const float MOVING_MAGNIFICATION = 0.05f;	// 移動量倍率
 	
 	// 位置設定用変数
 	float nextPosX, nextPosZ;
@@ -318,7 +330,7 @@ void EnemyBoss::SpiralMoveAttackAction()
 
 void EnemyBoss::WavesAttackAction()
 {
-	const int WAVES_ATK_BEFORE_TIME = 60;		// 攻撃前の上昇時間
+	const int WAVES_ATK_BEFORE_TIME = 60;		// 攻撃前の時間
 	const float WAVES_JUMP_SPEED_STEP = 0.0125f;	// 攻撃前のジャンプ増加値
 
 	if (wavesCount < WAVES_ATK_MAX_COUNT)
@@ -329,20 +341,21 @@ void EnemyBoss::WavesAttackAction()
 			wavesJumpTimer++;
 
 			
-			wavesJumpSpeed += WAVES_JUMP_SPEED_STEP;
-			transform_.position_.y += wavesJumpSpeed;
+			jumpSpeed += WAVES_JUMP_SPEED_STEP;
+			transform_.position_.y += jumpSpeed;
 		}
 		else
 		{
 
 			wavesJumpTimer = 0;
-			wavesJumpSpeed = 0;
+			jumpSpeed = 0;
 
 			// 床に着地
 			transform_.position_.y -= PositionAdjustment(transform_.position_);
 
 			// 波状攻撃を行う
-			Instantiate<EnemyBossWaves>(GetParent());
+			EnemyBossWaves* pWaves = Instantiate<EnemyBossWaves>(GetParent());
+			pWaves->SetStartPos(transform_.position_);
 			wavesCount++;
 		}
 	}
@@ -388,6 +401,15 @@ void EnemyBoss::JumpAttackAction()
 			transform_.position_.y -= PositionAdjustment(transform_.position_);
 			transform_.position_.z = landingPosition.z;
 
+			// AIレベルが最大だったら波状攻撃も行う
+			if (bossAIState == BossAIState::Caution && wavesCount == 0)
+			{
+				// 波状攻撃開始
+				EnemyBossWaves* pWaves = Instantiate<EnemyBossWaves>(GetParent());
+				pWaves->SetStartPos(transform_.position_);
+				wavesCount++;
+			}
+
 			// 可視化させたモデルを消す
 			if (pArea != nullptr)
 			{
@@ -403,6 +425,12 @@ void EnemyBoss::JumpAttackAction()
 				jumpSpeed = 0;
 				isPointGetting = false;
 				jumpCount++;
+
+				// AIレベルが最大の時は波状攻撃の変数も更新する
+				if (bossAIState == BossAIState::Caution)
+				{
+					wavesCount = 0;
+				}
 			}
 			else
 			{
@@ -508,7 +536,7 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 	case BossAttackState::WavesAttack:
 		wavesCount = 0;
 		wavesJumpTimer = 0;
-		wavesJumpSpeed = 0;
+		jumpSpeed = 0;
 		break;
 	case BossAttackState::JumpAttack:
 		jumpBetTimer = 0;
@@ -559,8 +587,8 @@ void EnemyBoss::Damage(float damage)
 	hp -= damage;
 	totalDamages += damage;
 
-	// 一定以上ダメージを与えたらAIレベルを一段階上げる
-	if (totalDamages >= TOTAL_DAMAGES_UP_AI_LEVEl)
+	// 一定以上ダメージを与えられAIレベルが最大状態じゃないときに一段階上げる
+	if (totalDamages >= TOTAL_DAMAGES_UP_AI_LEVEl && bossAIState != BossAIState::Caution)
 	{
 		bossAIState = BossAIState::Normal;
 	}
