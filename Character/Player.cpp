@@ -8,6 +8,7 @@
 #include "../Effect/PlayerEffect.h"
 
 #include "../UI/PlayerGauge.h"
+#include "../UI/RecoveryPotion.h"
 
 #include "../Scene/DebugScene.h"
 #include "../Character/Enemy.h"
@@ -47,6 +48,7 @@ Player::Player(GameObject* parent)
 	RECOVERY_QUANTITY = 0;
 
 	pGauge = nullptr;
+	pPotion = nullptr;
 
 	hp = 0;
 
@@ -94,18 +96,18 @@ void Player::Initialize()
 		transform_.position_.z = -45.0f;
 		vPrevPos = XMLoadFloat3(&transform_.position_);
 
-		
-
 		hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
 
 		pGauge = Instantiate<PlayerGauge>(GetParent());
 		
-
 		pLine = new PolyLine();
 		pLine->Load("Effect/Player/tex.png");
 
 		pEffect = new PlayerEffect();
+
+		pPotion = Instantiate<RecoveryPotion>(GetParent());
+		pPotion->SetPotionCount(RECOVERY_POTION_NUMBER);
 	}
 
 	NormalCamera();
@@ -125,10 +127,17 @@ void Player::CharacterUpdate()
 	//カメラ設定
 	NormalCamera();
 
+	// 回避を再度行える用になったかどうか
 	float trrigerR = Input::GetPadTrrigerR();
 	if (trrigerR == 0)
 	{
 		isTrrigerReset = true;
+	}
+
+	// 回復
+	if (IsRecoverEntry())
+	{
+		HPRecovery(RECOVERY_QUANTITY);
 	}
 
 	// 現在の状態関係なく行えるアクション
@@ -660,8 +669,25 @@ void Player::HPDamage(float value)
 
 void Player::HPRecovery(float value)
 {
-	hp += value;
-	pGauge->Recovery(value);
+	// 現在体力が最大体力より低かったら回復処理を行う
+	if (hp < GetParameterValue(CharacterID::Player, CharacterStatus::HP) && pPotion != nullptr)
+	{
+		hp += value;
+
+		if (hp > GetParameterValue(CharacterID::Player, CharacterStatus::HP))
+		{
+			hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
+		}
+
+		pGauge->Recovery(value);
+		pPotion->DawnPotionNumber();
+		
+		if (pPotion->GetPotionCount() == 0)
+		{
+			pPotion->KillMe();
+			pPotion = nullptr;
+		}
+	}
 }
 
 bool Player::IsMoveEntry()

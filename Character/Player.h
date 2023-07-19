@@ -4,6 +4,7 @@
 class PolyLine;
 class PlayerEffect;
 class PlayerGauge;
+class RecoveryPotion;
 
 // 攻撃の状態を管理
 enum class AttackState
@@ -110,6 +111,7 @@ private:
 
 	// ポインタ
 	PlayerGauge* pGauge;
+	RecoveryPotion* pPotion;
 
 	// 全体変数
 	float hp;		// 体力

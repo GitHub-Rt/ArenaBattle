@@ -39,7 +39,7 @@ void EnemyBossGauge::Initialize()
         //ÉçÅ[Éh
         for (int i = 0; i < (int)BossFramePict::PICT_MAX; i++)
         {
-            hPict[i] = GaugeImageLoad(fileName[i]);
+            hPict[i] = UILoad(fileName[i]);
             assert(hPict[i] >= 0);
         }
     }
@@ -54,11 +54,11 @@ void EnemyBossGauge::Draw()
     //ê‘ÉQÅ[ÉW
     gaugeTrans = transform_;
     gaugeTrans.scale_.x *= stopRatio;
-    GaugeImageDraw(hPict[(int)BossFramePict::PICT_RED], gaugeTrans);
+    UIDraw(hPict[(int)BossFramePict::PICT_RED], gaugeTrans);
 
     //òg
     gaugeTrans = transform_;
-    GaugeImageDraw(hPict[(int)BossFramePict::PICT_FRAME], gaugeTrans);
+    UIDraw(hPict[(int)BossFramePict::PICT_FRAME], gaugeTrans);
 }
 
 

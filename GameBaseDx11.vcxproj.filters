@@ -84,6 +84,9 @@
     <Filter Include="08UI\UIObject\HPGauge\GaugeObject">
       <UniqueIdentifier>{4241aa46-f882-4e0e-9028-72ff56c22d7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08UI\UIObject\Potion">
+      <UniqueIdentifier>{26f16ba9-28e4-40c6-9802-27a62fe592b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -254,14 +257,17 @@
     <ClCompile Include="AttackModel\EnemyBossSpecialArea.cpp">
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClCompile>
-    <ClCompile Include="UI\RecoveryPosion.cpp">
-      <Filter>08UI\UIObject</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Warning.cpp">
       <Filter>08UI\UIObject</Filter>
     </ClCompile>
     <ClCompile Include="UI\UIBase.cpp">
       <Filter>08UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\RecoveryPotion.cpp">
+      <Filter>08UI\UIObject\Potion</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\RecorveryNumber.cpp">
+      <Filter>08UI\UIObject\Potion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,14 +442,17 @@
     <ClInclude Include="AttackModel\EnemyBossSpecialArea.h">
       <Filter>07AttackModel\EnemyBoss</Filter>
     </ClInclude>
-    <ClInclude Include="UI\RecoveryPosion.h">
-      <Filter>08UI\UIObject</Filter>
-    </ClInclude>
     <ClInclude Include="UI\Warning.h">
       <Filter>08UI\UIObject</Filter>
     </ClInclude>
     <ClInclude Include="UI\UIBase.h">
       <Filter>08UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\RecoveryPotion.h">
+      <Filter>08UI\UIObject\Potion</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\RecorveryNumber.h">
+      <Filter>08UI\UIObject\Potion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -43,7 +43,7 @@ void PlayerGauge::Initialize()
         //ロード
         for (int i = 0; i < (int)PlayerFramePict::PICT_MAX; i++)
         {
-            hPict[i] = GaugeImageLoad(fileName[i]);
+            hPict[i] = UILoad(fileName[i]);
             assert(hPict[i] >= 0);
         }
     }
@@ -61,7 +61,7 @@ void PlayerGauge::Draw()
         //緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= stopRatio;
-        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
+        UIDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
     }
 
 
@@ -71,12 +71,12 @@ void PlayerGauge::Draw()
         //黄緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= stopRatio;
-        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_LGREEN], gaugeTrans);
+        UIDraw(hPict[(int)PlayerFramePict::PICT_LGREEN], gaugeTrans);
 
         //緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= moveRatio;
-        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
+        UIDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
     }
 
     //ダメージ中
@@ -85,17 +85,17 @@ void PlayerGauge::Draw()
         //赤ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= moveRatio;
-        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_RED], gaugeTrans);
+        UIDraw(hPict[(int)PlayerFramePict::PICT_RED], gaugeTrans);
 
         //緑ゲージ
         gaugeTrans = transform_;
         gaugeTrans.scale_.x *= stopRatio;
-        GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
+        UIDraw(hPict[(int)PlayerFramePict::PICT_GREEN], gaugeTrans);
     }
 
 
 
     //枠
     gaugeTrans = transform_;
-    GaugeImageDraw(hPict[(int)PlayerFramePict::PICT_FRAME], gaugeTrans);
+    UIDraw(hPict[(int)PlayerFramePict::PICT_FRAME], gaugeTrans);
 }

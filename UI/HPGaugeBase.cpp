@@ -1,11 +1,7 @@
 #include "HPGaugeBase.h"
-#include "../Engine/Image.h"
-
-
-
 
 HPGaugeBase::HPGaugeBase(GameObject* parent, std::string fileName)
-	: GameObject(parent, fileName)
+	: UIBase(parent, fileName)
 {
 }
 
@@ -14,7 +10,7 @@ HPGaugeBase::~HPGaugeBase()
 
 }
 
-void HPGaugeBase::Update()
+void HPGaugeBase::UIUpdate()
 {
     //Å‘åHP‚É‘Î‚·‚éAŒ»İHP‚ÌŠ„‡
     stopRatio = (float)nowHp / (float)maxHp;
@@ -22,17 +18,6 @@ void HPGaugeBase::Update()
     //ƒo[‚ğ“®‚©‚·
     if (moveRatio < stopRatio) moveRatio += RCV_SPEED;
     if (moveRatio > stopRatio) moveRatio -= DMG_SPEED;
-}
-
-void HPGaugeBase::GaugeImageDraw(int pictHandle, Transform trans)
-{
-    Image::SetTransform(pictHandle, trans);
-    Image::Draw(pictHandle);
-}
-
-void HPGaugeBase::Release()
-{
-
 }
 
 void HPGaugeBase::Damage(float value)
@@ -45,14 +30,6 @@ void HPGaugeBase::Recovery(float value)
 {
     nowHp += value;
     if (nowHp > maxHp)   nowHp = maxHp;
-}
-
-int HPGaugeBase::GaugeImageLoad(std::string fileName)
-{
-    int hPict = Image::Load("UI/" + fileName);
-    assert(hPict >= 0);
-
-    return hPict;
 }
 
 void HPGaugeBase::SetGaugeInformation()

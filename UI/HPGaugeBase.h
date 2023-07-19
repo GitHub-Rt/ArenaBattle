@@ -1,5 +1,5 @@
 #pragma once
-#include "../Engine/GameObject.h"
+#include "UIBase.h"
 
 
 
@@ -7,19 +7,15 @@
 const float DMG_SPEED = 0.0025f;      //ダメージバーの速度
 const float RCV_SPEED = 0.005f;       //回復バーの速度
 
-class HPGaugeBase : public GameObject
+class HPGaugeBase : public UIBase
 {
 public:
 	HPGaugeBase(GameObject* parent, std::string fileName);
 	~HPGaugeBase();
-	void Update() override;
-	void GaugeImageDraw(int pictHandle, Transform trans);
-	void Release() override;
+	void UIUpdate() override;
 
 	void Damage(float value);
 	void Recovery(float value);
-
-	int GaugeImageLoad(std::string fileName);
 
 	void SetGaugePosition(float x, float y)
 	{
