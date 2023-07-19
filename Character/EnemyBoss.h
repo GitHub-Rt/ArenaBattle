@@ -5,6 +5,7 @@ class Player;
 class EnemyBossGauge;
 class EnemyBossBullet;
 class EnemyBossJumpArea;
+class EnemyBossSpecialArea;
 
 enum class EnemyBossData
 {
@@ -21,6 +22,8 @@ enum class EnemyBossData
 	JumpAtkMaxCount,
 	JumpAtkBetTimer,
 	JumpAtkMagnification,
+	TimeUpToSpecialAttack,
+	SpecialAtkMagnification,
 };
 
 enum class BossAttackState
@@ -135,6 +138,8 @@ private:
 	int JUMP_ATK_MAX_COUNT;			// ジャンプ攻撃の最大回数
 	int JUMP_ATK_BET_TIMER;			// ジャンプ攻撃の間隔時間
 	float JUMP_ATK_MAGNIFICATION;	// ジャンプ攻撃の攻撃倍率
+	int TIME_UP_TO_SPECIAL_ATTACK;	// 特殊攻撃実行までの時間
+	float SPECIAL_ATK_MAGNIFICATION;// 特殊攻撃の倍率
 
 	// その他の定数
 	float ENTRY_POS_Y;				// 着地時のy座標
@@ -147,7 +152,8 @@ private:
 	XMFLOAT3 firstPos;
 
 	// 攻撃全体周りの変数
-	int attackIntervalTimer;
+	int attackIntervalTimer;	// 攻撃間隔
+	float jumpSpeed;			// ジャンプの上昇量
 	
 	// 弾攻撃周りの変数
 	int bulletTimer;	// 攻撃間隔
@@ -167,7 +173,6 @@ private:
 
 
 	// ジャンプ攻撃周りの変数
-	float jumpSpeed;			// ジャンプ攻撃の上昇
 	int jumpBetTimer;			// ジャンプ攻撃の間隔
 	int jumpCount;				// ジャンプ攻撃の攻撃回数
 	XMFLOAT3 landingPosition;	// 着地地点(プレイヤーのポジション)
@@ -176,8 +181,9 @@ private:
 
 
 	// 特殊攻撃周りの変数
-	bool isSpecialAttack;	// 特殊攻撃を行ったかどうか
-
+	int specialTimer;					// 特殊攻撃開始までの時間
+	bool isSpecialAttack;				// 特殊攻撃を行ったかどうか
+	EnemyBossSpecialArea* pSpecialArea;
 
 	// 体力周りの変数
 	EnemyBossGauge* pGauge;

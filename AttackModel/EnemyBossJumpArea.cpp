@@ -54,8 +54,10 @@ void EnemyBossJumpArea::Draw()
 
 void EnemyBossJumpArea::SetArea(XMFLOAT3 pos)
 {
+	const float POS_Y_ADJUSTMENT = 0.25f;	// yН└ХWВ╠ФўТ▓Ро
+
 	transform_.position_ = pos;
-	transform_.position_.y -= PositionAdjustment(transform_.position_);
+	transform_.position_.y -= PositionAdjustment(transform_.position_) - POS_Y_ADJUSTMENT;
 
 
 	moveArea = transform_;

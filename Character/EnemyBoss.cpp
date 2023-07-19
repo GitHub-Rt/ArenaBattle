@@ -5,6 +5,7 @@
 #include "../AttackModel/EnemyBossBullet.h"
 #include "../AttackModel/EnemyBossWaves.h"
 #include "../AttackModel/EnemyBossJumpArea.h"
+#include "../AttackModel/EnemyBossSpecialArea.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18, 9,18 };	//outsideの当たり判定枠
@@ -54,7 +55,8 @@ void EnemyBoss::SetData()
 	JUMP_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkMaxCount);
 	JUMP_ATK_BET_TIMER = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkBetTimer);
 	JUMP_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkMagnification);
-
+	TIME_UP_TO_SPECIAL_ATTACK = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TimeUpToSpecialAttack);
+	SPECIAL_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::SpecialAtkMagnification);
 
 }
 
@@ -139,7 +141,7 @@ void EnemyBoss::AttackTypeSelection()
 
 	// 動作確認用
 
-	ChangeAttackState(BossAttackState::JumpAttack);
+	ChangeAttackState(BossAttackState::SpecialAttack);
 	return;
 
 #endif
@@ -353,7 +355,7 @@ void EnemyBoss::WavesAttackAction()
 
 void EnemyBoss::JumpAttackAction()
 {
-	const float JUMP_ATK_JUMP_STEP = 0.25f;	// ジャンプ攻撃前の変化量
+	const float JUMP_ATK_JUMP_STEP = 0.25f;	// ジャンプ攻撃前の変化量(上昇量)
 
 	if (jumpCount < JUMP_ATK_MAX_COUNT)
 	{// 攻撃処理
@@ -386,6 +388,7 @@ void EnemyBoss::JumpAttackAction()
 			transform_.position_.y -= PositionAdjustment(transform_.position_);
 			transform_.position_.z = landingPosition.z;
 
+			// 可視化させたモデルを消す
 			if (pArea != nullptr)
 			{
 				pArea->KillMe();
@@ -416,6 +419,8 @@ void EnemyBoss::JumpAttackAction()
 		}
 		else
 		{// 初期位置に戻る
+
+			const float MOVE_SPEED = 0.125f;	// ベクトルの長さ(移動量)を調整する
 			
 			XMVECTOR vMyPos = XMLoadFloat3(&transform_.position_);
 			XMVECTOR vCenter = XMLoadFloat3(&firstPos);
@@ -423,7 +428,7 @@ void EnemyBoss::JumpAttackAction()
 			// 初期位置に向かうベクトルを用意
 			XMVECTOR vMove = vCenter - vMyPos;
 			XMVector3Normalize(vMove);
-			vMove *= 0.5f;
+			vMove *= MOVE_SPEED;
 
 			XMFLOAT3 moveNow;
 			XMStoreFloat3(&moveNow, vMove);
@@ -437,7 +442,52 @@ void EnemyBoss::JumpAttackAction()
 
 void EnemyBoss::SpecialAttackAction()
 {
+	const float JUMP_ATK_JUMP_STEP = 0.25f;	// ジャンプ攻撃前の変化量(上昇量)
+	const float MAX_HEIGHT = 10.0f;		// 最高到達地点
 
+	// モデルで範囲を可視化させる
+	if (pSpecialArea == nullptr)
+	{
+		pSpecialArea = Instantiate<EnemyBossSpecialArea>(GetParent());
+	}
+
+
+	// 最高到達地点にいったかどうか
+	if (transform_.position_.y + jumpSpeed < MAX_HEIGHT)
+	{
+		// 上昇処理
+		jumpSpeed += JUMP_ATK_JUMP_STEP;
+		transform_.position_.y += jumpSpeed;
+	}
+	else
+	{
+		// 最高到達地点についたら停止させる
+		transform_.position_.y = MAX_HEIGHT;
+	}
+
+	// 実行前時間を超えたら攻撃を行う
+	if (specialTimer > TIME_UP_TO_SPECIAL_ATTACK)
+	{		
+		// 地面に着地させる
+		transform_.position_.y = firstPos.y;
+
+		// 可視化モデルの消去
+		pSpecialArea->KillMe();
+		pSpecialArea = nullptr;
+
+
+		// 攻撃処理
+		pPlayer = (Player*)FindObject("Player");
+		CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, SPECIAL_ATK_MAGNIFICATION);
+		pPlayer->SetDamageStage(DamageStage::DamageStart);
+
+
+		AttackVariableReset(BossAttackState::SpecialAttack);
+	}
+	else
+	{
+		specialTimer++;
+	}
 }
 
 void EnemyBoss::AttackVariableReset(BossAttackState nowState)
@@ -467,6 +517,8 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 		isPointGetting = false;
 		break;
 	case BossAttackState::SpecialAttack:
+		specialTimer = 0;
+		jumpSpeed = 0;
 		break;
 	default:
 		break;
@@ -565,9 +617,6 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 				{
 				case BossAttackState::NoAttack:
 					break;
-				case BossAttackState::SpiralMoveAttack:
-					//atackMagnification =
-					break;
 				case BossAttackState::JumpAttack:
 					atackMagnification = JUMP_ATK_MAGNIFICATION;
 					break;
@@ -577,10 +626,13 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 
 			}
 			
-
-			CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
-			pPlayer->SetDamageStage(DamageStage::DamageStart);
-			pPlayer->SetDamageDirection(-(GetFrontVector()));
+			// プレイヤーがダメージを受けていなかったらダメージ処理を行わせる
+			if (pPlayer->GetDamageState() == DamageStage::NoDamage)
+			{
+				CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
+				pPlayer->SetDamageStage(DamageStage::DamageStart);
+				pPlayer->SetDamageDirection(-(GetFrontVector()));
+			}
 		}
 		
 	}
@@ -609,16 +661,19 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XM
 		atackMagnification = BULLET_ATK_MAGNIFICATION;
 		break;
 	case BossAttackModelHandle::Wave:
-		//atackMagnification =
+		atackMagnification = WAVES_ATK_MAGNIFICATION;
 		break;
 	default:
 		break;
 	}
 
-	
-	CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
-	pPlayer->SetDamageStage(DamageStage::DamageStart);
-	pPlayer->SetDamageDirection(vec);
+	// プレイヤーがダメージを受けていなかったらダメージ処理を行わせる
+	if (pPlayer->GetDamageState() == DamageStage::NoDamage)
+	{
+		CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
+		pPlayer->SetDamageStage(DamageStage::DamageStart);
+		pPlayer->SetDamageDirection(vec);
+	}
 }
 
 bool EnemyBoss::BossEntry()
