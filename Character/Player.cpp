@@ -15,7 +15,6 @@
 #include "../Character/EnemyBoss.h"
 #include "../Manager/EnemyManager.h"
 
-
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 4, 4, 4 };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
@@ -90,6 +89,9 @@ void Player::Initialize()
 	CharacterModelLoad("player.fbx");
 	CharacterAddCollider(HIT_TEST_RANGE);
 
+	SoundEffectLoad();
+
+	
 	
 	// 変数の初期化
 	{
@@ -108,6 +110,7 @@ void Player::Initialize()
 
 		pPotion = Instantiate<RecoveryPotion>(GetParent());
 		pPotion->SetPotionCount(RECOVERY_POTION_NUMBER);
+
 	}
 
 	NormalCamera();

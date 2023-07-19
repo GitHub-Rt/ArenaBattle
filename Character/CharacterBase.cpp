@@ -335,6 +335,30 @@ void CharacterBase::SetParameter(int hp_, int attack_, int defense_)
 	parameter.defense = defense_;
 }
 
+void CharacterBase::SoundEffectLoad(SoundEffect effect)
+{
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	GameSound* pSound = pManager->GetSound();
+
+	pSound->EffectLoad(effect);
+}
+
+void CharacterBase::SoundEffectPlay(SoundEffect effect)
+{
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	GameSound* pSound = pManager->GetSound();
+
+	pSound->EffectPlay(effect);
+}
+
+void CharacterBase::SoundEffectStop(SoundEffect effect)
+{
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	GameSound* pSound = pManager->GetSound();
+
+	pSound->EffectStop(effect);
+}
+
 int CharacterBase::GetPlayerStatusValue(CharacterStatus status)
 {
 	switch (status)
@@ -458,6 +482,12 @@ bool CharacterBase::IsMoveLimit(XMFLOAT3 position)
 	}
 	
 	return false;
+}
+
+GameSound* CharacterBase::GetSound()
+{
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	return pManager->GetSound();
 }
 
 void CharacterBase::ChangeStateForIdle()

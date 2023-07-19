@@ -180,9 +180,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 				//シャドウマップ作成
-				Direct3D::BeginDrawToTexture();
-				pRootObject->DrawSub();
-				Direct3D::EndDraw();
+				//Direct3D::BeginDrawToTexture();
+				//pRootObject->DrawSub();
+				//Direct3D::EndDraw();
 
 				// カメラの更新				
 				Camera::Update();

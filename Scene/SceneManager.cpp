@@ -20,8 +20,6 @@
 #include "DebugScene.h"
 
 
-
-
 SceneManager::SceneManager(GameObject * parent)
 	: GameObject(parent, "SceneManager")
 {
@@ -34,7 +32,7 @@ SceneManager::SceneManager(GameObject * parent)
 
 void SceneManager::Initialize()
 {
-	//pSound = new GameSound();
+	pSound = new GameSound();
 
 	//Å‰‚ÌƒV[ƒ“‚ğ€”õ
 	/*currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;

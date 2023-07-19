@@ -6,6 +6,7 @@
 #include "../AttackModel/EnemyBossWaves.h"
 #include "../AttackModel/EnemyBossJumpArea.h"
 #include "../AttackModel/EnemyBossSpecialArea.h"
+#include "../UI/Warning.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18, 9,18 };	//outsideの当たり判定枠
@@ -29,7 +30,7 @@ EnemyBoss::EnemyBoss(GameObject* parent)
 
 	hp = 0;
 
-	isWarningStart = false;
+	pWarning = nullptr;
 
 	damageTimer = 0;
 	totalDamages = 0;
@@ -105,21 +106,6 @@ void EnemyBoss::EnemyUpdate()
 	{
 		AttackStartTimer();
 	}
-
-	// 最大体力に対して現在体力の割合が一定以下になったら特殊攻撃を行う
-	if (isSpecialAttack == false && hp <= maxHp / RATE_FOR_MAX_STRENGTH)
-	{
-		isSpecialAttack = true;
-		attackIntervalTimer = 0;
-
-		// AI状態を最大状態にする
-		bossAIState = BossAIState::Caution;
-
-		// 特殊攻撃を行う
-		ChangeAttackState(BossAttackState::SpecialAttack);
-
-		ChangeState(CharacterState::Attacking);
-	}
 	
 	CharacterCheckHP();
 }
@@ -141,6 +127,21 @@ void EnemyBoss::AttackStartTimer()
 		AttackTypeSelection();
 		ChangeState(CharacterState::Attacking);
 	}
+
+	// 最大体力に対して現在体力の割合が一定以下になったら特殊攻撃を行う
+	if (isSpecialAttack == false && hp <= maxHp / RATE_FOR_MAX_STRENGTH)
+	{
+		isSpecialAttack = true;
+		attackIntervalTimer = 0;
+
+		// AI状態を最大状態にする
+		bossAIState = BossAIState::Caution;
+
+		// 特殊攻撃を行う
+		ChangeAttackState(BossAttackState::SpecialAttack);
+
+		ChangeState(CharacterState::Attacking);
+	}
 }
 
 void EnemyBoss::AttackTypeSelection()
@@ -150,7 +151,7 @@ void EnemyBoss::AttackTypeSelection()
 #ifdef _DEBUG
 
 	// 動作確認用
-	bossAIState = BossAIState::Caution;
+	//bossAIState = BossAIState::Caution;
 	//ChangeAttackState(BossAttackState::JumpAttack);
 	//return;
 
@@ -448,22 +449,7 @@ void EnemyBoss::JumpAttackAction()
 		else
 		{// 初期位置に戻る
 
-			const float MOVE_SPEED = 0.125f;	// ベクトルの長さ(移動量)を調整する
-			
-			XMVECTOR vMyPos = XMLoadFloat3(&transform_.position_);
-			XMVECTOR vCenter = XMLoadFloat3(&firstPos);
-
-			// 初期位置に向かうベクトルを用意
-			XMVECTOR vMove = vCenter - vMyPos;
-			XMVector3Normalize(vMove);
-			vMove *= MOVE_SPEED;
-
-			XMFLOAT3 moveNow;
-			XMStoreFloat3(&moveNow, vMove);
-
-			//移動処理
-			transform_.position_.x += moveNow.x;
-			transform_.position_.z += moveNow.z;
+			ReturnFirstPos();
 		}
 	}
 }
@@ -554,6 +540,26 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 
 	ClearAttackState(nowState);
 	ChangeAttackState(BossAttackState::NoAttack);
+}
+
+void EnemyBoss::ReturnFirstPos()
+{
+	const float MOVE_SPEED = 0.125f;	// ベクトルの長さ(移動量)を調整する
+
+	XMVECTOR vMyPos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR vCenter = XMLoadFloat3(&firstPos);
+
+	// 初期位置に向かうベクトルを用意
+	XMVECTOR vMove = vCenter - vMyPos;
+	XMVector3Normalize(vMove);
+	vMove *= MOVE_SPEED;
+
+	XMFLOAT3 moveNow;
+	XMStoreFloat3(&moveNow, vMove);
+
+	//移動処理
+	transform_.position_.x += moveNow.x;
+	transform_.position_.z += moveNow.z;
 }
 
 void EnemyBoss::CharacterTakeDamage(float damage)
@@ -711,11 +717,10 @@ bool EnemyBoss::BossEntry()
 	// 描画を許可する
 	Visible();
 
-	if (isWarningStart == false)
+	if (pWarning == nullptr)
 	{
-		isWarningStart = true;
-
 		// Warningの画像初期化
+		pWarning = Instantiate<Warning>(GetParent());
 	}
 
 	if (transform_.position_.y > ENTRY_POS_Y)
@@ -726,6 +731,8 @@ bool EnemyBoss::BossEntry()
 	else
 	{
 		transform_.position_.y = ENTRY_POS_Y;
+		pWarning->KillMe();
+		pWarning = nullptr;
 		return true;
 	}
 }

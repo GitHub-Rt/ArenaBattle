@@ -43,6 +43,11 @@ void UIBase::UIRect(RectUI target,int handle, int num)
 	}
 }
 
+void UIBase::UIAlpha(int handle, int alpha)
+{
+	Image::SetAlpha(handle, alpha);
+}
+
 void UIBase::Release()
 {
 

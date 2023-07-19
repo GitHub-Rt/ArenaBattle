@@ -10,7 +10,9 @@
 
 // 180度を表す定数
 const double DEGREES_180 = 180.0;
+
 enum class SCENE_ID;
+enum class SoundEffect;
 
 // キャラステータス
 enum class CharacterStatus
@@ -167,7 +169,23 @@ public:
 	/// <param name="defense_"></param>
 	void SetParameter(int hp_, int attack_, int defense_);
 
-	
+	/// <summary>
+	/// ゲーム効果音をロードする関数
+	/// </summary>
+	/// <param name="effect">該当エフェクト</param>
+	void SoundEffectLoad(SoundEffect effect);
+
+	/// <summary>
+	/// ゲーム効果音を再生する関数
+	/// </summary>
+	/// <param name="effect">該当エフェクト</param>
+	void SoundEffectPlay(SoundEffect effect);
+
+	/// <summary>
+	/// ゲーム効果音を停止する関数
+	/// </summary>
+	/// <param name="effect"></param>
+	void SoundEffectStop(SoundEffect effect);
 
 	/// <summary>
 	/// 受けるダメージ量を返す
@@ -266,7 +284,6 @@ public:
 	/// <param name="position">ポジション</param>
 	/// <returns>範囲外ならtrue</returns>
 	bool IsMoveLimit(XMFLOAT3 position);
-
 
 	/// <summary>
 	/// 定数として扱うデータを初期化する関数

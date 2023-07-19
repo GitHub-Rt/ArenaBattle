@@ -6,6 +6,7 @@ class EnemyBossGauge;
 class EnemyBossBullet;
 class EnemyBossJumpArea;
 class EnemyBossSpecialArea;
+class Warning;
 
 enum class EnemyBossData
 {
@@ -105,6 +106,9 @@ public:
 	// 各攻撃変数のリセット
 	void AttackVariableReset(BossAttackState nowState);
 
+	// 初期位置に移動する関数
+	void ReturnFirstPos();
+
 	void Damage(float damage);
 	void DamageMotion();
 
@@ -193,7 +197,7 @@ private:
 	float hp;
 
 	// 登場演出周りの変数
-	bool isWarningStart;
+	Warning* pWarning;
 
 	// 被ダメージ周りの変数
 	int damageTimer;
