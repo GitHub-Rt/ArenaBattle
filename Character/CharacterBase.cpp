@@ -359,6 +359,14 @@ void CharacterBase::SoundEffectStop(SoundEffect effect)
 	pSound->EffectStop(effect);
 }
 
+bool CharacterBase::IsSoundEffectStop(SoundEffect effect)
+{
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	GameSound* pSound = pManager->GetSound();
+
+	return pSound->GetEffectFlg(effect);
+}
+
 int CharacterBase::GetPlayerStatusValue(CharacterStatus status)
 {
 	switch (status)
@@ -482,12 +490,6 @@ bool CharacterBase::IsMoveLimit(XMFLOAT3 position)
 	}
 	
 	return false;
-}
-
-GameSound* CharacterBase::GetSound()
-{
-	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-	return pManager->GetSound();
 }
 
 void CharacterBase::ChangeStateForIdle()

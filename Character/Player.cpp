@@ -11,9 +11,12 @@
 #include "../UI/RecoveryPotion.h"
 
 #include "../Scene/DebugScene.h"
+
 #include "../Character/Enemy.h"
 #include "../Character/EnemyBoss.h"
 #include "../Manager/EnemyManager.h"
+
+#include "../Sound/GameSound.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 4, 4, 4 };	// 当たり判定枠
@@ -89,10 +92,11 @@ void Player::Initialize()
 	CharacterModelLoad("player.fbx");
 	CharacterAddCollider(HIT_TEST_RANGE);
 
-	SoundEffectLoad();
+	SoundEffectLoad(SoundEffect::GaugeRecovery);
+	SoundEffectLoad(SoundEffect::NormalAttack);
+	SoundEffectLoad(SoundEffect::HardAttack);
 
-	
-	
+
 	// 変数の初期化
 	{
 		transform_.position_.z = -45.0f;
@@ -311,6 +315,7 @@ void Player::NormalAttackAction()
 	if (attackTimer > NORMAL_ATTACK_TIME)
 	{
 		pEffect->StopEffectAtNormalAttack();
+		SoundEffectStop(SoundEffect::NormalAttack);
 		attackTimer = 0;
 		attackState = AttackState::NoAttack;
 	}
@@ -331,6 +336,7 @@ void Player::HardAttackAction()
 	if (attackTimer > HARD_ATTACK_TIME)
 	{
 		pEffect->StopEffectAtHardAttack();
+		SoundEffectStop(SoundEffect::HardAttack);
 		attackTimer = 0;
 		attackState = AttackState::NoAttack;
 	}
@@ -346,6 +352,12 @@ void Player::CharacterCheckHP()
 	if (hp <= 0)
 	{
 		//KillMe();
+	}
+
+	// 回復の効果音が再生終了していたら停止処理を行う
+	if (IsSoundEffectStop(SoundEffect::GaugeRecovery))
+	{
+		SoundEffectStop(SoundEffect::GaugeRecovery);
 	}
 }
 
@@ -681,7 +693,7 @@ void Player::HPRecovery(float value)
 		{
 			hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		}
-
+		SoundEffectPlay(SoundEffect::GaugeRecovery);
 		pGauge->Recovery(value);
 		pPotion->DawnPotionNumber();
 		
@@ -735,7 +747,7 @@ bool Player::IsAttackEntry()
 			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_B) || Input::IsMouseButtonDown(MouseBottunCode::LeftClick))
 			{
 				attackState = AttackState::NormalAttack;
-				//pSound->EffectPlay(SoundEffect::NormalAttack);
+				SoundEffectPlay(SoundEffect::NormalAttack);
 				return true;
 			}
 
@@ -743,7 +755,7 @@ bool Player::IsAttackEntry()
 			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_Y) || Input::IsMouseButtonDown(MouseBottunCode::RightClick))
 			{
 				attackState = AttackState::HardAttack;
-				//pSound->EffectPlay(SoundEffect::HardAttack);
+				SoundEffectPlay(SoundEffect::HardAttack);
 
 				return true;
 			}

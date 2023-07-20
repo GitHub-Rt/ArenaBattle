@@ -188,6 +188,13 @@ public:
 	void SoundEffectStop(SoundEffect effect);
 
 	/// <summary>
+	/// ゲーム効果音が再生終わったかどうかを取得する
+	/// </summary>
+	/// <param name="effect">該当エフェクト</param>
+	/// <returns>再生終了だったらtrue</returns>
+	bool IsSoundEffectStop(SoundEffect effect);
+
+	/// <summary>
 	/// 受けるダメージ量を返す
 	/// </summary>
 	/// <returns></returns>
