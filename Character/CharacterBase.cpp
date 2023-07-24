@@ -335,12 +335,14 @@ void CharacterBase::SetParameter(int hp_, int attack_, int defense_)
 	parameter.defense = defense_;
 }
 
-void CharacterBase::SoundEffectLoad(SoundEffect effect)
+int CharacterBase::SoundEffectLoad(SoundEffect effect)
 {
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 	GameSound* pSound = pManager->GetSound();
 
-	pSound->EffectLoad(effect);
+	int handle = pSound->EffectLoad(effect);
+
+	return handle;
 }
 
 void CharacterBase::SoundEffectPlay(SoundEffect effect)
@@ -359,10 +361,13 @@ void CharacterBase::SoundEffectStop(SoundEffect effect)
 	pSound->EffectStop(effect);
 }
 
-bool CharacterBase::IsSoundEffectStop(SoundEffect effect)
+bool CharacterBase::IsSoundEffectStop(SoundEffect effect, int handle)
 {
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 	GameSound* pSound = pManager->GetSound();
+
+	// ŠY“–Œø‰Ê‰¹‚ªÄ¶I—¹‚µ‚½‚©‚Ç‚¤‚©‚ðŠm”F‚·‚é
+	pSound->EffectEnd(effect, handle);
 
 	return pSound->GetEffectFlg(effect);
 }

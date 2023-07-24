@@ -114,6 +114,7 @@ private:
 	RecoveryPotion* pPotion;
 
 	// 全体変数
+	int hRecoveryEffect;	// 回復効果音の番号
 	float hp;				// 体力
 	XMFLOAT3 cameraPosition;	// カメラのポジション
 	XMFLOAT3 cameraFocus;		// カメラの焦点

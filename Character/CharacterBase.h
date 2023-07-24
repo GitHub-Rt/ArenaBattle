@@ -173,7 +173,7 @@ public:
 	/// ゲーム効果音をロードする関数
 	/// </summary>
 	/// <param name="effect">該当エフェクト</param>
-	void SoundEffectLoad(SoundEffect effect);
+	int SoundEffectLoad(SoundEffect effect);
 
 	/// <summary>
 	/// ゲーム効果音を再生する関数
@@ -191,8 +191,9 @@ public:
 	/// ゲーム効果音が再生終わったかどうかを取得する
 	/// </summary>
 	/// <param name="effect">該当エフェクト</param>
+	/// <param name="handle">該当効果音ハンドル</param>
 	/// <returns>再生終了だったらtrue</returns>
-	bool IsSoundEffectStop(SoundEffect effect);
+	bool IsSoundEffectStop(SoundEffect effect, int handle = -1);
 
 	/// <summary>
 	/// 受けるダメージ量を返す

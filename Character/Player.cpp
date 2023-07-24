@@ -52,6 +52,7 @@ Player::Player(GameObject* parent)
 	pGauge = nullptr;
 	pPotion = nullptr;
 
+	hRecoveryEffect = -1;
 	hp = 0;
 
 	isTrrigerReset = true;
@@ -92,7 +93,8 @@ void Player::Initialize()
 	CharacterModelLoad("player.fbx");
 	CharacterAddCollider(HIT_TEST_RANGE);
 
-	SoundEffectLoad(SoundEffect::GaugeRecovery);
+	// 効果音のロード(回復の効果音のみ番号取得する)
+	hRecoveryEffect = SoundEffectLoad(SoundEffect::GaugeRecovery);
 	SoundEffectLoad(SoundEffect::NormalAttack);
 	SoundEffectLoad(SoundEffect::HardAttack);
 
@@ -355,7 +357,7 @@ void Player::CharacterCheckHP()
 	}
 
 	// 回復の効果音が再生終了していたら停止処理を行う
-	if (IsSoundEffectStop(SoundEffect::GaugeRecovery))
+	if (IsSoundEffectStop(SoundEffect::GaugeRecovery, hRecoveryEffect))
 	{
 		SoundEffectStop(SoundEffect::GaugeRecovery);
 	}
