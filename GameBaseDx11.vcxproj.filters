@@ -87,6 +87,9 @@
     <Filter Include="08UI\UIObject\Potion">
       <UniqueIdentifier>{26f16ba9-28e4-40c6-9802-27a62fe592b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04Scene\Title, Start">
+      <UniqueIdentifier>{8ecbcafa-9b7b-4585-bd1a-d4bdc5016938}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -268,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="UI\RecorveryNumber.cpp">
       <Filter>08UI\UIObject\Potion</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>04Scene\Title, Start</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -453,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="UI\RecorveryNumber.h">
       <Filter>08UI\UIObject\Potion</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>04Scene\Title, Start</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

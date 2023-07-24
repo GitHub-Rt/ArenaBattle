@@ -172,6 +172,7 @@
     <ClCompile Include="Manager\EnemyManager.cpp" />
     <ClCompile Include="Scene\DebugScene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Sound\GameSound.cpp" />
     <ClCompile Include="Stage\BattleWall.cpp" />
     <ClCompile Include="Stage\NormalField.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="Manager\EnemyManager.h" />
     <ClInclude Include="Scene\DebugScene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Sound\GameSound.h" />
     <ClInclude Include="Stage\BattleWall.h" />
     <ClInclude Include="Stage\NormalField.h" />
