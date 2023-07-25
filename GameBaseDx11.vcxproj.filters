@@ -87,7 +87,22 @@
     <Filter Include="08UI\UIObject\Potion">
       <UniqueIdentifier>{26f16ba9-28e4-40c6-9802-27a62fe592b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04Scene\Title, Start">
+    <Filter Include="08UI\UIObject\Scene">
+      <UniqueIdentifier>{8fd0226c-2705-444e-a229-cbede69647ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\Scene\SceneImage">
+      <UniqueIdentifier>{d9b0d365-93a8-43fe-a30d-4033cf081580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\Scene\Image">
+      <UniqueIdentifier>{f68cf9e9-104d-461c-a976-42e23c71cacb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Scene\Play, Battle">
+      <UniqueIdentifier>{4f3a8d3f-28a5-4b6c-9998-c555fb7c24d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Scene\Result">
+      <UniqueIdentifier>{040e99fc-2b93-4fa9-9f2c-a202d18a85ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04Scene\Title, Start, Release">
       <UniqueIdentifier>{8ecbcafa-9b7b-4585-bd1a-d4bdc5016938}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -273,7 +288,49 @@
       <Filter>08UI\UIObject\Potion</Filter>
     </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
-      <Filter>04Scene\Title, Start</Filter>
+      <Filter>04Scene\Title, Start, Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\StartImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TitleImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\BackGroundImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SelectBox.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\StartScene.cpp">
+      <Filter>04Scene\Title, Start, Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\BattleScene.cpp">
+      <Filter>04Scene\Play, Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\PlayScene.cpp">
+      <Filter>04Scene\Play, Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ClearScene.cpp">
+      <Filter>04Scene\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\OverScene.cpp">
+      <Filter>04Scene\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ClearImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\OverImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ReleaseScene.cpp">
+      <Filter>04Scene\Title, Start, Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ReleaseImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\RetryImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,7 +518,49 @@
       <Filter>08UI\UIObject\Potion</Filter>
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
-      <Filter>04Scene\Title, Start</Filter>
+      <Filter>04Scene\Title, Start, Release</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\StartImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TitleImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\BackGroundImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SelectBox.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\StartScene.h">
+      <Filter>04Scene\Title, Start, Release</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\BattleScene.h">
+      <Filter>04Scene\Play, Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PlayScene.h">
+      <Filter>04Scene\Play, Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ClearScene.h">
+      <Filter>04Scene\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\OverScene.h">
+      <Filter>04Scene\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ClearImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\OverImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ReleaseScene.h">
+      <Filter>04Scene\Title, Start, Release</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ReleaseImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\RetryImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

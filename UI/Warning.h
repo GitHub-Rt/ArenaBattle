@@ -10,9 +10,6 @@ public:
 	void UIUpdate() override;
 	void Draw() override;
 
-	// 透明度を変更する関数
-	void ChangeAlpha();
-
 private:
 	int hPict;          //テキスト画像
 	int hPictBack;      //背景画像

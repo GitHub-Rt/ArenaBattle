@@ -43,9 +43,38 @@ void UIBase::UIRect(RectUI target,int handle, int num)
 	}
 }
 
-void UIBase::UIAlpha(int handle, int alpha)
+void UIBase::UIAlpha(int handle, float alpha)
 {
-	Image::SetAlpha(handle, alpha);
+	const int ALPHA = 255;              //透明度計算
+
+	Image::SetAlpha(handle, alpha * ALPHA);
+}
+
+float UIBase::UIChangeAlphaUp(float alpha)
+{
+	const int MAX_ALPHA = 1;            //不透明度の最大値
+	const float CHANGE_ALPHA = 0.25f;   //アルファ値の変化量
+
+	alpha += CHANGE_ALPHA;
+	if (alpha >= MAX_ALPHA)
+	{
+		alpha = MAX_ALPHA;
+	}
+
+	return alpha;
+}
+
+float UIBase::UIChangeAlphaDawn(float alpha)
+{
+	const float CHANGE_ALPHA = 0.25f;   //アルファ値の変化量
+
+	alpha -= CHANGE_ALPHA;
+	if (alpha <= 0)
+	{
+		alpha = 0;
+	}
+
+	return alpha;
 }
 
 void UIBase::Release()

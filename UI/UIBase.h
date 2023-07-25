@@ -20,7 +20,13 @@ public:
 	void UIRect(RectUI target,int handle, int num = 0);
 
 	// UIの透明度
-	void UIAlpha(int handle, int alpha);
+	void UIAlpha(int handle, float alpha);
+
+	// UIの透明度をあげる関数
+	float UIChangeAlphaUp(float alpha);
+
+	// UIの透明度を下げる関数
+	float UIChangeAlphaDawn(float alpha);
 
 	// 更新処理が必要なUIのみ呼ばれる
 	virtual void UIUpdate() {}

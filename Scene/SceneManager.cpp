@@ -8,8 +8,8 @@
 
 
 
-//#include "TitleScene.h"
-//#include "StartScene.h"
+#include "TitleScene.h"
+#include "StartScene.h"
 //#include "ReleaseScene.h"
 //#include "OperationScene.h"
 //#include "Operation2Scene.h"
@@ -35,15 +35,15 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//最初のシーンを準備
-	/*currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
+	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);*/
+	Instantiate<TitleScene>(this);
 
-	currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
+	/*currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<DebugScene>(this);
+	Instantiate<DebugScene>(this);*/
 }
 
 void SceneManager::Update()
@@ -61,15 +61,15 @@ void SceneManager::Update()
 		//次のシーンを作成
 		switch (nextSceneID_)
 		{
-		/*case SCENE_ID::SCENE_ID_TITLE:		Instantiate<TitleScene>(this);			break;
+		case SCENE_ID::SCENE_ID_TITLE:		Instantiate<TitleScene>(this);			break;
 		case SCENE_ID::SCENE_ID_START:		Instantiate<StartScene>(this);			break;
-		case SCENE_ID::SCENE_ID_RELEASE:	Instantiate<ReleaseScene>(this);		break;
-		case SCENE_ID::SCENE_ID_OPERATION:  Instantiate<OperationScene>(this);		break;
-		case SCENE_ID::SCENE_ID_OPERATION2: Instantiate<Operation2Scene>(this);		break;
-		case SCENE_ID::SCENE_ID_PLAY:       Instantiate<PlayScene>(this);			break;
-		case SCENE_ID::SCENE_ID_CLEAR:		Instantiate<ClearScene>(this);			break;
-		case SCENE_ID::SCENE_ID_OVER:		Instantiate<GameOverScene>(this);		break;
-		case SCENE_ID::SCENE_ID_BATTLE:		Instantiate<BattleScene>(this);			break;*/
+		//case SCENE_ID::SCENE_ID_RELEASE:	Instantiate<ReleaseScene>(this);		break;
+		//case SCENE_ID::SCENE_ID_OPERATION:  Instantiate<OperationScene>(this);		break;
+		//case SCENE_ID::SCENE_ID_OPERATION2: Instantiate<Operation2Scene>(this);		break;
+		//case SCENE_ID::SCENE_ID_PLAY:       Instantiate<PlayScene>(this);			break;
+		//case SCENE_ID::SCENE_ID_CLEAR:		Instantiate<ClearScene>(this);			break;
+		//case SCENE_ID::SCENE_ID_OVER:		Instantiate<GameOverScene>(this);		break;
+		//case SCENE_ID::SCENE_ID_BATTLE:		Instantiate<BattleScene>(this);			break;
 		case SCENE_ID::SCENE_ID_DEBUG:		Instantiate<DebugScene>(this);			break;
 		default:	break;
 		}

@@ -2,13 +2,14 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
-class TitleImage;
+class SelectBox;
 
-class TitleScene : public GameObject
+class StartScene : public GameObject
 {
 public:
 
-	TitleScene(GameObject* parent);
+	StartScene(GameObject* parent);
+	~StartScene();
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
@@ -17,6 +18,7 @@ public:
 private:
 
 	SceneManager* pManager;
-	TitleImage* pImage;
+	SelectBox* pBox;
+
 };
 

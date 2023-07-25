@@ -45,12 +45,7 @@ void DebugScene::Initialize()
 
 void DebugScene::Update()
 {
-	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START)
-#ifndef NDEBUG
-		|| Input::IsKeyDown(DIK_ESCAPE)
-#endif
-
-		)
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START) || Input::IsKeyDown(DIK_ESCAPE))
 	{
 		PostQuitMessage(0);	//ÉvÉçÉOÉâÉÄèIóπ
 	}
