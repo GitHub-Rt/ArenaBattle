@@ -26,7 +26,7 @@ void TitleScene::Update()
 {
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START) || Input::IsKeyDown(DIK_ESCAPE))
 	{
-		PostQuitMessage(0);	//ƒvƒƒOƒ‰ƒ€I—¹
+		pManager->ChangeScene(SCENE_ID::SCENE_ID_RELEASE);
 	}
 
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
