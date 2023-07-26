@@ -15,11 +15,13 @@
 
 // ’è”éŒ¾
 const int EnemyTimer = 30;	// “G‚ª‘S–Å‚µ‚Ä‚©‚çÄ“oê‚·‚é‚Ü‚Å‚ÌƒtƒŒ[ƒ€”
+const int ENEMY_COUNT = 3;
 
 DebugScene::DebugScene(GameObject* parent)
 	: GameObject(parent, "DebugScene")
 {
 	pBoss = nullptr;
+	pPlayer = nullptr;
 
 }
 

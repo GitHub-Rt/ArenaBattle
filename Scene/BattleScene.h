@@ -2,6 +2,9 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
+class EnemyBoss;
+class Player;
+
 
 class BattleScene : public GameObject
 {
@@ -17,6 +20,8 @@ public:
 private:
 
 	SceneManager* pManager;
+	EnemyBoss* pBoss;
+	Player* pPlayer;
 
 };
 

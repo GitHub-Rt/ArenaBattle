@@ -11,8 +11,8 @@
 #include "TitleScene.h"
 #include "StartScene.h"
 #include "ReleaseScene.h"
-//#include "OperationScene.h"
-//#include "Operation2Scene.h"
+#include "KeyboardOperationScene.h"
+#include "ControllerOperationScene.h"
 #include "PlayScene.h"
 #include "BattleScene.h"
 #include "ClearScene.h"
@@ -35,15 +35,15 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//ç≈èâÇÃÉVÅ[ÉìÇèÄîı
-	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
+	/*currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);
+	Instantiate<TitleScene>(this);*/
 
-	/*currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
+	currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<DebugScene>(this);*/
+	Instantiate<DebugScene>(this);
 }
 
 void SceneManager::Update()
@@ -64,8 +64,8 @@ void SceneManager::Update()
 		case SCENE_ID::SCENE_ID_TITLE:		Instantiate<TitleScene>(this);			break;
 		case SCENE_ID::SCENE_ID_START:		Instantiate<StartScene>(this);			break;
 		case SCENE_ID::SCENE_ID_RELEASE:	Instantiate<ReleaseScene>(this);		break;
-		//case SCENE_ID::SCENE_ID_OPERATION:  Instantiate<OperationScene>(this);		break;
-		//case SCENE_ID::SCENE_ID_OPERATION2: Instantiate<Operation2Scene>(this);		break;
+		case SCENE_ID::SCENE_ID_KEYBOARDOPERATION:  Instantiate<KeyboardOperationScene>(this);		break;
+		case SCENE_ID::SCENE_ID_CONTROLLEROPERATION: Instantiate<ControllerOperationScene>(this);		break;
 		case SCENE_ID::SCENE_ID_PLAY:       Instantiate<PlayScene>(this);			break;
 		case SCENE_ID::SCENE_ID_CLEAR:		Instantiate<ClearScene>(this);			break;
 		case SCENE_ID::SCENE_ID_OVER:		Instantiate<OverScene>(this);		break;

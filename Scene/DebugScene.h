@@ -4,7 +4,7 @@
 class EnemyBoss;
 class Player;
 
-const int ENEMY_COUNT = 3;
+
 
 class DebugScene : public GameObject
 {
