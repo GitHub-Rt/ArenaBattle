@@ -1,16 +1,16 @@
 #pragma once
 #include "UIBase.h"
 
-class ClearImage : public UIBase
+class LoadingImage : public UIBase
 {
 public:
 
-	ClearImage(GameObject* parent);
-	~ClearImage();
+	LoadingImage(GameObject* parent);
+	~LoadingImage();
 	void Initialize() override;
 	void UIUpdate() override;
 	void Draw() override;
-
+	
 private:
 
 	int hPict;

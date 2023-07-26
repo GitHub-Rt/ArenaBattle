@@ -332,6 +332,9 @@
     <ClCompile Include="UI\RetryImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
+    <ClCompile Include="UI\LoadingImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -560,6 +563,9 @@
       <Filter>08UI\UIObject\Scene\SceneImage</Filter>
     </ClInclude>
     <ClInclude Include="UI\RetryImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\LoadingImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
   </ItemGroup>

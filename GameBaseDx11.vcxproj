@@ -189,6 +189,7 @@
     <ClCompile Include="UI\ClearImage.cpp" />
     <ClCompile Include="UI\EnemyBossGauge.cpp" />
     <ClCompile Include="UI\HPGaugeBase.cpp" />
+    <ClCompile Include="UI\LoadingImage.cpp" />
     <ClCompile Include="UI\OverImage.cpp" />
     <ClCompile Include="UI\PlayerGauge.cpp" />
     <ClCompile Include="UI\RecorveryNumber.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="UI\ClearImage.h" />
     <ClInclude Include="UI\EnemyBossGauge.h" />
     <ClInclude Include="UI\HPGaugeBase.h" />
+    <ClInclude Include="UI\LoadingImage.h" />
     <ClInclude Include="UI\OverImage.h" />
     <ClInclude Include="UI\PlayerGauge.h" />
     <ClInclude Include="UI\RecorveryNumber.h" />

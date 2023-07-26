@@ -3,10 +3,13 @@
 
 #include "../Engine/Input.h"
 
+#include "../UI/BackGroundImage.h"
+#include "../UI/OverImage.h"
+
 OverScene::OverScene(GameObject* parent)
 	: GameObject(parent, "OverScene")
 {
-
+	pManager = nullptr;
 }
 
 OverScene::~OverScene()
@@ -16,7 +19,10 @@ OverScene::~OverScene()
 
 void OverScene::Initialize()
 {
+	pManager = (SceneManager*)FindObject("SceneManager");
 
+	Instantiate<BackGroundImage>(this);
+	Instantiate<OverImage>(this);
 }
 
 void OverScene::Update()
