@@ -27,7 +27,10 @@ void ClearScene::Initialize()
 
 void ClearScene::Update()
 {
-
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
+	{
+		pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+	}
 }
 
 void ClearScene::Draw()

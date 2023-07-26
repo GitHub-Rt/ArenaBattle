@@ -27,7 +27,10 @@ void OverScene::Initialize()
 
 void OverScene::Update()
 {
-
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
+	{
+		pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+	}
 }
 
 void OverScene::Draw()

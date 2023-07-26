@@ -105,6 +105,18 @@
     <Filter Include="04Scene\Title, Start, Release">
       <UniqueIdentifier>{8ecbcafa-9b7b-4585-bd1a-d4bdc5016938}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04Scene\Operation">
+      <UniqueIdentifier>{5e067454-52a2-4100-9890-e7e825c7daa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\Scene\SceneImage\Operation">
+      <UniqueIdentifier>{1b4c6700-3a6f-48ba-adc6-a91ee1a4d12b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\Scene\SceneImage\Result">
+      <UniqueIdentifier>{f3649895-7d71-408c-959e-bcc183064afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="08UI\UIObject\Scene\SceneImage\Title, Start, Release">
+      <UniqueIdentifier>{6844af61-b855-4664-b07f-b7c02ab0b25f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -290,12 +302,6 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>04Scene\Title, Start, Release</Filter>
     </ClCompile>
-    <ClCompile Include="UI\StartImage.cpp">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\TitleImage.cpp">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClCompile>
     <ClCompile Include="UI\BackGroundImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
@@ -317,23 +323,41 @@
     <ClCompile Include="Scene\OverScene.cpp">
       <Filter>04Scene\Result</Filter>
     </ClCompile>
-    <ClCompile Include="UI\ClearImage.cpp">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\OverImage.cpp">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\ReleaseScene.cpp">
       <Filter>04Scene\Title, Start, Release</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\ReleaseImage.cpp">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
     </ClCompile>
     <ClCompile Include="UI\RetryImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
     <ClCompile Include="UI\LoadingImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ControllerOperationScene.cpp">
+      <Filter>04Scene\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\KeyboardOperationScene.cpp">
+      <Filter>04Scene\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ControllerOperationImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\KeyboardOperationImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Operation</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ClearImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\OverImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ReleaseImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\StartImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TitleImage.cpp">
+      <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,12 +547,6 @@
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>04Scene\Title, Start, Release</Filter>
     </ClInclude>
-    <ClInclude Include="UI\StartImage.h">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\TitleImage.h">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClInclude>
     <ClInclude Include="UI\BackGroundImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
@@ -550,23 +568,41 @@
     <ClInclude Include="Scene\OverScene.h">
       <Filter>04Scene\Result</Filter>
     </ClInclude>
-    <ClInclude Include="UI\ClearImage.h">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\OverImage.h">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\ReleaseScene.h">
       <Filter>04Scene\Title, Start, Release</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\ReleaseImage.h">
-      <Filter>08UI\UIObject\Scene\SceneImage</Filter>
     </ClInclude>
     <ClInclude Include="UI\RetryImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
     <ClInclude Include="UI\LoadingImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ControllerOperationScene.h">
+      <Filter>04Scene\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\KeyboardOperationScene.h">
+      <Filter>04Scene\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ControllerOperationImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\KeyboardOperationImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Operation</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ClearImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\OverImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ReleaseImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\StartImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TitleImage.h">
+      <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
