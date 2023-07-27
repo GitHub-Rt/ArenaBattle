@@ -4,6 +4,12 @@
 class SceneManager;
 class SelectBox;
 
+enum class ReleaseState
+{
+	BackGame,
+	ExitGame
+};
+
 class ReleaseScene : public GameObject
 {
 public:
@@ -15,9 +21,13 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	// ó‘Ô‚ÆUI‚Ì•\¦ˆÊ’u‚ğ•ÏX‚·‚éŠÖ”
+	void ChangeStateUIPosition();
+
 private:
 
 	SceneManager* pManager;
 	SelectBox* pBox;
+	ReleaseState nowState;
 };
 

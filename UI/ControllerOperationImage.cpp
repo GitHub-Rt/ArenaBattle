@@ -13,7 +13,7 @@ ControllerOperationImage::~ControllerOperationImage()
 
 void ControllerOperationImage::Initialize()
 {
-	//hPict = UILoad("");
+	hPict = UILoad("ControllerOperationImage.png");
 }
 
 void ControllerOperationImage::UIUpdate()
@@ -23,5 +23,5 @@ void ControllerOperationImage::UIUpdate()
 
 void ControllerOperationImage::Draw()
 {
-	//UIDraw(hPict, transform_);
+	UIDraw(hPict, transform_);
 }

@@ -13,7 +13,7 @@ KeyboardOperationImage::~KeyboardOperationImage()
 
 void KeyboardOperationImage::Initialize()
 {
-	//hPict = UILoad("");
+	hPict = UILoad("KeyboardOperationImage.png");
 }
 
 void KeyboardOperationImage::UIUpdate()
@@ -23,5 +23,5 @@ void KeyboardOperationImage::UIUpdate()
 
 void KeyboardOperationImage::Draw()
 {
-	//UIDraw(hPict, transform_);
+	UIDraw(hPict, transform_);
 }
