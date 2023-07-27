@@ -59,8 +59,6 @@ void Enemy::Initialize()
 
 		hp = GetParameterValue(CharacterID::NormalEnemy, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
-
-		transform_.position_.y -= PositionAdjustment(transform_.position_);
 	}
 }
 

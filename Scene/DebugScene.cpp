@@ -22,13 +22,11 @@ DebugScene::DebugScene(GameObject* parent)
 {
 	pBoss = nullptr;
 	pPlayer = nullptr;
-
+	timer = 0;
 }
 
 void DebugScene::Initialize()
 {
-	
-
 	Instantiate<Stage>(this);
 
 	for (int i = 0; i < ENEMY_COUNT; i++)

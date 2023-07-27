@@ -50,4 +50,5 @@ void PlayScene::BattleStart()
 
 
 	pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
+	//pManager->ChangeScene(SCENE_ID::SCENE_ID_DEBUG);
 }

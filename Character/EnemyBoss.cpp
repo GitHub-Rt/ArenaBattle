@@ -75,7 +75,6 @@ void EnemyBoss::Initialize()
 	// •Ï”‚Ì‰Šú‰»
 	{
 		// ’…’n“_‚ÌyÀ•W‚ğİ’è
-		transform_.position_.y -= PositionAdjustment(transform_.position_);
 		ENTRY_POS_Y = transform_.position_.y;
 		firstPos = transform_.position_;
 		transform_.position_.y = ENTRY_FIRST_POS_Y;
