@@ -5,7 +5,10 @@
 class Stage : public StageBase
 {
 public:
+
     Stage(GameObject* parent);
     ~Stage();
     void Initialize() override; 
+    void Draw() override;
+
 };

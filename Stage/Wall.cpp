@@ -12,5 +12,10 @@ Wall::~Wall()
 void Wall::Initialize()
 {
     //•Çƒ‚ƒfƒ‹‚Ìƒ[ƒh
-    StageModelLoad("Stage/wall.fbx");
+    StageModelLoad("wall.fbx");
+}
+
+void Wall::Draw()
+{
+    StageDraw(transform_);
 }

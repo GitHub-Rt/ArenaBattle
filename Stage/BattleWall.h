@@ -4,8 +4,11 @@
 class BattleWall : public StageBase
 {
 public:
+	
 	BattleWall(GameObject* parent);
 	~BattleWall();
 	void Initialize()  override;
+	void Draw() override;
+
 };
 

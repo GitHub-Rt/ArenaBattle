@@ -72,7 +72,8 @@ public:
 	void DamageMotion();
 	void SetDamageDirection(XMVECTOR dir) { vTraveling = dir; }
 
-	// HPゲージ周り
+	// HP周り
+	float GetHP() { return hp; }
 	void HPDamage(float value);		// HPゲージ減少、hp減少
 	void HPRecovery(float value);	// HPゲージ増加、hp増加
 	
@@ -86,14 +87,6 @@ public:
 	bool IsAttackEntry();		// 攻撃周りの入力
 	bool IsRecoverEntry();		// 回復周りの入力
 	bool IsJumpEntry();			// ジャンプ周りの入力
-
-#ifdef _DEBUG
-
-	float GetHP() { return hp; }
-
-	
-
-#endif
 
 private:
 

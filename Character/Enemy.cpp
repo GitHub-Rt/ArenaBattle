@@ -341,8 +341,6 @@ void Enemy::OnCollision(GameObject* pTarget, Collider* nowCollider)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
-		
-
 		Player* pPlayer = (Player*)FindObject("Player");
 
 		if (pPlayer->IsStateSet(CharacterState::Dodging) == false)

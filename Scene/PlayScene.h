@@ -14,6 +14,9 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	// バトル開始するための処理
+	void BattleStart();
+
 private:
 
 	SceneManager* pManager;

@@ -5,7 +5,10 @@
 class NormalField : public StageBase
 {
 public:
+
     NormalField(GameObject* parent);
     ~NormalField();
     void Initialize() override;
+    void Draw() override;
+
 };

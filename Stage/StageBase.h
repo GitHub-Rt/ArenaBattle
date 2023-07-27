@@ -8,9 +8,10 @@ public:
 	~StageBase();
 	void Update() override;
 	void Release() override;
-	void Draw() override;
 	void StageModelLoad(std::string fileName);
+	void StageDraw(Transform trans);
 	int GetModelHandle() { return hModel; }
+	
 
 private:
 	int hModel;

@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 
 #include "../Stage/Stage.h"
+#include "../Stage/BattleWall.h"
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
 #include "../Character/Enemy.h"
@@ -27,7 +28,10 @@ BattleScene::~BattleScene()
 
 void BattleScene::Initialize()
 {
+	pManager = (SceneManager*)FindObject("SceneManager");
+
 	Instantiate<Stage>(this);
+	Instantiate<BattleWall>(this);
 
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
@@ -54,6 +58,21 @@ void BattleScene::Update()
 			pBoss->ProcessStart();
 		}
 	}
+
+	// Resultシーンへの移行処理
+	{
+		if (pPlayer->GetHP() <= 0)
+		{
+			// リトライするかどうかの確認の機能追加予定
+			pManager->ChangeScene(SCENE_ID::SCENE_ID_OVER);
+		}
+
+		if (pBoss->GetHP() <= 0)
+		{
+			pManager->ChangeScene(SCENE_ID::SCENE_ID_CLEAR);
+		}
+	}
+	
 }
 
 void BattleScene::Draw()

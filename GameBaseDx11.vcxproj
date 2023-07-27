@@ -182,6 +182,7 @@
     <ClCompile Include="Scene\StartScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Sound\GameSound.cpp" />
+    <ClCompile Include="Stage\BattleStartCylinder.cpp" />
     <ClCompile Include="Stage\BattleWall.cpp" />
     <ClCompile Include="Stage\NormalField.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="Scene\StartScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Sound\GameSound.h" />
+    <ClInclude Include="Stage\BattleStartCylinder.h" />
     <ClInclude Include="Stage\BattleWall.h" />
     <ClInclude Include="Stage\NormalField.h" />
     <ClInclude Include="Stage\Stage.h" />

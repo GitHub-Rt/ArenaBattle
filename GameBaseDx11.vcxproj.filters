@@ -359,6 +359,9 @@
     <ClCompile Include="UI\TitleImage.cpp">
       <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\BattleStartCylinder.cpp">
+      <Filter>05Stage\StageObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -603,6 +606,9 @@
     </ClInclude>
     <ClInclude Include="UI\TitleImage.h">
       <Filter>08UI\UIObject\Scene\SceneImage\Title, Start, Release</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\BattleStartCylinder.h">
+      <Filter>05Stage\StageObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

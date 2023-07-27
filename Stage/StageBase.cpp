@@ -17,19 +17,19 @@ void StageBase::Update()
 
 }
 
-
-void StageBase::Draw()
-{
-	Model::SetTransform(hModel, transform_);
-	Model::Draw(hModel);
-}
-
 void StageBase::Release()
 {
 }
 
 void StageBase::StageModelLoad(std::string fileName)
 {
-	hModel = Model::Load(fileName);
+	hModel = Model::Load("Stage/" + fileName);
 	assert(hModel >= 0);
+}
+
+void StageBase::StageDraw(Transform trans)
+{
+	Model::SetTransform(hModel, trans);
+	Model::Draw(hModel);
+
 }

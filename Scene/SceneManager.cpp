@@ -35,10 +35,10 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//Å‰‚ÌƒV[ƒ“‚ğ€”õ
-	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
+	currentSceneID_ = SCENE_ID::SCENE_ID_PLAY;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);
+	Instantiate<PlayScene>(this);
 
 	/*currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;

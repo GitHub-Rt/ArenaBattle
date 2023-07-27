@@ -12,7 +12,12 @@ NormalField::~NormalField()
 void NormalField::Initialize()
 {
     //°ƒ‚ƒfƒ‹‚Ìƒ[ƒh
-    StageModelLoad("Stage/stage.fbx");
+    StageModelLoad("stage.fbx");
+}
+
+void NormalField::Draw()
+{
+    StageDraw(transform_);
 }
 
 

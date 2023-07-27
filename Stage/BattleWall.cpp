@@ -13,5 +13,10 @@ BattleWall::~BattleWall()
 
 void BattleWall::Initialize()
 {
-	StageModelLoad("Stage/BattleWall.fbx");
+	StageModelLoad("BattleWall.fbx");
+}
+
+void BattleWall::Draw()
+{
+	StageDraw(transform_);
 }

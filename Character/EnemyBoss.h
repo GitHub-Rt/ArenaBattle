@@ -95,7 +95,6 @@ public:
 
 
 	// 各攻撃の関数
-
 	void BulletAttackAction();
 	void BulletAttackCal(std::string dirName);	// 弾攻撃に必要な計算を行いスタートさせる関数
 	void SpiralMoveAttackAction();
@@ -118,16 +117,10 @@ public:
 	// Update等の処理を開始する関数
 	void ProcessStart();
 
-
 	// 初期位置周辺に戻ってきたかどうか(戻ってきたらtrue)
 	bool IsFirstPosAround(XMFLOAT3 pos);
 
-#ifdef  _DEBUG
-
 	float GetHP() { return hp; }
-
-#endif
-
 
 private:
 	

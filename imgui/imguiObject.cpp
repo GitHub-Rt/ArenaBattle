@@ -109,6 +109,10 @@ void imguiObject::Update()
 
                             ImGui::Text("HP : %g", pEnemy->GetHP());
 
+                            ImGui::Text("position_x : %g", pEnemy->GetPosition().x);
+                            ImGui::Text("position_y : %g", pEnemy->GetPosition().y);
+                            ImGui::Text("position_z : %g", pEnemy->GetPosition().z);
+
 
                             std::string damegeStr = "isDamage : ";
                             if (pEnemy->IsDamage())

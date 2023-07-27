@@ -5,8 +5,11 @@
 class Wall : public StageBase
 {
 public:
+
     Wall(GameObject* parent);
     ~Wall();
     void Initialize() override;
+    void Draw() override;
+
 };
 
