@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
+class GameSound;
 
 class ClearScene : public GameObject
 {
@@ -17,6 +18,7 @@ public:
 private:
 
 	SceneManager* pManager;
+	GameSound* pSound;
 
 };
 

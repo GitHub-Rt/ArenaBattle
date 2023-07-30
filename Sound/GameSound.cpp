@@ -21,7 +21,7 @@ GameSound::GameSound()
 		case (int)SoundTrack::PlaySceneSound:
 			track[i].fileName = "Audio/MusMus-BGM-036.wav";
 			break;
-		case (int)SoundTrack::ButtleSound:
+		case (int)SoundTrack::BattleSound:
 			track[i].fileName = "Audio/MusMus-BGM-069.wav";
 			break;
 		case (int)SoundTrack::BossSound:

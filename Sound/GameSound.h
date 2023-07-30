@@ -6,7 +6,7 @@ enum class SoundTrack
 {
 	TitleSound = 0,	// タイトルシーン等の音楽
 	PlaySceneSound,		// プレイシーンの音楽
-	ButtleSound,	// ノーマル敵との戦闘音楽
+	BattleSound,	// ノーマル敵との戦闘音楽
 	BossSound,		// ボス戦の戦闘音楽
 	LastBossSound,	// 第2形態のボス戦の戦闘音楽
 	ClearSound,		// クリア時の音楽
