@@ -26,6 +26,12 @@ void ClearScene::Initialize()
 
 	pSound->SoundLoad(SoundTrack::ClearSound);
 
+	if (pManager->GetClearFlg() == false)
+	{
+		// クリアしたことをセットする
+		pManager->SetClearedFlg();
+	}
+
 	Instantiate<BackGroundImage>(this);
 	Instantiate<ClearImage>(this);
 

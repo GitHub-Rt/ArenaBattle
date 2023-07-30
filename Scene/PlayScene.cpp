@@ -9,11 +9,15 @@
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
 
+#include "../UI/LevelSelectImage.h"
+#include "../UI/SelectBox.h"
+
 PlayScene::PlayScene(GameObject* parent)
 	: GameObject(parent, "PlayScene")
 {
 	pManager = nullptr;
 	pSound = nullptr;
+	pBox = nullptr;
 }
 
 PlayScene::~PlayScene()
@@ -64,8 +68,16 @@ void PlayScene::Release()
 void PlayScene::BattleStart()
 {
 	// “ñŽü–Ú‚©‚Ç‚¤‚©‚ð’²‚×‚ÄŠY“–‚µ‚Ä‚¢‚½‚ç‰æ‘œ‚Å“ïˆÕ“x‘I‘ð‚ðs‚í‚¹‚é—\’è
+	if (pManager->GetClearFlg())
+	{
+		Instantiate<LevelSelectImage>(this);
+		pBox = Instantiate<SelectBox>(this);
 
-	pSound->SoundStop(SoundTrack::PlaySceneSound);
-	pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
-	//pManager->ChangeScene(SCENE_ID::SCENE_ID_DEBUG);
+
+	}
+	else
+	{
+		pSound->SoundStop(SoundTrack::PlaySceneSound);
+		pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
+	}
 }

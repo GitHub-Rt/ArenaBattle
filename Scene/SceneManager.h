@@ -53,10 +53,18 @@ public:
 	/// <returns></returns>
 	GameSound* GetSound() { return pSound; }
 
+	// 一周目(Easy)をクリアしたときに呼ぶ関数
+	void SetClearedFlg() { isCleared = true; }
+
+
+	bool GetClearFlg() { return isCleared; }
+
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
 	SCENE_ID prevSceneID_;		//前回のシーン
 
 	GameSound* pSound;
+
+	bool isCleared;				// クリアしたかどうか
 };

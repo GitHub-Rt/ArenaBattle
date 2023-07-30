@@ -362,6 +362,9 @@
     <ClCompile Include="Stage\BattleStartCylinder.cpp">
       <Filter>05Stage\StageObject</Filter>
     </ClCompile>
+    <ClCompile Include="UI\LevelSelectImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -609,6 +612,9 @@
     </ClInclude>
     <ClInclude Include="Stage\BattleStartCylinder.h">
       <Filter>05Stage\StageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\LevelSelectImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

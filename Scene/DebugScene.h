@@ -1,10 +1,10 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
-class EnemyBoss;
-class Player;
+//class EnemyBoss;
+//class Player;
 
-
+class SelectBox;
 
 class DebugScene : public GameObject
 {
@@ -17,7 +17,10 @@ public:
 	void Release() override;
 
 private:
-	EnemyBoss* pBoss;
+
+	/*EnemyBoss* pBoss;
 	Player* pPlayer;
-	int timer;
+	int timer;*/
+
+	SelectBox* pBox;
 };

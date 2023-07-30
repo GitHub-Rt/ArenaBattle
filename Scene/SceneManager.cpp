@@ -28,6 +28,8 @@ SceneManager::SceneManager(GameObject * parent)
 	prevSceneID_ = SCENE_ID::MAX_SCENE_ID;
 
 	pSound = nullptr;
+
+	isCleared = false;
 }
 
 void SceneManager::Initialize()
@@ -35,15 +37,15 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//ç≈èâÇÃÉVÅ[ÉìÇèÄîı
-	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
+	/*currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);
+	Instantiate<TitleScene>(this);*/
 
-	/*currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
+	currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<DebugScene>(this);*/
+	Instantiate<DebugScene>(this);
 }
 
 void SceneManager::Update()

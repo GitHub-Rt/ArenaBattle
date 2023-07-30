@@ -3,6 +3,7 @@
 
 class SceneManager;
 class GameSound;
+class SelectBox;
 
 class PlayScene : public GameObject
 {
@@ -22,5 +23,6 @@ private:
 
 	SceneManager* pManager;
 	GameSound* pSound;
+	SelectBox* pBox;
 };
 

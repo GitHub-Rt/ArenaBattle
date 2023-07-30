@@ -194,6 +194,7 @@
     <ClCompile Include="UI\EnemyBossGauge.cpp" />
     <ClCompile Include="UI\HPGaugeBase.cpp" />
     <ClCompile Include="UI\KeyboardOperationImage.cpp" />
+    <ClCompile Include="UI\LevelSelectImage.cpp" />
     <ClCompile Include="UI\LoadingImage.cpp" />
     <ClCompile Include="UI\OverImage.cpp" />
     <ClCompile Include="UI\PlayerGauge.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="UI\EnemyBossGauge.h" />
     <ClInclude Include="UI\HPGaugeBase.h" />
     <ClInclude Include="UI\KeyboardOperationImage.h" />
+    <ClInclude Include="UI\LevelSelectImage.h" />
     <ClInclude Include="UI\LoadingImage.h" />
     <ClInclude Include="UI\OverImage.h" />
     <ClInclude Include="UI\PlayerGauge.h" />
