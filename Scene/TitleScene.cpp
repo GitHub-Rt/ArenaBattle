@@ -11,15 +11,22 @@ TitleScene::TitleScene(GameObject* parent)
 	: GameObject(parent, "TitleScene")
 {
 	pManager = nullptr;
+	pSound = nullptr;
 	pImage = nullptr;
 }
 
 void TitleScene::Initialize()
 {
 	pManager = (SceneManager*)FindObject("SceneManager");
+	pSound = pManager->GetSound();
+	
+	pSound->SoundLoad(SoundTrack::TitleSound);
+	pSound->EffectLoad(SoundEffect::Determinant);
 	
 	Instantiate<BackGroundImage>(this);
 	pImage = Instantiate<TitleImage>(this);
+
+	pSound->SoundPlay(SoundTrack::TitleSound);
 }
 
 void TitleScene::Update()
@@ -31,6 +38,13 @@ void TitleScene::Update()
 
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 	{
+		if (pSound->GetEffectFlg(SoundEffect::Determinant))
+		{
+			pSound->EffectStop(SoundEffect::Determinant);
+		}
+
+		pSound->EffectPlay(SoundEffect::Determinant);
+
 		// まだタイトル画像が不透明じゃない状態だったら不透明にする
 		if (pImage->GetAlpha() != 1)
 		{

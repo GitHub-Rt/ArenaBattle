@@ -35,10 +35,10 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//Å‰‚ÌƒV[ƒ“‚ğ€”õ
-	currentSceneID_ = SCENE_ID::SCENE_ID_PLAY;
+	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<PlayScene>(this);
+	Instantiate<TitleScene>(this);
 
 	/*currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;
@@ -73,7 +73,7 @@ void SceneManager::Update()
 		case SCENE_ID::SCENE_ID_DEBUG:		Instantiate<DebugScene>(this);			break;
 		default:	break;
 		}
-		pSound->SetEffectALLFalse();
+		//pSound->SetEffectALLFalse();
 		currentSceneID_ = nextSceneID_;
 	}
 }

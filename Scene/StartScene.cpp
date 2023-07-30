@@ -1,6 +1,7 @@
 #include "StartScene.h"
 
 #include "SceneManager.h"
+#include "../Sound/GameSound.h"
 #include "../UI/BackGroundImage.h"
 #include "../UI/StartImage.h"
 #include "../UI/SelectBox.h"
@@ -18,6 +19,7 @@ StartScene::StartScene(GameObject* parent)
 	: GameObject(parent, "StartScene")
 {
 	pManager = nullptr;
+	pSound = nullptr;
 	pBox = nullptr;
 	nowState = StartState::GameStart;
 }
@@ -30,6 +32,10 @@ StartScene::~StartScene()
 void StartScene::Initialize()
 {
 	pManager = (SceneManager*)FindObject("SceneManager");
+	pSound = pManager->GetSound();
+
+	pSound->EffectLoad(SoundEffect::Determinant);
+	pSound->EffectLoad(SoundEffect::MoveSelection);
 
 	Instantiate<BackGroundImage>(this);
 	Instantiate<StartImage>(this);
@@ -50,9 +56,16 @@ void StartScene::Update()
 	// 該当するシーンに遷移する
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 	{
+		if (pSound->GetEffectFlg(SoundEffect::Determinant))
+		{
+			pSound->EffectStop(SoundEffect::Determinant);
+		}
+		pSound->EffectPlay(SoundEffect::Determinant);
+
 		switch (nowState)
 		{
 		case StartState::GameStart:
+			pSound->SoundStop(SoundTrack::TitleSound);
 			pManager->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
 			break;
 		case StartState::Controller:
@@ -85,6 +98,12 @@ void StartScene::ChangeStateUIPosition()
 
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
 	{
+		if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
+		{
+			pSound->EffectStop(SoundEffect::MoveSelection);
+		}
+		pSound->EffectPlay(SoundEffect::MoveSelection);
+
 		// 一番下の項目が今の状態ではないかを確認
 		if (nowState != StartState::Keyboard)
 		{
@@ -96,6 +115,12 @@ void StartScene::ChangeStateUIPosition()
 	}
 	else if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP) || Input::IsKeyDown(DIK_UP))
 	{
+		if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
+		{
+			pSound->EffectStop(SoundEffect::MoveSelection);
+		}
+		pSound->EffectPlay(SoundEffect::MoveSelection);
+
 		// 一番上の項目が今の状態ではないかを確認
 		if (nowState != StartState::GameStart)
 		{

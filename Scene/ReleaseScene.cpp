@@ -1,6 +1,7 @@
 #include "ReleaseScene.h"
 
 #include "SceneManager.h"
+#include "../Sound/GameSound.h"
 #include "../UI/BackGroundImage.h"
 #include "../UI/ReleaseImage.h"
 #include "../UI/SelectBox.h"
@@ -16,6 +17,7 @@ ReleaseScene::ReleaseScene(GameObject* parent)
 	: GameObject(parent, "ReleaseScene")
 {
 	pManager = nullptr;
+	pSound = nullptr;
 	pBox = nullptr;
 	nowState = ReleaseState::BackGame;
 }
@@ -28,6 +30,16 @@ ReleaseScene::~ReleaseScene()
 void ReleaseScene::Initialize()
 {
 	pManager = (SceneManager*)FindObject("SceneManager");
+	pSound = pManager->GetSound();
+
+
+	if (pManager->GetPrevScene() == SCENE_ID::SCENE_ID_PLAY)
+	{
+		pSound->SoundLoad(SoundTrack::TitleSound);
+		pSound->SoundStop(SoundTrack::PlaySceneSound);
+		pSound->SoundPlay(SoundTrack::TitleSound);
+	}
+
 
 	Instantiate<BackGroundImage>(this);
 	Instantiate<ReleaseImage>(this);

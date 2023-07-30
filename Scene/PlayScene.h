@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
+class GameSound;
 
 class PlayScene : public GameObject
 {
@@ -20,6 +21,6 @@ public:
 private:
 
 	SceneManager* pManager;
-
+	GameSound* pSound;
 };
 

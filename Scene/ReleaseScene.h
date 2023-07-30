@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
+class GameSound;
 class SelectBox;
 
 enum class ReleaseState
@@ -27,6 +28,7 @@ public:
 private:
 
 	SceneManager* pManager;
+	GameSound* pSound;
 	SelectBox* pBox;
 	ReleaseState nowState;
 };

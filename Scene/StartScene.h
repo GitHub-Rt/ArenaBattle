@@ -2,6 +2,7 @@
 #include "../Engine/GameObject.h"
 
 class SceneManager;
+class GameSound;
 class SelectBox;
 
 // StartScene‚Ì‘JˆÚæ
@@ -29,6 +30,7 @@ public:
 private:
 
 	SceneManager* pManager;
+	GameSound* pSound;
 	SelectBox* pBox;
 	StartState nowState;
 };
