@@ -18,9 +18,13 @@ const int ROBOT_PARAMTER = 2;
 const int NORMALENEMY_PARAMTER = 3;
 const int BOSSENEMY_PARAMTER = 4;
 
+const int HARD_MAX_HP = 4;
+const int HARD_ATTACK = 5;
+const int HARD_DEFENCE = 6;
 
 // InternalDataCSV‚Ì”Ô†
 const int INTERNALDATA = 1;
+const int HARD_INTERNALDATA = 2;
 
 
 CharacterBase::CharacterBase(GameObject* parent, std::string fileName)
@@ -234,72 +238,149 @@ float CharacterBase::PositionAdjustment(XMFLOAT3 position)
 
 void CharacterBase::SetParameter(CharacterID id)
 {
-	switch (id)
-	{
-	case CharacterID::Player:
-		SetParameter(
-			parameter.hp = ParameterCSV.GetValue(MAX_HP, PLAYER_PARAMTER),
-			parameter.attack = ParameterCSV.GetValue(ATTACK, PLAYER_PARAMTER),
-			parameter.defense = ParameterCSV.GetValue(DEFENCE, PLAYER_PARAMTER));
-		break;
-	case CharacterID::Robot:
-		SetParameter(
-			parameter.hp = ParameterCSV.GetValue(MAX_HP, ROBOT_PARAMTER),
-			parameter.attack = ParameterCSV.GetValue(ATTACK, ROBOT_PARAMTER),
-			parameter.defense = ParameterCSV.GetValue(DEFENCE, ROBOT_PARAMTER));
-		break;
-	case CharacterID::NormalEnemy:
-		SetParameter(
-			parameter.hp = ParameterCSV.GetValue(MAX_HP, NORMALENEMY_PARAMTER),
-			parameter.attack = ParameterCSV.GetValue(ATTACK, NORMALENEMY_PARAMTER),
-			parameter.defense = ParameterCSV.GetValue(DEFENCE, NORMALENEMY_PARAMTER));
-		break;
-	case CharacterID::EnemyBoss:
-		SetParameter(
-			parameter.hp = ParameterCSV.GetValue(MAX_HP, BOSSENEMY_PARAMTER),
-			parameter.attack = ParameterCSV.GetValue(ATTACK, BOSSENEMY_PARAMTER),
-			parameter.defense = ParameterCSV.GetValue(DEFENCE, BOSSENEMY_PARAMTER));
-		break;
-	default:
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 
-		break;
+	if (pManager->GetHardMode())
+	{
+		switch (id)
+		{
+		case CharacterID::Player:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(HARD_MAX_HP, PLAYER_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(HARD_ATTACK, PLAYER_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(HARD_DEFENCE, PLAYER_PARAMTER));
+			break;
+		case CharacterID::Robot:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(HARD_MAX_HP, ROBOT_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(HARD_ATTACK, ROBOT_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(HARD_DEFENCE, ROBOT_PARAMTER));
+			break;
+		case CharacterID::NormalEnemy:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(HARD_MAX_HP, NORMALENEMY_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(HARD_ATTACK, NORMALENEMY_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(HARD_DEFENCE, NORMALENEMY_PARAMTER));
+			break;
+		case CharacterID::EnemyBoss:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(HARD_MAX_HP, BOSSENEMY_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(HARD_ATTACK, BOSSENEMY_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(HARD_DEFENCE, BOSSENEMY_PARAMTER));
+			break;
+		default:
+
+			break;
+		}
 	}
+	else
+	{
+		switch (id)
+		{
+		case CharacterID::Player:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(MAX_HP, PLAYER_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(ATTACK, PLAYER_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(DEFENCE, PLAYER_PARAMTER));
+			break;
+		case CharacterID::Robot:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(MAX_HP, ROBOT_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(ATTACK, ROBOT_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(DEFENCE, ROBOT_PARAMTER));
+			break;
+		case CharacterID::NormalEnemy:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(MAX_HP, NORMALENEMY_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(ATTACK, NORMALENEMY_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(DEFENCE, NORMALENEMY_PARAMTER));
+			break;
+		case CharacterID::EnemyBoss:
+			SetParameter(
+				parameter.hp = ParameterCSV.GetValue(MAX_HP, BOSSENEMY_PARAMTER),
+				parameter.attack = ParameterCSV.GetValue(ATTACK, BOSSENEMY_PARAMTER),
+				parameter.defense = ParameterCSV.GetValue(DEFENCE, BOSSENEMY_PARAMTER));
+			break;
+		default:
+
+			break;
+		}
+	}
+	
 }
 
 Parameters CharacterBase::GetParameter(CharacterID id)
 {
 	Parameters data = { 0,0,0 };
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 
-	switch (id)
+	if (pManager->GetHardMode())
 	{
-	case CharacterID::Player:
-		SetParameter(
-			data.hp = ParameterCSV.GetValue(MAX_HP, PLAYER_PARAMTER),
-			data.attack = ParameterCSV.GetValue(ATTACK, PLAYER_PARAMTER),
-			data.defense = ParameterCSV.GetValue(DEFENCE, PLAYER_PARAMTER));
-		break;
-	case CharacterID::Robot:
-		SetParameter(
-			data.hp = ParameterCSV.GetValue(MAX_HP, ROBOT_PARAMTER),
-			data.attack = ParameterCSV.GetValue(ATTACK, ROBOT_PARAMTER),
-			data.defense = ParameterCSV.GetValue(DEFENCE, ROBOT_PARAMTER));
-		break;
-	case CharacterID::NormalEnemy:
-		SetParameter(
-			data.hp = ParameterCSV.GetValue(MAX_HP, NORMALENEMY_PARAMTER),
-			data.attack = ParameterCSV.GetValue(ATTACK, NORMALENEMY_PARAMTER),
-			data.defense = ParameterCSV.GetValue(DEFENCE, NORMALENEMY_PARAMTER));
-		break;
-	case CharacterID::EnemyBoss:
-		SetParameter(
-			data.hp = ParameterCSV.GetValue(MAX_HP, BOSSENEMY_PARAMTER),
-			data.attack = ParameterCSV.GetValue(ATTACK, BOSSENEMY_PARAMTER),
-			data.defense = ParameterCSV.GetValue(DEFENCE, BOSSENEMY_PARAMTER));
-		break;
-	default:
+		switch (id)
+		{
+		case CharacterID::Player:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(HARD_MAX_HP, PLAYER_PARAMTER),
+				data.attack = ParameterCSV.GetValue(HARD_ATTACK, PLAYER_PARAMTER),
+				data.defense = ParameterCSV.GetValue(HARD_DEFENCE, PLAYER_PARAMTER));
+			break;
+		case CharacterID::Robot:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(HARD_MAX_HP, ROBOT_PARAMTER),
+				data.attack = ParameterCSV.GetValue(HARD_ATTACK, ROBOT_PARAMTER),
+				data.defense = ParameterCSV.GetValue(HARD_DEFENCE, ROBOT_PARAMTER));
+			break;
+		case CharacterID::NormalEnemy:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(HARD_MAX_HP, NORMALENEMY_PARAMTER),
+				data.attack = ParameterCSV.GetValue(HARD_ATTACK, NORMALENEMY_PARAMTER),
+				data.defense = ParameterCSV.GetValue(HARD_DEFENCE, NORMALENEMY_PARAMTER));
+			break;
+		case CharacterID::EnemyBoss:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(HARD_MAX_HP, BOSSENEMY_PARAMTER),
+				data.attack = ParameterCSV.GetValue(HARD_ATTACK, BOSSENEMY_PARAMTER),
+				data.defense = ParameterCSV.GetValue(HARD_DEFENCE, BOSSENEMY_PARAMTER));
+			break;
+		default:
 
-		break;
+			break;
+		}
 	}
+	else
+	{
+		switch (id)
+		{
+		case CharacterID::Player:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(MAX_HP, PLAYER_PARAMTER),
+				data.attack = ParameterCSV.GetValue(ATTACK, PLAYER_PARAMTER),
+				data.defense = ParameterCSV.GetValue(DEFENCE, PLAYER_PARAMTER));
+			break;
+		case CharacterID::Robot:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(MAX_HP, ROBOT_PARAMTER),
+				data.attack = ParameterCSV.GetValue(ATTACK, ROBOT_PARAMTER),
+				data.defense = ParameterCSV.GetValue(DEFENCE, ROBOT_PARAMTER));
+			break;
+		case CharacterID::NormalEnemy:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(MAX_HP, NORMALENEMY_PARAMTER),
+				data.attack = ParameterCSV.GetValue(ATTACK, NORMALENEMY_PARAMTER),
+				data.defense = ParameterCSV.GetValue(DEFENCE, NORMALENEMY_PARAMTER));
+			break;
+		case CharacterID::EnemyBoss:
+			SetParameter(
+				data.hp = ParameterCSV.GetValue(MAX_HP, BOSSENEMY_PARAMTER),
+				data.attack = ParameterCSV.GetValue(ATTACK, BOSSENEMY_PARAMTER),
+				data.defense = ParameterCSV.GetValue(DEFENCE, BOSSENEMY_PARAMTER));
+			break;
+		default:
+
+			break;
+		}
+	}
+	
 
 	return data;
 }
@@ -374,87 +455,197 @@ bool CharacterBase::IsSoundEffectStop(SoundEffect effect, int handle)
 
 int CharacterBase::GetPlayerStatusValue(CharacterStatus status)
 {
-	switch (status)
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+	if (pManager->GetHardMode())
 	{
-	case CharacterStatus::HP:
-		return ParameterCSV.GetValue(MAX_HP, PLAYER_PARAMTER);
-		break;
-	case CharacterStatus::AttackPower:
-		return ParameterCSV.GetValue(ATTACK, PLAYER_PARAMTER);
-		break;
-	case CharacterStatus::DefensePower:
-		return ParameterCSV.GetValue(DEFENCE, PLAYER_PARAMTER);
-		break;
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(HARD_MAX_HP, PLAYER_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(HARD_ATTACK, PLAYER_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(HARD_DEFENCE, PLAYER_PARAMTER);
+			break;
+		}
 	}
+	else
+	{
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(MAX_HP, PLAYER_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(ATTACK, PLAYER_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(DEFENCE, PLAYER_PARAMTER);
+			break;
+		}
+	}
+	
 }
 
 int CharacterBase::GetRobotStatusValue(CharacterStatus status)
 {
-	switch (status)
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+	if (pManager->GetHardMode())
 	{
-	case CharacterStatus::HP:
-		return ParameterCSV.GetValue(MAX_HP, ROBOT_PARAMTER);
-		break;
-	case CharacterStatus::AttackPower:
-		return ParameterCSV.GetValue(ATTACK, ROBOT_PARAMTER);
-		break;
-	case CharacterStatus::DefensePower:
-		return ParameterCSV.GetValue(DEFENCE, ROBOT_PARAMTER);
-		break;
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(HARD_MAX_HP, ROBOT_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(HARD_ATTACK, ROBOT_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(HARD_DEFENCE, ROBOT_PARAMTER);
+			break;
+		}
 	}
+	else
+	{
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(MAX_HP, ROBOT_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(ATTACK, ROBOT_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(DEFENCE, ROBOT_PARAMTER);
+			break;
+		}
+	}
+	
 }
 
 int CharacterBase::GetNormalEnemyStatusValue(CharacterStatus status)
 {
-	switch (status)
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+	if (pManager->GetHardMode())
 	{
-	case CharacterStatus::HP:
-		return ParameterCSV.GetValue(MAX_HP, NORMALENEMY_PARAMTER);
-		break;
-	case CharacterStatus::AttackPower:
-		return ParameterCSV.GetValue(ATTACK, NORMALENEMY_PARAMTER);
-		break;
-	case CharacterStatus::DefensePower:
-		return ParameterCSV.GetValue(DEFENCE, NORMALENEMY_PARAMTER);
-		break;
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(HARD_MAX_HP, NORMALENEMY_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(HARD_ATTACK, NORMALENEMY_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(HARD_DEFENCE, NORMALENEMY_PARAMTER);
+			break;
+		}
 	}
+	else
+	{
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(MAX_HP, NORMALENEMY_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(ATTACK, NORMALENEMY_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(DEFENCE, NORMALENEMY_PARAMTER);
+			break;
+		}
+	}
+	
 }
 
 int CharacterBase::GetBossEnemyStatusValue(CharacterStatus status)
 {
-	switch (status)
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+	if (pManager->GetHardMode())
 	{
-	case CharacterStatus::HP:
-		return ParameterCSV.GetValue(MAX_HP, BOSSENEMY_PARAMTER);
-		break;
-	case CharacterStatus::AttackPower:
-		return ParameterCSV.GetValue(ATTACK, BOSSENEMY_PARAMTER);
-		break;
-	case CharacterStatus::DefensePower:
-		return ParameterCSV.GetValue(DEFENCE, BOSSENEMY_PARAMTER);
-		break;
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(HARD_MAX_HP, BOSSENEMY_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(HARD_ATTACK, BOSSENEMY_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(HARD_DEFENCE, BOSSENEMY_PARAMTER);
+			break;
+		}
 	}
+	else
+	{
+		switch (status)
+		{
+		case CharacterStatus::HP:
+			return ParameterCSV.GetValue(MAX_HP, BOSSENEMY_PARAMTER);
+			break;
+		case CharacterStatus::AttackPower:
+			return ParameterCSV.GetValue(ATTACK, BOSSENEMY_PARAMTER);
+			break;
+		case CharacterStatus::DefensePower:
+			return ParameterCSV.GetValue(DEFENCE, BOSSENEMY_PARAMTER);
+			break;
+		}
+	}
+	
 }
 
 float CharacterBase::GetInternalData(CharacterID id, int cal)
 {
-	switch (id)
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+	if (pManager->GetHardMode())
 	{
-	case CharacterID::Player:
-		internalData = PlayerInternalDataCSV.GetValue(cal, INTERNALDATA);
-		break;
-	case CharacterID::Robot:
-		internalData = RobotInternalDataCSV.GetValue(cal, INTERNALDATA);
-		break;
-	case CharacterID::NormalEnemy:
-		internalData = EnemyInternalDataCSV.GetValue(cal, INTERNALDATA);
-		break;
-	case CharacterID::EnemyBoss:
-		internalData = EnemyBossInternalDataCSV.GetValue(cal, INTERNALDATA);
-		break;
-	default:
-		break;
+		switch (id)
+		{
+		case CharacterID::Player:
+			internalData = PlayerInternalDataCSV.GetValue(cal, HARD_INTERNALDATA);
+			break;
+		case CharacterID::Robot:
+			internalData = RobotInternalDataCSV.GetValue(cal, HARD_INTERNALDATA);
+			break;
+		case CharacterID::NormalEnemy:
+			internalData = EnemyInternalDataCSV.GetValue(cal, HARD_INTERNALDATA);
+			break;
+		case CharacterID::EnemyBoss:
+			internalData = EnemyBossInternalDataCSV.GetValue(cal, HARD_INTERNALDATA);
+			break;
+		default:
+			break;
+		}
 	}
+	else
+	{
+		switch (id)
+		{
+		case CharacterID::Player:
+			internalData = PlayerInternalDataCSV.GetValue(cal, INTERNALDATA);
+			break;
+		case CharacterID::Robot:
+			internalData = RobotInternalDataCSV.GetValue(cal, INTERNALDATA);
+			break;
+		case CharacterID::NormalEnemy:
+			internalData = EnemyInternalDataCSV.GetValue(cal, INTERNALDATA);
+			break;
+		case CharacterID::EnemyBoss:
+			internalData = EnemyBossInternalDataCSV.GetValue(cal, INTERNALDATA);
+			break;
+		default:
+			break;
+		}
+	}
+	
 
 	return internalData;
 }

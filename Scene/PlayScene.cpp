@@ -18,6 +18,8 @@ PlayScene::PlayScene(GameObject* parent)
 	pManager = nullptr;
 	pSound = nullptr;
 	pBox = nullptr;
+
+	nowLevel = GameLevel::Easy;
 }
 
 PlayScene::~PlayScene()
@@ -70,10 +72,44 @@ void PlayScene::BattleStart()
 	// 二周目かどうかを調べて該当していたら画像で難易度選択を行わせる予定
 	if (pManager->GetClearFlg())
 	{
-		Instantiate<LevelSelectImage>(this);
-		pBox = Instantiate<SelectBox>(this);
+		const float SELECT_BOX_POS_X = 0;
+		const float EASY_Y = -0.05f;
+		const float HARD_Y = -0.38f;
 
+		// レベル選択画像を表示させる
+		if (pBox == nullptr)
+		{
+			const XMFLOAT3 BOX_SCALE = XMFLOAT3(1, 1.3f, 1);
 
+			Instantiate<LevelSelectImage>(this);
+			pBox = Instantiate<SelectBox>(this);
+			pBox->SetScale(BOX_SCALE);
+			pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, EASY_Y, 0));
+		}
+		
+		// レベル選択入力
+		{
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP) || Input::IsKeyDown(DIK_UP))
+			{
+				pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, EASY_Y, 0));
+				nowLevel = GameLevel::Easy;
+			}
+
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
+			{
+				pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, HARD_Y, 0));
+				nowLevel = GameLevel::Hard;
+			}
+		}
+		
+		// レベル決定
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
+		{
+			pManager->SetHardModeFlg();
+			pSound->SoundStop(SoundTrack::PlaySceneSound);
+			pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
+		}
+		
 	}
 	else
 	{

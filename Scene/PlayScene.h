@@ -5,6 +5,12 @@ class SceneManager;
 class GameSound;
 class SelectBox;
 
+enum class GameLevel
+{
+	Easy,
+	Hard
+};
+
 class PlayScene : public GameObject
 {
 public:
@@ -24,5 +30,6 @@ private:
 	SceneManager* pManager;
 	GameSound* pSound;
 	SelectBox* pBox;
+	GameLevel nowLevel;
 };
 

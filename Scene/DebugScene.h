@@ -1,10 +1,19 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
-//class EnemyBoss;
-//class Player;
+class EnemyBoss;
+class Player;
+
+class SceneManager;
+
 
 class SelectBox;
+
+enum class RetryMenu
+{
+	Retry,
+	GameOver
+};
 
 class DebugScene : public GameObject
 {
@@ -16,11 +25,18 @@ public:
 	void Draw() override;
 	void Release() override;
 
+
+	void BattleRetry();
+
 private:
 
-	/*EnemyBoss* pBoss;
+	EnemyBoss* pBoss;
 	Player* pPlayer;
-	int timer;*/
+	int timer;
+
+	SceneManager* pManager;
+
 
 	SelectBox* pBox;
+	RetryMenu nowMenu;
 };

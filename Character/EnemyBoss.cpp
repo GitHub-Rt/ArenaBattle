@@ -617,7 +617,7 @@ void EnemyBoss::CharacterCheckHP()
 {
 	if (hp < 0)
 	{
-		//KillMe();
+		KillMe();
 	}
 }
 

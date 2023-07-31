@@ -55,9 +55,16 @@ public:
 
 	// 一周目(Easy)をクリアしたときに呼ぶ関数
 	void SetClearedFlg() { isCleared = true; }
+	
+	// ハードモードにセットする
+	void SetHardModeFlg() { isHardMode = true; }
+
 
 
 	bool GetClearFlg() { return isCleared; }
+
+	bool GetHardMode() { return isHardMode; }
+
 
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
@@ -67,4 +74,5 @@ private:
 	GameSound* pSound;
 
 	bool isCleared;				// クリアしたかどうか
+	bool isHardMode;			// ハードモードかどうか
 };

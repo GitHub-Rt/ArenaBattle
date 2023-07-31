@@ -30,6 +30,7 @@ SceneManager::SceneManager(GameObject * parent)
 	pSound = nullptr;
 
 	isCleared = false;
+	isHardMode = false;
 }
 
 void SceneManager::Initialize()
