@@ -40,6 +40,7 @@ void BattleScene::Initialize()
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
 
+	pSound->SetSoundALLFalse();
 	pSound->SoundLoad(SoundTrack::BattleSound);
 	pSound->SoundLoad(SoundTrack::BossSound);
 	pSound->SoundLoad(SoundTrack::LastBossSound);
@@ -81,7 +82,24 @@ void BattleScene::Initialize()
 
 	}
 
-	pSound->SoundPlay(SoundTrack::BattleSound);
+	// ƒoƒgƒ‹‰¹Šy‚ÌÄ¶
+	
+	switch (point)
+	{
+	case RetryPoint::NormalEnemyBattle:
+		pSound->SoundPlay(SoundTrack::BattleSound);
+		break;
+	case RetryPoint::BossBattle:
+		pSound->SoundPlay(SoundTrack::BossSound);
+		break;
+	case RetryPoint::BossLastBattle:
+		pSound->SoundPlay(SoundTrack::LastBossSound);
+		break;
+	default:
+
+		break;
+	}
+	
 }
 
 void BattleScene::Update()
@@ -156,6 +174,7 @@ void BattleScene::Update()
 					BattleRetry();
 					break;
 				case RetryMenu::GameOver:
+					pSound->SetSoundALLFalse();
 					pManager->ChangeScene(SCENE_ID::SCENE_ID_OVER);
 					break;
 				default:

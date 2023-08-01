@@ -18,7 +18,7 @@ PlayScene::PlayScene(GameObject* parent)
 	pManager = nullptr;
 	pSound = nullptr;
 	pBox = nullptr;
-
+	pPlayer = nullptr;
 	nowLevel = GameLevel::Easy;
 }
 
@@ -42,7 +42,7 @@ void PlayScene::Initialize()
 	Instantiate<NormalField>(this);
 	Instantiate<Wall>(this);
 	Instantiate<BattleStartCylinder>(this);
-	Instantiate<Player>(this);
+	pPlayer = Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 
 	
@@ -80,6 +80,9 @@ void PlayScene::BattleStart()
 		if (pBox == nullptr)
 		{
 			const XMFLOAT3 BOX_SCALE = XMFLOAT3(1, 1.3f, 1);
+
+			// プレイヤーの入力を受け付けなくする
+			pPlayer->SetInputReception(false);
 
 			Instantiate<LevelSelectImage>(this);
 			pBox = Instantiate<SelectBox>(this);

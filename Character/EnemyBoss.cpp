@@ -8,6 +8,7 @@
 #include "../AttackModel/EnemyBossSpecialArea.h"
 #include "../UI/Warning.h"
 #include "../Scene/BattleScene.h"
+#include "../Scene/SceneManager.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18, 9,18 };	//outsideの当たり判定枠
@@ -177,7 +178,7 @@ void EnemyBoss::AttackTypeSelection()
 		break;
 	case BossAIState::Normal:
 		std::srand(unsigned(time(NULL)));
-		bossAttackState = (unsigned int)(1 << rand() % 4 + 1);
+		bossAttackState = (unsigned int)(1 << (rand() % 4 + 1));
 		break;
 	case BossAIState::Caution:
 		std::srand(unsigned(time(NULL)));
@@ -477,9 +478,12 @@ void EnemyBoss::SpecialAttackAction()
 	{
 		pSpecialArea = Instantiate<EnemyBossSpecialArea>(GetParent());
 
-		// サウンド変更
-		//BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-		//pBattleScene->ChangeBossSound();
+		if (GetSceneID() == SCENE_ID::SCENE_ID_BATTLE)
+		{
+			// サウンド変更
+			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
+			pBattleScene->ChangeBossSound();
+		}
 	}
 
 
@@ -497,7 +501,7 @@ void EnemyBoss::SpecialAttackAction()
 	}
 
 	// 実行前時間を超えたら攻撃を行う
-	if (specialTimer > TIME_UP_TO_SPECIAL_ATTACK)
+	if (specialTimer >= TIME_UP_TO_SPECIAL_ATTACK)
 	{		
 		// 地面に着地させる
 		transform_.position_.y = firstPos.y;

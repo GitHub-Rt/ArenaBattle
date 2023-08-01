@@ -4,6 +4,7 @@
 class SceneManager;
 class GameSound;
 class SelectBox;
+class Player;
 
 enum class GameLevel
 {
@@ -30,6 +31,7 @@ private:
 	SceneManager* pManager;
 	GameSound* pSound;
 	SelectBox* pBox;
+	Player* pPlayer;
 	GameLevel nowLevel;
 };
 

@@ -8,6 +8,8 @@
 #include <cmath>
 #include <corecrt_math_defines.h>
 
+class SceneManager;
+
 // 180度を表す定数
 const double DEGREES_180 = 180.0;
 
@@ -292,6 +294,11 @@ public:
 	/// <param name="position">ポジション</param>
 	/// <returns>範囲外ならtrue</returns>
 	bool IsMoveLimit(XMFLOAT3 position);
+
+	/// <summary>
+	/// 現在シーンを取得する関数
+	/// </summary>
+	SCENE_ID GetSceneID();
 
 	/// <summary>
 	/// 定数として扱うデータを初期化する関数

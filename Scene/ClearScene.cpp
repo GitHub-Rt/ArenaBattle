@@ -24,6 +24,9 @@ void ClearScene::Initialize()
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
 
+	// リトライポイントのリセット
+	pManager->SetRetryPoint(RetryPoint::NormalEnemyBattle);
+
 	pSound->SoundLoad(SoundTrack::ClearSound);
 
 	if (pManager->GetClearFlg() == false)

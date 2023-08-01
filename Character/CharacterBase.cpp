@@ -709,3 +709,9 @@ void CharacterBase::ChangeStateForIdle()
 		ChangeState(CharacterState::Idle);
 	}
 }
+
+SCENE_ID CharacterBase::GetSceneID()
+{
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	return pManager->GetSceneID();
+}
