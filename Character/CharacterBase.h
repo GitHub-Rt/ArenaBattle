@@ -275,7 +275,7 @@ public:
 	/// 該当キャラクターの内部データ値を獲得する変数
 	/// </summary>
 	/// <param name="id">該当キャラクターID</param>
-	/// /// /// <param name="cal">取得したい要素の列数</param>
+	/// <param name="cal">取得したい要素の列数</param>
 	/// <returns></returns>
 	float GetInternalData(CharacterID id, int cal);
 

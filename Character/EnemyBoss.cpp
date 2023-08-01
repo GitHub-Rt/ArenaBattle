@@ -137,8 +137,13 @@ void EnemyBoss::AttackStartTimer()
 
 void EnemyBoss::SecondFormStart()
 {
-	float reHP = maxHp / RATE_FOR_MAX_STRENGTH;
-	Damage(reHP);
+	// リトライ時に呼ばれたらHPを減少させる
+	if (hp == maxHp)
+	{
+		float reHP = maxHp / RATE_FOR_MAX_STRENGTH;
+		Damage(reHP);
+	}
+	
 	
 	isSpecialAttack = true;
 	attackIntervalTimer = 0;
@@ -160,7 +165,7 @@ void EnemyBoss::AttackTypeSelection()
 
 	// 動作確認用
 	//bossAIState = BossAIState::Caution;
-	//ChangeAttackState(BossAttackState::JumpAttack);
+	//ChangeAttackState(BossAttackState::SpecialAttack);
 	//return;
 
 #endif
@@ -628,9 +633,9 @@ void EnemyBoss::DamageMotion()
 
 void EnemyBoss::CharacterCheckHP()
 {
-	if (hp < 0)
+	if (hp <= 0)
 	{
-		//KillMe();
+		Leave();
 	}
 }
 

@@ -112,10 +112,34 @@ std::string CsvReader::GetString(DWORD x, DWORD y)
 	return data_[y][x];
 }
 
-//指定した位置のデータを整数で取得
-int CsvReader::GetValue(DWORD x, DWORD y)
+//指定した位置のデータを取得
+float CsvReader::GetValue(DWORD x, DWORD y)
 {
-	return atoi(GetString(x, y).c_str());
+	// GetString関数を使ってCSVファイル内のセルの文字列を取得
+	std::string cellValue = GetString(x, y);
+
+	// 文字列を浮動小数点数に変換
+	float floatValue = static_cast<float>(atof(cellValue.c_str()));
+
+	// 整数値か小数値か判定
+	bool isInteger = true;
+	for (char c : cellValue)
+	{
+		if (!std::isdigit(c) && c != '-')
+		{
+			isInteger = false;
+			break;
+		}
+	}
+
+	// 整数値の場合は浮動小数点数から整数にキャストして返す
+	if (isInteger)
+	{
+		return static_cast<int>(floatValue);
+	}
+
+	// 小数値の場合はそのまま返す
+	return floatValue;
 }
 
 //ファイルの列数を取得

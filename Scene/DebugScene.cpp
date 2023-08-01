@@ -32,11 +32,16 @@ void DebugScene::Initialize()
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 	pManager->SetHardModeFlg();
 
+	if (EnemyManager::IsListEmpty() == false)
+	{
+		EnemyManager::ClearEnemy();
+	}
+
 	Instantiate<Stage>(this);
 
 	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+		//EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
 	pBoss = Instantiate<EnemyBoss>(this);
 
@@ -80,6 +85,17 @@ void DebugScene::Update()
 			pPlayer->SetInputReception(true);
 			pBoss->ProcessStart();
 		}
+	}
+
+	if (pPlayer->GetHP() <= 0)
+	{
+		SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+		pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
+	}
+	else if (pBoss->GetHP() <= 0)
+	{
+		SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+		pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
 	}
 }
 

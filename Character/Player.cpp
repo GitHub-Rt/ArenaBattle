@@ -353,7 +353,7 @@ void Player::CharacterCheckHP()
 {
 	if (hp <= 0)
 	{
-		Invisible();
+		SetInputReception(false);
 	}
 
 	// 回復の効果音が再生終了していたら停止処理を行う
