@@ -27,10 +27,13 @@ SceneManager::SceneManager(GameObject * parent)
 	nextSceneID_ = SCENE_ID::MAX_SCENE_ID;
 	prevSceneID_ = SCENE_ID::MAX_SCENE_ID;
 
+	nowPoint = RetryPoint::NormalEnemyBattle;
+
 	pSound = nullptr;
 
 	isCleared = false;
 	isHardMode = false;
+	isReLoad = false;
 }
 
 void SceneManager::Initialize()
@@ -52,8 +55,13 @@ void SceneManager::Initialize()
 void SceneManager::Update()
 {
 	//シーン切り替えを行うかどうか
-	if (currentSceneID_ != nextSceneID_)
+	if (currentSceneID_ != nextSceneID_ || isReLoad)
 	{
+		if (isReLoad)
+		{
+			isReLoad = false;
+		}
+
 		//そのシーンのオブジェクトを全削除
 		KillAllChildren();
 
@@ -94,4 +102,10 @@ void SceneManager::ChangeScene(SCENE_ID next)
 {
 	prevSceneID_ = currentSceneID_;
 	nextSceneID_ = next;
+}
+
+void SceneManager::ReLoadScene(SCENE_ID targetScene)
+{
+	ChangeScene(targetScene);
+	isReLoad = true;
 }

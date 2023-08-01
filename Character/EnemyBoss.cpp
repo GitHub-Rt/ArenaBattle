@@ -7,6 +7,7 @@
 #include "../AttackModel/EnemyBossJumpArea.h"
 #include "../AttackModel/EnemyBossSpecialArea.h"
 #include "../UI/Warning.h"
+#include "../Scene/BattleScene.h"
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18, 9,18 };	//outsideの当たり判定枠
@@ -130,17 +131,25 @@ void EnemyBoss::AttackStartTimer()
 	// 最大体力に対して現在体力の割合が一定以下になったら特殊攻撃を行う
 	if (isSpecialAttack == false && hp <= maxHp / RATE_FOR_MAX_STRENGTH)
 	{
-		isSpecialAttack = true;
-		attackIntervalTimer = 0;
-
-		// AI状態を最大状態にする
-		bossAIState = BossAIState::Caution;
-
-		// 特殊攻撃を行う
-		ChangeAttackState(BossAttackState::SpecialAttack);
-
-		ChangeState(CharacterState::Attacking);
+		SecondFormStart();
 	}
+}
+
+void EnemyBoss::SecondFormStart()
+{
+	float reHP = maxHp / RATE_FOR_MAX_STRENGTH;
+	Damage(reHP);
+	
+	isSpecialAttack = true;
+	attackIntervalTimer = 0;
+
+	// AI状態を最大状態にする
+	bossAIState = BossAIState::Caution;
+
+	// 特殊攻撃を行う
+	ChangeAttackState(BossAttackState::SpecialAttack);
+
+	ChangeState(CharacterState::Attacking);
 }
 
 void EnemyBoss::AttackTypeSelection()
@@ -462,6 +471,10 @@ void EnemyBoss::SpecialAttackAction()
 	if (pSpecialArea == nullptr)
 	{
 		pSpecialArea = Instantiate<EnemyBossSpecialArea>(GetParent());
+
+		// サウンド変更
+		//BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
+		//pBattleScene->ChangeBossSound();
 	}
 
 
@@ -617,7 +630,7 @@ void EnemyBoss::CharacterCheckHP()
 {
 	if (hp < 0)
 	{
-		KillMe();
+		//KillMe();
 	}
 }
 

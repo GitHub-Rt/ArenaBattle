@@ -19,6 +19,13 @@ enum class SCENE_ID
 	MAX_SCENE_ID
 };
 
+enum class RetryPoint
+{
+	NormalEnemyBattle,
+	BossBattle,
+	BossLastBattle
+};
+
 //-----------------------------------------------------------
 //シーン切り替えを担当するオブジェクト
 //-----------------------------------------------------------
@@ -59,7 +66,12 @@ public:
 	// ハードモードにセットする
 	void SetHardModeFlg() { isHardMode = true; }
 
+	// シーンの再作成を行う関数
+	void ReLoadScene(SCENE_ID targetScene);
 
+
+	void SetRetryPoint(RetryPoint nextPoint) { nowPoint = nextPoint; }
+	RetryPoint GetRetryPoint() { return nowPoint; }
 
 	bool GetClearFlg() { return isCleared; }
 
@@ -71,8 +83,11 @@ private:
 	SCENE_ID nextSceneID_;		//次のシーン
 	SCENE_ID prevSceneID_;		//前回のシーン
 
+	RetryPoint nowPoint;
+
 	GameSound* pSound;
 
 	bool isCleared;				// クリアしたかどうか
 	bool isHardMode;			// ハードモードかどうか
+	bool isReLoad;				// 再作成するかどうか
 };

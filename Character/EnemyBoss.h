@@ -93,6 +93,8 @@ public:
 	// 攻撃開始までの時間を計測して攻撃を開始させる関数
 	void AttackStartTimer();
 
+	// 特殊攻撃からスタートさせる関数
+	void SecondFormStart();
 
 	// 各攻撃の関数
 	void BulletAttackAction();
@@ -119,6 +121,9 @@ public:
 
 	// 初期位置周辺に戻ってきたかどうか(戻ってきたらtrue)
 	bool IsFirstPosAround(XMFLOAT3 pos);
+
+
+	BossAIState GetAIState() { return bossAIState; }
 
 	float GetHP() { return hp; }
 

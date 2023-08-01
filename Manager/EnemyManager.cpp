@@ -67,4 +67,9 @@ namespace EnemyManager {
 		return enemyList[index];
 	}
 
+	void ClearEnemy()
+	{
+		enemyList.clear();
+	}
+
 }

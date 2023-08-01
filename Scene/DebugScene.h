@@ -4,17 +4,6 @@
 class EnemyBoss;
 class Player;
 
-class SceneManager;
-
-
-class SelectBox;
-
-enum class RetryMenu
-{
-	Retry,
-	GameOver
-};
-
 class DebugScene : public GameObject
 {
 public:
@@ -26,17 +15,13 @@ public:
 	void Release() override;
 
 
-	void BattleRetry();
-
 private:
 
 	EnemyBoss* pBoss;
 	Player* pPlayer;
 	int timer;
 
-	SceneManager* pManager;
 
 
-	SelectBox* pBox;
-	RetryMenu nowMenu;
+	
 };
