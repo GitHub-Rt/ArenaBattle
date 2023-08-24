@@ -6,8 +6,6 @@
 #include "../Engine/Audio.h"
 #include "../Engine/Global.h"
 
-
-
 #include "TitleScene.h"
 #include "StartScene.h"
 #include "ReleaseScene.h"
@@ -41,15 +39,15 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//ç≈èâÇÃÉVÅ[ÉìÇèÄîı
-	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
+	/*currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);
+	Instantiate<TitleScene>(this);*/
 
-	/*currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
+	currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
-	Instantiate<DebugScene>(this);*/
+	Instantiate<DebugScene>(this);
 }
 
 void SceneManager::Update()

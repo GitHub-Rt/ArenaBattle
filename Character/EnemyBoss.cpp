@@ -141,7 +141,7 @@ void EnemyBoss::SecondFormStart()
 	// ƒŠƒgƒ‰ƒC‚ÉŒÄ‚Î‚ê‚½‚çHP‚ğŒ¸­‚³‚¹‚é
 	if (hp == maxHp)
 	{
-		float reHP = maxHp / RATE_FOR_MAX_STRENGTH;
+		float reHP = maxHp - (maxHp / RATE_FOR_MAX_STRENGTH);
 		Damage(reHP);
 	}
 	

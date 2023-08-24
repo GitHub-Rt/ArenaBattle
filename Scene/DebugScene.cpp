@@ -2,7 +2,10 @@
 #include "../Stage/Stage.h"
 
 #include "../imgui/imguiObject.h"
+#include "../Stage/BattleBackGround.h"
+#include "../Stage/BattleWall.h"
 
+#include "../Stage/WaterFloor.h"
 
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
@@ -29,25 +32,28 @@ DebugScene::DebugScene(GameObject* parent)
 
 void DebugScene::Initialize()
 {
-	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-	pManager->SetHardModeFlg();
+	//SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	//pManager->SetHardModeFlg();
 
-	if (EnemyManager::IsListEmpty() == false)
+	/*if (EnemyManager::IsListEmpty() == false)
 	{
 		EnemyManager::ClearEnemy();
-	}
-
+	}*/
+	
 	Instantiate<Stage>(this);
+	Instantiate<BattleWall>(this);
+	//Instantiate<BattleBackGround>(this);
+	Instantiate<WaterFloor>(this);
 
-	for (int i = 0; i < ENEMY_COUNT; i++)
+	/*for (int i = 0; i < ENEMY_COUNT; i++)
 	{
-		//EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
-	}
-	pBoss = Instantiate<EnemyBoss>(this);
+		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+	}*/
+	//pBoss = Instantiate<EnemyBoss>(this);
 
 	
 	pPlayer = Instantiate<Player>(this);
-	Instantiate<Robot>(this);
+	//Instantiate<Robot>(this);
 
 	Instantiate<imguiObject>(this);
 }
@@ -73,30 +79,29 @@ void DebugScene::Update()
 	//		}
 	//	}		
 	//}
-	// ボス登場処理
 
-	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty())
-	{
-		// プレイヤーの入力を受け付けなくする
-		pPlayer->SetInputReception(false);
-		if (pBoss->BossEntry())
-		{
-			// プレイヤーの入力受付を再開する
-			pPlayer->SetInputReception(true);
-			pBoss->ProcessStart();
-		}
-	}
+	//if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty())
+	//{
+	//	// プレイヤーの入力を受け付けなくする
+	//	pPlayer->SetInputReception(false);
+	//	if (pBoss->BossEntry())
+	//	{
+	//		// プレイヤーの入力受付を再開する
+	//		pPlayer->SetInputReception(true);
+	//		pBoss->ProcessStart();
+	//	}
+	//}
 
-	if (pPlayer->GetHP() <= 0)
-	{
-		SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-		pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
-	}
-	else if (pBoss->GetHP() <= 0)
-	{
-		SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-		pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
-	}
+	//if (pPlayer->GetHP() <= 0)
+	//{
+	//	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	//	pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
+	//}
+	//else if (pBoss->GetHP() <= 0)
+	//{
+	//	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	//	pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
+	//}
 }
 
 void DebugScene::Draw()

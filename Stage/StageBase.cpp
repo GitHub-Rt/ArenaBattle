@@ -31,5 +31,4 @@ void StageBase::StageDraw(Transform trans)
 {
 	Model::SetTransform(hModel, trans);
 	Model::Draw(hModel);
-
 }

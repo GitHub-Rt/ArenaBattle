@@ -442,9 +442,11 @@ void FbxParts::Draw(Transform& transform)
 		// パラメータの受け渡し
 		D3D11_MAPPED_SUBRESOURCE pdata;
 		CONSTANT_BUFFER cb;
-		cb.worldVewProj =	XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());						// リソースへ送る値をセット
-		cb.world =		XMMatrixTranspose(transform.GetWorldMatrix());
+
+		// リソースへ送る値をセット
+		cb.worldVewProj =	XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());						
 		cb.normalTrans =	XMMatrixTranspose(transform.matRotate_ * XMMatrixInverse(nullptr, transform.matScale_));
+		cb.world = XMMatrixTranspose(transform.GetWorldMatrix());
 
 		cb.mWLP = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetLightView() * Camera::GetShadowProjectionMatrix());
 		cb.mWLPT = XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetLightView() * Camera::GetShadowProjectionMatrix() * Direct3D::clipToUV_);

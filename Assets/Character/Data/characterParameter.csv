@@ -1,5 +1,5 @@
 Parameter,MAX_HP,AttackPower,DefensePower,MAX_HP(HardMode),AttackPower(HardMode),DefensePower(HardMode)
-Player,100,40,15,100,40,15
-Robot,0,12,0,0,26,0
+Player,100,40,15,100,35,15
+Robot,0,12,0,0,27,0
 NormalEnemy,50,18,5,50,35,18
 BossEnemy,1000,20,10,2000,40,25

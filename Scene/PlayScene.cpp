@@ -5,6 +5,7 @@
 
 #include "../Stage/NormalField.h"
 #include "../Stage/Wall.h"
+#include "../Stage/Building.h"
 #include "../Stage/BattleStartCylinder.h"
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
@@ -41,7 +42,9 @@ void PlayScene::Initialize()
 
 	Instantiate<NormalField>(this);
 	Instantiate<Wall>(this);
+	Instantiate<Building>(this);
 	Instantiate<BattleStartCylinder>(this);
+
 	pPlayer = Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 

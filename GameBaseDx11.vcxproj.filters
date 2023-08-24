@@ -365,6 +365,15 @@
     <ClCompile Include="UI\LevelSelectImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\Building.cpp">
+      <Filter>05Stage\StageObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\BattleBackGround.cpp">
+      <Filter>05Stage\StageObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\WaterFloor.cpp">
+      <Filter>05Stage\StageObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -616,6 +625,15 @@
     <ClInclude Include="UI\LevelSelectImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\Building.h">
+      <Filter>05Stage\StageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\BattleBackGround.h">
+      <Filter>05Stage\StageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\WaterFloor.h">
+      <Filter>05Stage\StageObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
@@ -631,6 +649,9 @@
       <Filter>02Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Shadowmap.hlsl">
+      <Filter>02Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\WaterShader.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
   </ItemGroup>

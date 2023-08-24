@@ -182,12 +182,15 @@
     <ClCompile Include="Scene\StartScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Sound\GameSound.cpp" />
+    <ClCompile Include="Stage\BattleBackGround.cpp" />
     <ClCompile Include="Stage\BattleStartCylinder.cpp" />
     <ClCompile Include="Stage\BattleWall.cpp" />
+    <ClCompile Include="Stage\Building.cpp" />
     <ClCompile Include="Stage\NormalField.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Stage\StageBase.cpp" />
     <ClCompile Include="Stage\Wall.cpp" />
+    <ClCompile Include="Stage\WaterFloor.cpp" />
     <ClCompile Include="UI\BackGroundImage.cpp" />
     <ClCompile Include="UI\ClearImage.cpp" />
     <ClCompile Include="UI\ControllerOperationImage.cpp" />
@@ -267,12 +270,15 @@
     <ClInclude Include="Scene\StartScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Sound\GameSound.h" />
+    <ClInclude Include="Stage\BattleBackGround.h" />
     <ClInclude Include="Stage\BattleStartCylinder.h" />
     <ClInclude Include="Stage\BattleWall.h" />
+    <ClInclude Include="Stage\Building.h" />
     <ClInclude Include="Stage\NormalField.h" />
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="Stage\StageBase.h" />
     <ClInclude Include="Stage\Wall.h" />
+    <ClInclude Include="Stage\WaterFloor.h" />
     <ClInclude Include="UI\BackGroundImage.h" />
     <ClInclude Include="UI\ClearImage.h" />
     <ClInclude Include="UI\ControllerOperationImage.h" />
@@ -314,6 +320,12 @@
     <FxCompile Include="Assets\Shader\Simple3D.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\WaterShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
