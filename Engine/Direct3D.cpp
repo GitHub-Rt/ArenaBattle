@@ -456,6 +456,7 @@ namespace Direct3D
 			pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shaderBundle[SHADER_WATER].pPixelShader);
 
 
+			//// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
 			// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
 			D3D11_INPUT_ELEMENT_DESC layout[] = {
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(XMVECTOR) * 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
@@ -463,10 +464,10 @@ namespace Direct3D
 				{ "NORMAL",	  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(XMVECTOR) * 2,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//法線
 				{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(XMVECTOR) * 3,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//タンジェント
 			};
-			pDevice_->CreateInputLayout(layout, 3, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_WATER].pVertexLayout);
+			pDevice_->CreateInputLayout(layout, sizeof(layout) / sizeof(D3D11_INPUT_ELEMENT_DESC), pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_WATER].pVertexLayout);
 
 
-			//シェーダーが無事作成できたので、コンパイルしたやつはいらない
+			////シェーダーが無事作成できたので、コンパイルしたやつはいらない
 			pCompileVS->Release();
 			pCompilePS->Release();
 
@@ -484,10 +485,10 @@ namespace Direct3D
 	void SetShader(SHADER_TYPE type)
 	{
 		nowShaderType = type;
-		pContext_->RSSetState(shaderBundle[type].pRasterizerState);
-		pContext_->VSSetShader(shaderBundle[type].pVertexShader, NULL, 0);                         // 頂点シェーダをセット
-		pContext_->PSSetShader(shaderBundle[type].pPixelShader, NULL, 0);                          // ピクセルシェーダをセット
-		pContext_->IASetInputLayout(shaderBundle[type].pVertexLayout);
+		pContext_->VSSetShader(shaderBundle[type].pVertexShader, NULL, 0);      // 頂点シェーダをセット
+		pContext_->PSSetShader(shaderBundle[type].pPixelShader, NULL, 0);       // ピクセルシェーダをセット
+		pContext_->IASetInputLayout(shaderBundle[type].pVertexLayout);			// 頂点インプットレイアウト
+		pContext_->RSSetState(shaderBundle[type].pRasterizerState);				// ラスタライザー
 	}
 
 

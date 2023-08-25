@@ -113,15 +113,12 @@ void FbxParts::InitVertex(fbxsdk::FbxMesh* mesh)
 		}
 	}
 
-
 	////タンジェント取得
-	//for (int i = 0; i < (int)polygonCount_; i++)
+	//for (int i = 0; i < polygonCount_; i++)
 	//{
 	//	int startIndex = mesh->GetPolygonVertexIndex(i);
-
 	//	FbxGeometryElementTangent* t = mesh->GetElementTangent(0);
 	//	FbxVector4 tangent = t->GetDirectArray().GetAt(startIndex).mData;
-
 	//	for (int j = 0; j < 3; j++)
 	//	{
 	//		int index = mesh->GetPolygonVertices()[startIndex + j];
@@ -230,7 +227,7 @@ void FbxParts::InitTexture(fbxsdk::FbxSurfaceMaterial * pMaterial, const DWORD &
 		//テクスチャ情報
 		FbxProperty  lProperty = pMaterial->FindProperty(FbxSurfaceMaterial::sBump);
 
-		//テクスチャの数数
+		//テクスチャの数
 		int fileTextureCount = lProperty.GetSrcObjectCount<FbxFileTexture>();
 
 		//テクスチャあり
@@ -286,6 +283,7 @@ void FbxParts::InitIndex(fbxsdk::FbxMesh * mesh)
 				for (DWORD k = 0; k < 3; k++)
 				{
 					pIndex[count + k] = mesh->GetPolygonVertex(j, k);
+					//count++;
 				}
 				count += 3;
 			}

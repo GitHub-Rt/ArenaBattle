@@ -40,8 +40,8 @@ void DebugScene::Initialize()
 		EnemyManager::ClearEnemy();
 	}*/
 	
-	//Instantiate<Stage>(this);
-	//Instantiate<BattleWall>(this);
+	Instantiate<Stage>(this);
+	Instantiate<BattleWall>(this);
 	//Instantiate<BattleBackGround>(this);
 	Instantiate<WaterFloor>(this);
 
@@ -52,7 +52,7 @@ void DebugScene::Initialize()
 	//pBoss = Instantiate<EnemyBoss>(this);
 
 	
-	//pPlayer = Instantiate<Player>(this);
+	pPlayer = Instantiate<Player>(this);
 	//Instantiate<Robot>(this);
 
 	//Instantiate<imguiObject>(this);

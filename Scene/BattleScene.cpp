@@ -56,7 +56,7 @@ void BattleScene::Initialize()
 	}
 
 	Instantiate<Stage>(this);
-	//Instantiate<BattleWall>(this);
+	Instantiate<BattleWall>(this);
 	Instantiate<BattleBackGround>(this);
 
 	// リトライポイントを取得する
