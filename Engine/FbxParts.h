@@ -21,6 +21,7 @@ class FbxParts
 		XMFLOAT3 position;
 		XMFLOAT3 normal;
 		XMFLOAT3 uv;
+		XMVECTOR tangent;
 	};
 
 	//【コンスタントバッファー】
@@ -45,6 +46,21 @@ class FbxParts
 		BOOL	 isDamage;		//ダメージの有無
 	};
 
+	// WaterShader用
+	struct CONSTANT_BUFFER_WATER
+	{
+		XMMATRIX matW;		//ワールド行列
+		XMMATRIX matWVP;	//ワールド・ビュー・プロダクションの合成行列
+		XMMATRIX matNormal;	//法線変形用の行列
+		XMFLOAT4 camPos;	//カメラの位置
+		XMFLOAT4 color;	//マテリアルの色
+		XMFLOAT4 ambient;	//環境光
+		XMFLOAT4 specular;	//ハイライトの色
+		float shininess;	//ハイライトの強さ
+		int	 isTexture;	//テクスチャがあるかどうかを判断
+		float scroll;	//uvスクロール
+	};
+
 	// マテリアル情報（質感の情報）
 	struct  MATERIAL
 	{
@@ -55,6 +71,7 @@ class FbxParts
 		XMFLOAT4	specular;			//鏡面反射光（スペキュラ）への反射強度
 		float		shininess;			//ハイライトの強さ（サイズ）
 		Texture*	pTexture;			//テクスチャ
+		Texture*	pNormalmap;			//NormalMapテクスチャ
 		bool		isDamage;			//ダメージの有無
 	}*pMaterial_;
 
@@ -79,8 +96,8 @@ class FbxParts
 
 	//各データの個数
 	DWORD vertexCount_;		//頂点数
-	DWORD polygonCount_;		//ポリゴ数
-	DWORD indexCount_;		//インデックス数
+	DWORD polygonCount_;		//ポリゴン数
+	int* indexCount_;		//インデックス数
 	DWORD materialCount_;		//マテリアルの個数
 	DWORD polygonVertexCount_;//ポリゴン頂点インデックス数 
 
@@ -119,6 +136,12 @@ class FbxParts
 	void InitIndex(fbxsdk::FbxMesh * mesh);		//インデックスバッファ準備
 	void InitSkelton(FbxMesh * pMesh);			//骨の情報を準備
 	void IntConstantBuffer();	//コンスタントバッファ（シェーダーに情報を送るやつ）準備
+
+	///////// 各シェーダーで必要な情報のセットと描画を行う関数 //////////////////////////
+	void NormalShader(Transform& transform, DWORD num);		// Simple3D用
+	void WaterShader(Transform& transform, DWORD num);		// WaterShader用
+
+
 
 public:
 	FbxParts();

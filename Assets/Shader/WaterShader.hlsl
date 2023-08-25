@@ -7,15 +7,13 @@ Texture2D texNormal:register(t1);	//Normalテクスチャーを受け取る
 
 cbuffer global
 {
-	float4x4 matWVP;		//ワールド・ビュー・プロダクションの合成行列
-	float4x4	g_matNormalTrans;	// 法線の変換行列（回転行列と拡大の逆行列）
 	float4x4 matW;			//ワールド行列
+	float4x4 matWVP;		//ワールド・ビュー・プロダクションの合成行列
 	float4x4 matNormal;		//法線変形させるための行列
-	
-	float4	 diffuse;		//マテリアルの色
+	float4  camPos;			//カメラの位置
+	float4	 color;			//マテリアルの色
 	float4 ambient;			//環境光
 	float4 specular;		//ハイライトの色
-	float4  camPos;			//カメラの位置
 	float	shiness;		//ハイライトの強さ
 	bool	 isTexture;		//テクスチャの有無
 	float scroll;			//uvスクロール
@@ -50,7 +48,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL, f
 	normal = normalize(normal);
 	normal.w = 0;
 
-	//接線
+
 	tangent = mul(tangent, matNormal);
 	tangent = normalize(tangent);
 	tangent.w = 0;
@@ -83,7 +81,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL, f
 }
 
 //ピクセルシェーダー
-// xxx : セマンティクス---------v    渡される値を識別する文字列
+//（） : セマンティクス----------------v
 float4 PS(VS_OUT inData) : SV_TARGET
 {
 	float4 diffuse;
@@ -101,7 +99,7 @@ float4 PS(VS_OUT inData) : SV_TARGET
 
 	float4 normal = normal1 + normal2;
 	normal.w = 0;
-	normal = normalize(normal);
+	normal = normalize(normal1);
 
 
 	inData.color = dot(normal, inData.light);
@@ -124,12 +122,12 @@ float4 PS(VS_OUT inData) : SV_TARGET
 	}
 	else
 	{
-		diffuse = diffuse * inData.color;
-		ambient_ = diffuse * ambient;
+		diffuse = color * inData.color;
+		ambient_ = color * ambient;
 	}
 	float4 result = diffuse + ambient_ + inData.specular;
 
-	result.a = (result.r + result.g + result.b) / 3;
+	result.a = 0;
 
 	return result;
 }

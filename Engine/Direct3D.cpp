@@ -443,13 +443,12 @@ namespace Direct3D
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_SHADOW].pRasterizerState);
 		}
 
-		// WaterShader
+		// WaterShader用
 		{
 			// 頂点シェーダの作成（コンパイル）
 			ID3DBlob* pCompileVS = NULL;
 			D3DCompileFromFile(L"Shader/WaterShader.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
 			pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shaderBundle[SHADER_WATER].pVertexShader);
-
 
 			// ピクセルシェーダの作成（コンパイル）
 			ID3DBlob* pCompilePS = NULL;
@@ -459,9 +458,10 @@ namespace Direct3D
 
 			// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
 			D3D11_INPUT_ELEMENT_DESC layout[] = {
-				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//頂点位置
-				{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 1, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//法線
-				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, vectorSize * 2, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//テクスチャ（UV）座標
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(XMVECTOR) * 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//位置
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, sizeof(XMVECTOR) * 1,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//uv
+				{ "NORMAL",	  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(XMVECTOR) * 2,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//法線
+				{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(XMVECTOR) * 3,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//タンジェント
 			};
 			pDevice_->CreateInputLayout(layout, 3, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_WATER].pVertexLayout);
 
@@ -474,7 +474,7 @@ namespace Direct3D
 			D3D11_RASTERIZER_DESC rdc = {};
 			rdc.CullMode = D3D11_CULL_BACK;
 			rdc.FillMode = D3D11_FILL_SOLID;
-			rdc.FrontCounterClockwise = TRUE;
+			rdc.FrontCounterClockwise = FALSE;
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_WATER].pRasterizerState);
 		}
 	}
@@ -585,6 +585,10 @@ namespace Direct3D
 		SAFE_RELEASE(pDevice_);
 	}
 
+	SHADER_TYPE GetShaderType()
+	{
+		return nowShaderType;
+	}
 
 	//三角形と線分の衝突判定（衝突判定に使用）
 	//https://pheema.hatenablog.jp/entry/ray-triangle-intersection

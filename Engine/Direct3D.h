@@ -100,6 +100,9 @@ namespace Direct3D
 	void Release();
 
 
+	SHADER_TYPE GetShaderType();
+
+
 	//三角形と線分（レイ）の衝突判定（衝突判定に使用）
 	//引数：start　		レイのスタート位置
 	//引数：direction	レイの方向

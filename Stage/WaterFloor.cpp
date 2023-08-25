@@ -18,6 +18,8 @@ void WaterFloor::Initialize()
 
 	transform_.scale_.x = 150;
 	transform_.scale_.z = 150;
+
+	transform_.position_.y -= 12;
 }
 
 void WaterFloor::Draw()
