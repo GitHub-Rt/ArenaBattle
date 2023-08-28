@@ -25,7 +25,7 @@ void WaterFloor::Initialize()
 void WaterFloor::Draw()
 {
 	// 専用のシェーダーに変更する
-	Direct3D::SetShader(Direct3D::SHADER_WATER);
+	//Direct3D::SetShader(Direct3D::SHADER_WATER);
 	StageDraw(transform_);
 
 	// 元のシェーダーに戻す
