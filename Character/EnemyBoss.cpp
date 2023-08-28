@@ -165,9 +165,9 @@ void EnemyBoss::AttackTypeSelection()
 #ifdef _DEBUG
 
 	// 動作確認用
-	//bossAIState = BossAIState::Caution;
-	//ChangeAttackState(BossAttackState::SpecialAttack);
-	//return;
+	bossAIState = BossAIState::Caution;
+	ChangeAttackState(BossAttackState::JumpAttack);
+	return;
 
 #endif
 
@@ -728,6 +728,9 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XM
 		CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
 		pPlayer->SetDamageStage(DamageStage::DamageStart);
 		pPlayer->SetDamageDirection(vec);
+
+		// 何とのダメージ判定処理なのかをLogで出力
+		
 	}
 }
 

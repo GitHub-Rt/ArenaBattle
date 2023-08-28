@@ -680,6 +680,25 @@ void Player::OnCollision(GameObject* pTarget, Collider* nowCollider)
 
 void Player::HPDamage(float value)
 {
+#ifdef _DEBUG
+
+	// 不死にする(ゲージはいつも通り減らすが0にはならない)
+	if (isImmortality)
+	{
+		hp -= value;
+		pGauge->Damage(value);
+		if (hp <= 0)
+		{
+			hp = 1;
+		}
+		return;
+	}
+
+
+
+
+#endif
+
 	hp -= value;
 	pGauge->Damage(value);
 }
@@ -797,3 +816,16 @@ bool Player::IsJumpEntry()
 }
 
 
+#ifdef _DEBUG
+
+void Player::Immortality()
+{
+	if (isImmortality == false)
+	{
+		isImmortality = true;
+	}
+	
+}
+
+
+#endif

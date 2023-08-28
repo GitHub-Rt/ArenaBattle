@@ -374,6 +374,9 @@
     <ClCompile Include="Stage\WaterFloor.cpp">
       <Filter>05Stage\StageObject</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Debug.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -633,6 +636,9 @@
     </ClInclude>
     <ClInclude Include="Stage\WaterFloor.h">
       <Filter>05Stage\StageObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Debug.h">
+      <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,8 @@ imguiObject::imguiObject(GameObject* parent)
     pRobot = nullptr;
     pEnemy = nullptr;
     pBoss = nullptr;
+
+    isImmortality = true;
 }
 
 imguiObject::~imguiObject()
@@ -28,6 +30,13 @@ void imguiObject::Initialize()
 {
     stateStr = "CharacterState : ";
     attackStateStr = "AttackState : ";
+
+    // プレイヤーを不死にするかどうか
+    if (isImmortality)
+    {
+        pPlayer = (Player*)FindObject("Player");
+        pPlayer->Immortality();
+    }
 }
 
 void imguiObject::Update()
@@ -39,6 +48,7 @@ void imguiObject::Update()
     // デバッグ機能
     if (ImGui::TreeNode("DebugMaster"))
     {
+
 
         ImGui::TreePop();
     }

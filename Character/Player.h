@@ -88,6 +88,14 @@ public:
 	bool IsRecoverEntry();		// 回復周りの入力
 	bool IsJumpEntry();			// ジャンプ周りの入力
 
+
+#ifdef _DEBUG	// デバッグ関数
+
+	void Immortality();	// 無敵(不死)にする関数
+
+
+#endif
+
 private:
 
 	// InternalDataCSVから値を格納する定数
@@ -144,4 +152,11 @@ private:
 	float angleX;				// 水平方向のカメラ回転角度
 	float angleY;				// 鉛直方向のカメラ回転角度
 	XMFLOAT3 cameraDirection;	// カメラの方向ベクトル
+
+
+#ifdef _DEBUG	// デバッグ変数
+
+	bool isImmortality;	// 不死かどうか
+
+#endif
 };

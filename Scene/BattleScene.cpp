@@ -42,7 +42,7 @@ void BattleScene::Initialize()
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
 
-	pManager->SetHardModeFlg();
+	//pManager->SetHardModeFlg();
 
 	pSound->SetSoundALLFalse();
 	pSound->SoundLoad(SoundTrack::BattleSound);
@@ -57,7 +57,7 @@ void BattleScene::Initialize()
 
 	Instantiate<Stage>(this);
 	Instantiate<BattleWall>(this);
-	Instantiate<BattleBackGround>(this);
+	//Instantiate<BattleBackGround>(this);
 
 	// リトライポイントを取得する
 	RetryPoint point = pManager->GetRetryPoint();

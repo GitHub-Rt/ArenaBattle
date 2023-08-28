@@ -23,6 +23,9 @@ public:
     std::string GetPlayerAttackStateString();
     std::string GetEnemyBossAttackStateString();
 
+
+
+
 private:
 
     Player* pPlayer;
@@ -33,4 +36,6 @@ private:
     std::string stateStr;
 
     std::string attackStateStr;
+
+    bool isImmortality;
 };

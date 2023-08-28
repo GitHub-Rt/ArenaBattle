@@ -158,7 +158,6 @@ void CharacterBase::CharacterDamageCalculation(CharacterID attackChara, Characte
 
 	
 	SetTakeDamageStart(target, attackDamage, indexNumber);
-	
 }
 
 void CharacterBase::SetTakeDamageStart(CharacterID target, float attackDamage, int indexNumber)

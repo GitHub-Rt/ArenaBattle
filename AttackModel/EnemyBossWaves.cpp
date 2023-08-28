@@ -12,6 +12,7 @@ EnemyBossWaves::EnemyBossWaves(GameObject* parent)
 	: AttackModelBase(parent, "EnemyBossWaves")
 {
 	pBoss = nullptr;
+	pPlayer = nullptr;
 	scalingTimer = 0;
 	inside = 0;
 	outside = 0;
@@ -36,16 +37,30 @@ void EnemyBossWaves::Initialize()
 
 void EnemyBossWaves::AttackModelUpdate()
 {
-	const int MAX_SCALING_TIME = 45;		// 拡大最大時間
-	const float SCALING_STEP = 0.096f;		// 拡大増加率
-	const float HIT_TEST_STEP = 0.91f;		// 当たり判定増減率
+	const int MAX_SCALING_TIME = 45;				// 拡大最大時間
+	const float SCALING_STEP = 0.096f;				// 拡大増加率
+	const float SCALING_STEP_SECOND = 0.049f;		// 拡大増加率(第二形態)
+	const float HIT_TEST_STEP = 0.91f;				// 当たり判定増減率
 
 	// 最大時間内ならモデルを拡大、時間外なら消す
 	if (scalingTimer < MAX_SCALING_TIME)
 	{
 		scalingTimer++;
 
-		// モデルの拡大
+		//// 形態別に拡大する
+		//if (pBoss->GetAIState() == BossAIState::Caution)
+		//{
+		//	// 第二形態のモデルの拡大
+		//	transform_.scale_.x += SCALING_STEP_SECOND;
+		//	transform_.scale_.z += SCALING_STEP_SECOND;
+		//}
+		//else
+		//{
+		//	// 第一形態のモデルの拡大
+		//	transform_.scale_.x += SCALING_STEP;
+		//	transform_.scale_.z += SCALING_STEP;
+		//}
+		
 		transform_.scale_.x += SCALING_STEP;
 		transform_.scale_.z += SCALING_STEP;
 
@@ -76,7 +91,7 @@ bool EnemyBossWaves::IsCollisionToPlayer()
 	pPlayer = (Player*)FindObject("Player");
 
 	// プレイヤーのポジションとの長さを調べる
-	XMFLOAT3 center = XMFLOAT3(0, 0, 0);
+	XMFLOAT3 center = pBoss->GetPosition();
 	XMFLOAT3 targetPos = pPlayer->GetPosition();
 
 	XMVECTOR vCenter = XMLoadFloat3(&center);
@@ -100,7 +115,7 @@ bool EnemyBossWaves::IsCollisionToPlayer()
 		length -= inside;
 
 		// モデル上にいて、プレイヤーの状態がジャンプではないかどうか
-		if (length <= WAVES_LENGTH && pPlayer->IsStateSet(CharacterState::Jumping) == false)
+		if (length <= WAVES_LENGTH && pPlayer->IsStateSet(CharacterState::Jumping) == false )
 		{
 			return true;
 		}

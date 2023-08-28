@@ -49,13 +49,16 @@ void DebugScene::Initialize()
 	{
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}*/
-	//pBoss = Instantiate<EnemyBoss>(this);
+	pBoss = Instantiate<EnemyBoss>(this);
+	pBoss->ProcessStart();
 
+	// 第二形態からスタートさせる
+	///pBoss->SecondFormStart();
 	
 	pPlayer = Instantiate<Player>(this);
 	//Instantiate<Robot>(this);
 
-	//Instantiate<imguiObject>(this);
+	Instantiate<imguiObject>(this);
 }
 
 void DebugScene::Update()

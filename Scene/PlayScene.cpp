@@ -11,6 +11,7 @@
 #include "../Character/Robot.h"
 
 #include "../UI/LevelSelectImage.h"
+#include "../UI/LoadingImage.h"
 #include "../UI/SelectBox.h"
 
 PlayScene::PlayScene(GameObject* parent)
@@ -111,8 +112,12 @@ void PlayScene::BattleStart()
 		// ƒŒƒxƒ‹Œˆ’è
 		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 		{
-			pManager->SetHardModeFlg();
+			if (nowLevel == GameLevel::Hard)
+			{
+				pManager->SetHardModeFlg();
+			}
 			pSound->SoundStop(SoundTrack::PlaySceneSound);
+			Instantiate<LoadingImage>(this);
 			pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
 		}
 		
@@ -120,6 +125,7 @@ void PlayScene::BattleStart()
 	else
 	{
 		pSound->SoundStop(SoundTrack::PlaySceneSound);
+		Instantiate<LoadingImage>(this);
 		pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
 	}
 }
