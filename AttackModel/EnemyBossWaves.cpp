@@ -47,22 +47,22 @@ void EnemyBossWaves::AttackModelUpdate()
 	{
 		scalingTimer++;
 
-		//// 形態別に拡大する
-		//if (pBoss->GetAIState() == BossAIState::Caution)
-		//{
-		//	// 第二形態のモデルの拡大
-		//	transform_.scale_.x += SCALING_STEP_SECOND;
-		//	transform_.scale_.z += SCALING_STEP_SECOND;
-		//}
-		//else
-		//{
-		//	// 第一形態のモデルの拡大
-		//	transform_.scale_.x += SCALING_STEP;
-		//	transform_.scale_.z += SCALING_STEP;
-		//}
+		// 形態別に拡大する
+		if (pBoss->GetAIState() == BossAIState::Caution)
+		{
+			// 第二形態のモデルの拡大
+			transform_.scale_.x += SCALING_STEP_SECOND;
+			transform_.scale_.z += SCALING_STEP_SECOND;
+		}
+		else
+		{
+			// 第一形態のモデルの拡大
+			transform_.scale_.x += SCALING_STEP;
+			transform_.scale_.z += SCALING_STEP;
+		}
 		
-		transform_.scale_.x += SCALING_STEP;
-		transform_.scale_.z += SCALING_STEP;
+		//transform_.scale_.z += SCALING_STEP;
+		//transform_.scale_.x += SCALING_STEP;
 
 		// 当たり判定変数更新
 		inside += HIT_TEST_STEP;

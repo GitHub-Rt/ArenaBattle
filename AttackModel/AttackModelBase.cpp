@@ -18,7 +18,8 @@ AttackModelBase::~AttackModelBase()
 
 void AttackModelBase::Update()
 {
-	if (IsEntered())
+	GameObject* parentObj = GetParent();
+	if (parentObj->IsEntered())
 	{
 		AttackModelUpdate();
 	}

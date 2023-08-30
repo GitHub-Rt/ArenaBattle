@@ -138,6 +138,17 @@ void EnemyBoss::AttackStartTimer()
 
 void EnemyBoss::SecondFormStart()
 {
+#ifdef _DEBUG
+
+	// 動作確認中なら無視する
+	if (isSelectAttack)
+	{
+		return;
+	}
+
+#endif
+
+
 	// リトライ時に呼ばれたらHPを減少させる
 	if (hp == maxHp)
 	{
@@ -164,7 +175,7 @@ void EnemyBoss::AttackTypeSelection()
 
 #ifdef _DEBUG
 
-	// 動作確認用
+	// 動作確認中なら無視する
 	if (isSelectAttack)
 	{
 		return;
@@ -612,6 +623,23 @@ void EnemyBoss::CharacterTakeDamage(float damage)
 
 void EnemyBoss::Damage(float damage)
 {
+
+#ifdef _DEBUG
+
+	// 不死にする(ゲージはいつも通り減らすが0にはならない)
+	if (isImmortality)
+	{
+		hp -= damage;
+		pGauge->Damage(damage);
+		if (hp <= 0)
+		{
+			hp = 1;
+		}
+		return;
+	}
+
+#endif
+
 	pGauge->Damage(damage);
 	hp -= damage;
 	totalDamages += damage;

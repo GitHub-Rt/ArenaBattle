@@ -129,13 +129,15 @@ public:
 
 #ifdef _DEBUG	// デバッグ関数
 
+	// 攻撃手段関数
 	void SetAttackSlect(BossAttackState next)
 	{
 		isSelectAttack = true;
 		bossAttackState = (unsigned int)next;
 	}
-
 	unsigned int GetAttackState() { return bossAttackState; }
+
+	void Immortality(bool next) { isImmortality = next; }	// 不死にする関数
 
 #endif
 
@@ -216,6 +218,7 @@ private:
 #ifdef _DEBUG	// デバッグ変数
 
 	bool isSelectAttack;	// 攻撃方法が選択されているかどうか
+	bool isImmortality;		// 不死かどうか
 
 #endif
 };

@@ -694,9 +694,6 @@ void Player::HPDamage(float value)
 		return;
 	}
 
-
-
-
 #endif
 
 	hp -= value;

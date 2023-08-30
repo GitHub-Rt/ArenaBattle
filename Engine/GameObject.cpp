@@ -212,7 +212,6 @@ void GameObject::KillObjectSub(GameObject * obj)
 }
 
 
-
 //コライダー（衝突判定）を追加する
 void GameObject::AddCollider(Collider* collider)
 {
@@ -322,6 +321,7 @@ void GameObject::UpdateSub()
 
 void GameObject::DrawSub()
 {
+
 	Draw();
 
 

@@ -1,6 +1,9 @@
 #include "imguiObject.h"
 #include "imgui.h"
 
+#include "../Engine/RootObject.h"
+#include "../Engine/VFX.h"
+
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
 #include "../Character/Enemy.h"
@@ -22,6 +25,7 @@ imguiObject::imguiObject(GameObject* parent)
 
     isImmortality = true;
     isGameLevelHard = false;
+    isStopDrawing = false;
 }
 
 imguiObject::~imguiObject()
@@ -55,7 +59,6 @@ void imguiObject::Update()
     // デバッグ機能
     if (ImGui::TreeNode("DebugMaster"))
     {
-
         // 難易度選択
         if (ImGui::TreeNode("GameLevel"))
         {
@@ -90,7 +93,7 @@ void imguiObject::Update()
         if (ImGui::TreeNode("EnemyBossDebug"))
         {
             // 攻撃手段
-            if (ImGui::TreeNode("EnemyBossAttack"))
+            if (ImGui::TreeNode("AttackSelect"))
             {
                 // 攻撃手段を未攻撃で初期化する
                 static int attackNum = 1;
@@ -130,7 +133,7 @@ void imguiObject::Update()
             }
 
             // AIレベル
-            if (ImGui::TreeNode("EnemyBossAILevel"))
+            if (ImGui::TreeNode("AILevel"))
             {
                 // AIレベルを余裕で初期化する
                 static int aiLevel = 1;
@@ -150,11 +153,23 @@ void imguiObject::Update()
                 ImGui::TreePop();
             }
 
+            // 不死にするかどうか
+            if (ImGui::TreeNode("Immortality"))
+            {
+                static bool isImmortality = false;
+
+                ImGui::Checkbox("Immortality", &isImmortality);
+
+                // 状態をセットする
+                pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+                pBoss->Immortality(isImmortality);
+
+
+                ImGui::TreePop();
+            }
 
             ImGui::TreePop();
         }
-
-
 
         ImGui::TreePop();
     }
