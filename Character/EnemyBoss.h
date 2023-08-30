@@ -122,10 +122,22 @@ public:
 	// 初期位置周辺に戻ってきたかどうか(戻ってきたらtrue)
 	bool IsFirstPosAround(XMFLOAT3 pos);
 
-
+	void SetAIState(BossAIState next) { bossAIState = next; }
 	BossAIState GetAIState() { return bossAIState; }
 
 	float GetHP() { return hp; }
+
+#ifdef _DEBUG	// デバッグ関数
+
+	void SetAttackSlect(BossAttackState next)
+	{
+		isSelectAttack = true;
+		bossAttackState = (unsigned int)next;
+	}
+
+	unsigned int GetAttackState() { return bossAttackState; }
+
+#endif
 
 private:
 	
@@ -200,5 +212,11 @@ private:
 	// 被ダメージ周りの変数
 	int damageTimer;
 	float totalDamages;
+
+#ifdef _DEBUG	// デバッグ変数
+
+	bool isSelectAttack;	// 攻撃方法が選択されているかどうか
+
+#endif
 };
 

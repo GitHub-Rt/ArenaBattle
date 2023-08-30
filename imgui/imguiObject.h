@@ -22,9 +22,7 @@ public:
 
     std::string GetPlayerAttackStateString();
     std::string GetEnemyBossAttackStateString();
-
-
-
+    std::string GetAIStateString();
 
 private:
 
@@ -34,8 +32,9 @@ private:
     EnemyBoss* pBoss;
 
     std::string stateStr;
-
     std::string attackStateStr;
+    std::string aiStateStr;
 
     bool isImmortality;
+    bool isGameLevelHard;
 };

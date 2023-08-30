@@ -8,6 +8,7 @@
 
 #include "../Manager/EnemyManager.h"
 
+#include "../Scene/SceneManager.h"
 
 #include <stdio.h>
 
@@ -20,6 +21,7 @@ imguiObject::imguiObject(GameObject* parent)
     pBoss = nullptr;
 
     isImmortality = true;
+    isGameLevelHard = false;
 }
 
 imguiObject::~imguiObject()
@@ -28,8 +30,11 @@ imguiObject::~imguiObject()
 
 void imguiObject::Initialize()
 {
+#ifdef _DEBUG
+
     stateStr = "CharacterState : ";
     attackStateStr = "AttackState : ";
+    aiStateStr = "AIState : ";
 
     // プレイヤーを不死にするかどうか
     if (isImmortality)
@@ -37,6 +42,8 @@ void imguiObject::Initialize()
         pPlayer = (Player*)FindObject("Player");
         pPlayer->Immortality();
     }
+
+#endif
 }
 
 void imguiObject::Update()
@@ -48,6 +55,105 @@ void imguiObject::Update()
     // デバッグ機能
     if (ImGui::TreeNode("DebugMaster"))
     {
+
+        // 難易度選択
+        if (ImGui::TreeNode("GameLevel"))
+        {
+            static bool isChangeMode = false;
+
+            // 難易度変更のチェックボックス
+            ImGui::Checkbox("GameLeveltoHard", &isGameLevelHard);
+
+            // HardModeでSceneをリロードする
+            if (isGameLevelHard && isChangeMode == false)
+            {
+                isChangeMode = true;
+
+                SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+                pManager->SetHardModeFlg();
+                pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
+            }
+            else if (isGameLevelHard == false && isChangeMode)
+            {
+                isChangeMode = false;
+
+                // EasyモードでSceneをリロードする
+                SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+                pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
+            }
+
+
+            ImGui::TreePop();
+        }
+
+        // 敵ボス
+        if (ImGui::TreeNode("EnemyBossDebug"))
+        {
+            // 攻撃手段
+            if (ImGui::TreeNode("EnemyBossAttack"))
+            {
+                // 攻撃手段を未攻撃で初期化する
+                static int attackNum = 1;
+
+                // 現在攻撃を保存する
+                pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+                int prevAttack = pBoss->GetAttackState();
+
+                // 攻撃手段を設定する
+                ImGui::RadioButton("NoAttack", &attackNum, (int)BossAttackState::NoAttack);
+                ImGui::SameLine();
+                ImGui::RadioButton("BulletAttack", &attackNum, (int)BossAttackState::BulletAttack);
+                
+                ImGui::RadioButton("SpiralMoveAttack", &attackNum, (int)BossAttackState::SpiralMoveAttack);
+                ImGui::SameLine();
+                ImGui::RadioButton("WavesAttack", &attackNum, (int)BossAttackState::WavesAttack);
+
+                ImGui::RadioButton("JumpAttack", &attackNum, (int)BossAttackState::JumpAttack);
+                ImGui::SameLine();
+                ImGui::RadioButton("SpecialAttack", &attackNum, (int)BossAttackState::SpecialAttack);
+
+                // 該当攻撃を行う用にセットする
+                if (prevAttack != attackNum)
+                {
+                    // 初期位置に戻す
+                    pBoss->ReturnFirstPos();
+                    if (pBoss->IsFirstPosAround(pBoss->GetPosition()))
+                    {
+                        // 攻撃変数を初期化して選択した新しい攻撃を開始させる
+                        pBoss->AttackVariableReset((BossAttackState)prevAttack);
+                        pBoss->SetAttackSlect((BossAttackState)attackNum);
+                    }
+                    
+                }
+
+                ImGui::TreePop();
+            }
+
+            // AIレベル
+            if (ImGui::TreeNode("EnemyBossAILevel"))
+            {
+                // AIレベルを余裕で初期化する
+                static int aiLevel = 1;
+
+                // AIレベル選択RadioButton
+                ImGui::RadioButton("Allowance", &aiLevel, (int)BossAIState::Allowance);
+                ImGui::SameLine();
+                ImGui::RadioButton("Normal", &aiLevel, (int)BossAIState::Normal);
+                ImGui::SameLine();
+                ImGui::RadioButton("Caution", &aiLevel, (int)BossAIState::Caution);
+
+                // 選択したAIレベルに変更する
+                pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+                pBoss->SetAIState((BossAIState)aiLevel);
+
+
+                ImGui::TreePop();
+            }
+
+
+            ImGui::TreePop();
+        }
+
 
 
         ImGui::TreePop();
@@ -163,6 +269,9 @@ void imguiObject::Update()
 
                 std::string attack = GetEnemyBossAttackStateString();
                 ImGui::Text(attack.c_str());
+
+                std::string ai = GetAIStateString();
+                ImGui::Text(ai.c_str());
             }
             
 
@@ -305,4 +414,33 @@ std::string imguiObject::GetEnemyBossAttackStateString()
     }
 
     return attackStateStr + nowAttackState;
+}
+
+std::string imguiObject::GetAIStateString()
+{
+    std::string nowAIState = "";
+
+    BossAIState nowState = pBoss->GetAIState();
+
+    switch (nowState)
+    {
+    case BossAIState::Allowance:
+        nowAIState = "Allowance";
+        break;
+    case BossAIState::Normal:
+        nowAIState = "Normal";
+        break;
+    case BossAIState::Caution:
+        nowAIState = "Caution";
+        break;
+    default:
+        break;
+    }
+
+    if (nowAIState == "")
+    {
+        nowAIState = "Unknown";
+    }
+
+    return aiStateStr + nowAIState;
 }

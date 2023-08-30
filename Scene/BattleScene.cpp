@@ -5,6 +5,7 @@
 #include "../Stage/Stage.h"
 #include "../Stage/BattleWall.h"
 #include "../Stage/BattleBackGround.h"
+#include "../Stage/WaterFloor.h"
 
 #include "../Character/Player.h"
 #include "../Character/Robot.h"
@@ -42,8 +43,6 @@ void BattleScene::Initialize()
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
 
-	//pManager->SetHardModeFlg();
-
 	pSound->SetSoundALLFalse();
 	pSound->SoundLoad(SoundTrack::BattleSound);
 	pSound->SoundLoad(SoundTrack::BossSound);
@@ -57,6 +56,7 @@ void BattleScene::Initialize()
 
 	Instantiate<Stage>(this);
 	Instantiate<BattleWall>(this);
+	Instantiate<WaterFloor>(this);
 	//Instantiate<BattleBackGround>(this);
 
 	// リトライポイントを取得する
