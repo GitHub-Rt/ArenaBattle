@@ -156,13 +156,10 @@ int GameSound::EffectLoad(SoundEffect effectNumber, float volume)
 void GameSound::EffectPlay(SoundEffect effectNumber)
 {
 	if (effect[(int)effectNumber].isPlay)
-	{//Šù‚ÉÄ¶‚³‚ê‚Ä‚¢‚½‚ç–ß‚é
-		return;
-	}
-	else
 	{
-		effect[(int)effectNumber].isPlay = true;
+		EffectStop(effectNumber);
 	}
+	effect[(int)effectNumber].isPlay = true;
 	Audio::Play((int)effect[(int)effectNumber].soundEffect);
 }
 

@@ -56,10 +56,6 @@ void StartScene::Update()
 	// 該当するシーンに遷移する
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 	{
-		if (pSound->GetEffectFlg(SoundEffect::Determinant))
-		{
-			pSound->EffectStop(SoundEffect::Determinant);
-		}
 		pSound->EffectPlay(SoundEffect::Determinant);
 
 		switch (nowState)
@@ -98,10 +94,6 @@ void StartScene::ChangeStateUIPosition()
 
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
 	{
-		if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
-		{
-			pSound->EffectStop(SoundEffect::MoveSelection);
-		}
 		pSound->EffectPlay(SoundEffect::MoveSelection);
 
 		// 一番下の項目が今の状態ではないかを確認
@@ -115,10 +107,6 @@ void StartScene::ChangeStateUIPosition()
 	}
 	else if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP) || Input::IsKeyDown(DIK_UP))
 	{
-		if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
-		{
-			pSound->EffectStop(SoundEffect::MoveSelection);
-		}
 		pSound->EffectPlay(SoundEffect::MoveSelection);
 
 		// 一番上の項目が今の状態ではないかを確認

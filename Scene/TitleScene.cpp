@@ -38,11 +38,6 @@ void TitleScene::Update()
 
 	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 	{
-		if (pSound->GetEffectFlg(SoundEffect::Determinant))
-		{
-			pSound->EffectStop(SoundEffect::Determinant);
-		}
-
 		pSound->EffectPlay(SoundEffect::Determinant);
 
 		// まだタイトル画像が不透明じゃない状態だったら不透明にする

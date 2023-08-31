@@ -262,7 +262,6 @@ void imguiObject::Update()
                 }
             }
            
-
             ImGui::TreePop();
         }
 
@@ -288,11 +287,9 @@ void imguiObject::Update()
                 std::string ai = GetAIStateString();
                 ImGui::Text(ai.c_str());
             }
-            
 
             ImGui::TreePop();
         }
-
 
         ImGui::TreePop();
     }

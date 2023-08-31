@@ -179,10 +179,6 @@ void BattleScene::Update()
 			{
 				if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP) || Input::IsKeyDown(DIK_UP))
 				{
-					if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
-					{
-						pSound->EffectStop(SoundEffect::MoveSelection);
-					}
 					pSound->EffectPlay(SoundEffect::MoveSelection);
 					nowRetryMenu = RetryMenu::Retry;
 					pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, RETORY_POS_Y, 0));
@@ -190,10 +186,6 @@ void BattleScene::Update()
 
 				if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
 				{
-					if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
-					{
-						pSound->EffectStop(SoundEffect::MoveSelection);
-					}
 					pSound->EffectPlay(SoundEffect::MoveSelection);
 					nowRetryMenu = RetryMenu::GameOver;
 					pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, OVER_POS_Y, 0));
@@ -203,10 +195,6 @@ void BattleScene::Update()
 			// ‘I‘ð
 			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 			{
-				if (pSound->GetEffectFlg(SoundEffect::Determinant))
-				{
-					pSound->EffectStop(SoundEffect::Determinant);
-				}
 				pSound->EffectPlay(SoundEffect::Determinant);
 
 				isRetryProcess = false;
@@ -270,10 +258,6 @@ void BattleScene::Update()
 
 			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
 			{
-				if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
-				{
-					pSound->EffectStop(SoundEffect::MoveSelection);
-				}
 				pSound->EffectPlay(SoundEffect::MoveSelection);
 				nowMenu = Menu::ToStart;
 				pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, START_POS_Y, 0));
@@ -283,10 +267,6 @@ void BattleScene::Update()
 		// ‘I‘ð
 		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 		{
-			if (pSound->GetEffectFlg(SoundEffect::Determinant))
-			{
-				pSound->EffectStop(SoundEffect::Determinant);
-			}
 			pSound->EffectPlay(SoundEffect::Determinant);
 
 			isPauseProcess = false;
