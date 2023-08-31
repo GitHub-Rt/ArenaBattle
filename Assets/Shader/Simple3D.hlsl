@@ -147,7 +147,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	float LightLength = inData.LighViewPos.z / inData.LighViewPos.w;
 	if (LightLength - TexValue > 0.002) //ライトビューでの長さが短い（ライトビューでは遮蔽物がある） 
 	{
-		color *= 0.6; //影（明るさを調節） 
+		color *= 0.8; //影（明るさを調節） 
 	}
 	color.a = diffuse.a;
 	return color;

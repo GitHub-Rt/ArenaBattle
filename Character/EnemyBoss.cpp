@@ -98,20 +98,20 @@ EnemyBoss::~EnemyBoss()
 void EnemyBoss::SetData()
 {
 	ENTRY_FIRST_POS_Y = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::EntryFirstPosY);
-	ATTACK_INTERVAL_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::AttackIntervalTime);
-	DAMAGE_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::DamageTime);
-	RATE_FOR_MAX_STRENGTH = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::RateForMaxStrength);
-	TOTAL_DAMAGES_UP_AI_LEVEl = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TotalDamagesUpAILevel);
-	BULLET_ATK_INTERVAL_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkIntervalTime);
-	BULLET_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMaxCount);
+	ATTACK_INTERVAL_TIME = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::AttackIntervalTime);
+	DAMAGE_TIME = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::DamageTime);
+	RATE_FOR_MAX_STRENGTH = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::RateForMaxStrength);
+	TOTAL_DAMAGES_UP_AI_LEVEl = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TotalDamagesUpAILevel);
+	BULLET_ATK_INTERVAL_TIME = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkIntervalTime);
+	BULLET_ATK_MAX_COUNT = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMaxCount);
 	BULLET_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMagnification);
 	SPIRAL_MOVE_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::SpiralMoveAtkMagnification);
-	WAVES_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMaxCount);
+	WAVES_ATK_MAX_COUNT = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMaxCount);
 	WAVES_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMagnification);
-	JUMP_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkMaxCount);
-	JUMP_ATK_BET_TIMER = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkBetTimer);
+	JUMP_ATK_MAX_COUNT = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkMaxCount);
+	JUMP_ATK_BET_TIMER = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkBetTimer);
 	JUMP_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkMagnification);
-	TIME_UP_TO_SPECIAL_ATTACK = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TimeUpToSpecialAttack);
+	TIME_UP_TO_SPECIAL_ATTACK = (int)GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::TimeUpToSpecialAttack);
 	SPECIAL_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::SpecialAtkMagnification);
 
 }
@@ -137,7 +137,7 @@ void EnemyBoss::Initialize()
 		transform_.position_.y = ENTRY_FIRST_POS_Y;
 
 
-		hp = GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP);
+		hp = (float)GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP);
 		maxHp = hp;
 
 		pLine = new PolyLine();

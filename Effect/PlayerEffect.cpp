@@ -34,7 +34,7 @@ void PlayerEffect::StartEffectDetonation()
 	data_Detonation.direction = XMFLOAT3(0, 1, 0);
 	data_Detonation.directionRnd = XMFLOAT3(90, 90, 90);
 	data_Detonation.speed = 0.1f;
-	data_Detonation.speedRnd = 0.8;
+	data_Detonation.speedRnd = 0.8f;
 	data_Detonation.size = XMFLOAT2(1.2, 1.2);
 	data_Detonation.sizeRnd = XMFLOAT2(0.4, 0.4);
 	data_Detonation.scale = XMFLOAT2(1.05, 1.05);
