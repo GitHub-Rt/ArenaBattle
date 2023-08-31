@@ -31,7 +31,7 @@ DebugScene::DebugScene(GameObject* parent)
 
 void DebugScene::Initialize()
 {
-	//SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 	//pManager->SetHardModeFlg();
 
 	/*if (EnemyManager::IsListEmpty() == false)
@@ -48,6 +48,21 @@ void DebugScene::Initialize()
 	{
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}*/
+
+	BossScene nowBoss = pManager->GetBossScene();
+	
+	switch (nowBoss)
+	{
+	case BossScene::NormalBoss:
+		pBoss = Instantiate<EnemyBoss>(this);
+		pBoss->ProcessStart();
+		break;
+	case BossScene::SecretBoss:
+
+		break;
+	default:
+		break;
+	}
 	pBoss = Instantiate<EnemyBoss>(this);
 	pBoss->ProcessStart();
 

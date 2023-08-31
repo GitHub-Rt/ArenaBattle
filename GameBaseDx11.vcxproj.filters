@@ -380,6 +380,9 @@
     <ClCompile Include="UI\PauseImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
+    <ClCompile Include="Character\SecretEnemyBoss.cpp">
+      <Filter>06Character\Enemy\EnemyObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -645,6 +648,10 @@
     </ClInclude>
     <ClInclude Include="UI\PauseImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="SecretBoss.h" />
+    <ClInclude Include="Character\SecretEnemyBoss.h">
+      <Filter>06Character\Enemy\EnemyObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
