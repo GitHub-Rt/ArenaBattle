@@ -84,7 +84,6 @@ private:
 	SCENE_ID prevSceneID_;		//前回のシーン
 
 	RetryPoint nowPoint;
-
 	GameSound* pSound;
 
 	bool isCleared;				// クリアしたかどうか

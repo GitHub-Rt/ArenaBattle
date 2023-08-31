@@ -1,6 +1,8 @@
 #include "EnemyBoss.h"
 #include "../UI/EnemyBossGauge.h"
 
+#include "../Effect/PolyLine.h"
+
 #include "Player.h"
 #include "../AttackModel/EnemyBossBullet.h"
 #include "../AttackModel/EnemyBossWaves.h"
@@ -18,29 +20,79 @@ const FLOAT ENTRY_FALL_SPEED = 1.6f;
 EnemyBoss::EnemyBoss(GameObject* parent)
 	: EnemyBase(parent, "EnemyBoss")
 {
-	pPlayer = nullptr;
-	pGauge = nullptr;
+	ENTRY_FIRST_POS_Y = 0;
+	ATTACK_INTERVAL_TIME = 0;
+	DAMAGE_TIME = 0;
+	RATE_FOR_MAX_STRENGTH = 0;
+	TOTAL_DAMAGES_UP_AI_LEVEl = 0;
+	BULLET_ATK_INTERVAL_TIME = 0;
+	BULLET_ATK_MAX_COUNT = 0;
+	BULLET_ATK_MAGNIFICATION = 0;
+	SPIRAL_MOVE_ATK_MAGNIFICATION = 0;
+	WAVES_ATK_MAX_COUNT = 0;
+	WAVES_ATK_MAGNIFICATION = 0;
+	JUMP_ATK_MAX_COUNT = 0;
+	JUMP_ATK_BET_TIMER = 0;
+	JUMP_ATK_MAGNIFICATION = 0;
+	TIME_UP_TO_SPECIAL_ATTACK = 0;
+	SPECIAL_ATK_MAGNIFICATION = 0;
 
+	ENTRY_POS_Y = 0;
+
+	pPlayer = nullptr;
 	bossAttackState = (unsigned int)BossAttackState::NoAttack;
 	bossAIState = BossAIState::Allowance;
-	
-	attackIntervalTimer = 0;
+	firstPos = { 0,0,0 };
 
+	attackIntervalTimer = 0;
+	jumpSpeed = 0;
 
 	bulletTimer = 0;
 	bulletCount = 0;
 
+	pLine = nullptr;
+	spiralAngle = 0;
+	spiralRadius = 0;
+	isEndLine = false;
+	isDrawPolyLine = false;
+	
+	wavesCount = 0;
+	wavesJumpTimer = 0;
+
+	pArea = nullptr;
+	jumpBetTimer = 0;
+	jumpCount = 0;
+	landingPosition = { 0,0,0 };
+	isPointGetting = false;
+
+	pSpecialArea = nullptr;
+	specialTimer = 0;
+	isSelectAttack = false;
+
+	pGauge = nullptr;
+	maxHp = 0;
 	hp = 0;
 
 	pWarning = nullptr;
 
 	damageTimer = 0;
 	totalDamages = 0;
+
+#ifdef _DEBUG
+
+	isSelectAttack = false;
+	isImmortality = false;
+
+#endif
 }
 
 EnemyBoss::~EnemyBoss()
 {
-
+	if (pLine != nullptr)
+	{
+		pLine->Release();
+		SAFE_DELETE(pLine);
+	}
 }
 
 void EnemyBoss::SetData()
@@ -53,6 +105,7 @@ void EnemyBoss::SetData()
 	BULLET_ATK_INTERVAL_TIME = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkIntervalTime);
 	BULLET_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMaxCount);
 	BULLET_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::BulletAtkMagnification);
+	SPIRAL_MOVE_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::SpiralMoveAtkMagnification);
 	WAVES_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMaxCount);
 	WAVES_ATK_MAGNIFICATION = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::WavesAtkMagnification);
 	JUMP_ATK_MAX_COUNT = GetInternalData(CharacterID::EnemyBoss, (int)EnemyBossData::JumpAtkMaxCount);
@@ -77,13 +130,18 @@ void EnemyBoss::Initialize()
 	// 変数の初期化
 	{
 		// 着地点のy座標を設定
+		
 		ENTRY_POS_Y = transform_.position_.y;
 		firstPos = transform_.position_;
+		//firstPos.y -= PositionAdjustment(transform_.position_);
 		transform_.position_.y = ENTRY_FIRST_POS_Y;
 
 
 		hp = GetParameterValue(CharacterID::EnemyBoss, CharacterStatus::HP);
 		maxHp = hp;
+
+		pLine = new PolyLine();
+		pLine->Load("Effect/tex.png");
 
 		// 各種該当状態を拒否
 		Leave();		// Update
@@ -93,7 +151,11 @@ void EnemyBoss::Initialize()
 
 void EnemyBoss::EnemyRelease()
 {
-
+	if (pLine != nullptr)
+	{
+		pLine->Release();
+		SAFE_DELETE(pLine);
+	}
 }
 
 void EnemyBoss::EnemyUpdate()
@@ -334,12 +396,13 @@ void EnemyBoss::SpiralMoveAttackAction()
 		nextPosZ = spiralRadius * sin(spiralAngle);
 	}
 
-	
-	
-
 	// 螺旋移動
 	transform_.position_.x = nextPosX * MOVING_MAGNIFICATION;
 	transform_.position_.z = nextPosZ * MOVING_MAGNIFICATION;
+
+	// PolyLine
+	pLine->AddPosition(transform_.position_);
+	isDrawPolyLine = true;
 
 	// 端に到達したかどうか
 	if (IsMoveLimit(transform_.position_) && isEndLine == false)
@@ -350,7 +413,8 @@ void EnemyBoss::SpiralMoveAttackAction()
 	// 初期位置周辺に戻ってきたかどうか
 	if (isEndLine && IsFirstPosAround(transform_.position_))
 	{
-		transform_.position_ = firstPos;
+		transform_.position_.x = firstPos.x;
+		transform_.position_.z = firstPos.z;
 		AttackVariableReset(BossAttackState::SpiralMoveAttack);
 	}
 
@@ -470,7 +534,8 @@ void EnemyBoss::JumpAttackAction()
 	{
 		if (IsFirstPosAround(transform_.position_))
 		{
-			transform_.position_ = firstPos;
+			transform_.position_.x = firstPos.x;
+			transform_.position_.z = firstPos.z;
 			AttackVariableReset(BossAttackState::JumpAttack);
 		}
 		else
@@ -550,6 +615,7 @@ void EnemyBoss::AttackVariableReset(BossAttackState nowState)
 		break;
 	case BossAttackState::SpiralMoveAttack:
 		isEndLine = false;
+		isDrawPolyLine = false;
 		spiralAngle = 0;
 		spiralRadius = 0;
 		break;
@@ -675,7 +741,10 @@ void EnemyBoss::CharacterCheckHP()
 
 void EnemyBoss::DrawEffect()
 {
-
+	if (isDrawPolyLine)
+	{
+		pLine->Draw();
+	}
 }
 
 void EnemyBoss::CharacterStunAction()
@@ -692,7 +761,7 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 		if (IsStateSet(CharacterState::Attacking))
 		{
 			// 攻撃倍率の設定
-			float atackMagnification = 1.0f;
+			float attackMagnification = 1.0f;
 
 			for (unsigned int nowState = (unsigned int)BossAttackState::NoAttack; nowState <= (unsigned int)BossAttackState::MaxAttackState; nowState++)
 			{
@@ -702,19 +771,21 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 				{
 				case BossAttackState::NoAttack:
 					break;
+				case BossAttackState::SpiralMoveAttack:
+					attackMagnification = SPIRAL_MOVE_ATK_MAGNIFICATION;
+					break;
 				case BossAttackState::JumpAttack:
-					atackMagnification = JUMP_ATK_MAGNIFICATION;
+					attackMagnification = JUMP_ATK_MAGNIFICATION;
 					break;
 				default:
 					break;
 				}
-
 			}
 			
 			// プレイヤーがダメージを受けていなかったらダメージ処理を行わせる
-			if (pPlayer->GetDamageState() == DamageStage::NoDamage)
+			if (pPlayer->GetDamageState() == DamageStage::NoDamage && attackMagnification != 1.0f)
 			{
-				CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
+				CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, attackMagnification);
 				pPlayer->SetDamageStage(DamageStage::DamageStart);
 				pPlayer->SetDamageDirection(-(GetFrontVector()));
 			}
@@ -737,25 +808,25 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XM
 	pPlayer = (Player*)FindObject("Player");
 
 	// 攻撃倍率の設定
-	float atackMagnification = 1.0f;
+	float attackMagnification = 1.0f;
 
 	// モデルハンドル別に倍率を設定
 	switch (attackSource)
 	{
 	case BossAttackModelHandle::Bullet:
-		atackMagnification = BULLET_ATK_MAGNIFICATION;
+		attackMagnification = BULLET_ATK_MAGNIFICATION;
 		break;
 	case BossAttackModelHandle::Wave:
-		atackMagnification = WAVES_ATK_MAGNIFICATION;
+		attackMagnification = WAVES_ATK_MAGNIFICATION;
 		break;
 	default:
 		break;
 	}
 
 	// プレイヤーがダメージを受けていなかったらダメージ処理を行わせる
-	if (pPlayer->GetDamageState() == DamageStage::NoDamage)
+	if (pPlayer->GetDamageState() == DamageStage::NoDamage && attackMagnification != 1.0f)
 	{
-		CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, atackMagnification);
+		CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, attackMagnification);
 		pPlayer->SetDamageStage(DamageStage::DamageStart);
 		pPlayer->SetDamageDirection(vec);		
 	}

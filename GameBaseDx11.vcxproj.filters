@@ -377,6 +377,9 @@
     <ClCompile Include="Engine\Debug.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="UI\PauseImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -639,6 +642,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Debug.h">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\PauseImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

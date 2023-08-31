@@ -88,11 +88,12 @@ public:
 	bool IsRecoverEntry();		// 回復周りの入力
 	bool IsJumpEntry();			// ジャンプ周りの入力
 
-
 #ifdef _DEBUG	// デバッグ関数
 
-	void Immortality();	// 無敵(不死)にする関数
+	void Immortality() { isImmortality = true; }
 
+	// 不死の解除
+	void ImmortalityCancellation() { isImmortality = false; }	
 
 #endif
 
@@ -110,15 +111,11 @@ private:
 	float RECOVERY_QUANTITY;				// 回復量
 	float MAX_DAMAGE_TIMER;					// 被ダメージ最大時間
 
-	// ポインタ
+	// 体力周りの変数
 	PlayerGauge* pGauge;
 	RecoveryPotion* pPotion;
-
-	// 全体変数
 	int hRecoveryEffect;	// 回復効果音の番号
 	float hp;				// 体力
-	XMFLOAT3 cameraPosition;	// カメラのポジション
-	XMFLOAT3 cameraFocus;		// カメラの焦点
 
 	// 入力周りの変数
 	bool isTrrigerReset;		// 回避の入力をリセットしたかどうか
@@ -135,8 +132,8 @@ private:
 
 
 	// 攻撃周りの変数
+	PlayerEffect* pEffect;
 	AttackState attackState;		// 攻撃状態
-	PlayerEffect* pEffect;			// エフェクトのポインタ
 	int attackTimer;				// 攻撃時間
 	XMVECTOR attackVector;			// 入力ベクトル
 
@@ -152,6 +149,8 @@ private:
 	float angleX;				// 水平方向のカメラ回転角度
 	float angleY;				// 鉛直方向のカメラ回転角度
 	XMFLOAT3 cameraDirection;	// カメラの方向ベクトル
+	XMFLOAT3 cameraPosition;	// カメラのポジション
+	XMFLOAT3 cameraFocus;		// カメラの焦点
 
 
 #ifdef _DEBUG	// デバッグ変数

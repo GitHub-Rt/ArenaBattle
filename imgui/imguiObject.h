@@ -37,5 +37,4 @@ private:
 
     bool isImmortality;
     bool isGameLevelHard;
-    bool isStopDrawing;
 };

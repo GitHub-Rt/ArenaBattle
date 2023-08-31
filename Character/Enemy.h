@@ -43,11 +43,7 @@ public:
 	void DrawEffect() override {};
 	void CharacterStunAction() override {};
 
-#ifdef _DEBUG
-
-	bool isDamage;
-
-	bool IsDamage() { return isDamage; }
+#ifdef _DEBUG // デバッグ関数
 
 	float GetHP() { return hp; }
 

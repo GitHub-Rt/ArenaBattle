@@ -7,11 +7,18 @@ class EnemyBoss;
 class Player;
 
 class SelectBox;
+class PauseImage;
 
 enum class RetryMenu
 {
 	Retry,
 	GameOver
+};
+
+enum class Menu
+{
+	BackGame,
+	ToStart
 };
 
 class BattleScene : public GameObject
@@ -28,8 +35,9 @@ public:
 	// ボスの第二形態に入った時に音楽を変える関数
 	void ChangeBossSound();
 
-	// リトライ回りの関数
+	// リトライ、ポーズ回りの関数
 	void BattleRetry();
+	void BackBattle();
 	void PoseProcess();
 
 private:
@@ -40,8 +48,11 @@ private:
 	Player* pPlayer;
 
 	SelectBox* pBox;
-	RetryMenu nowMenu;
+	PauseImage* pPause;
+	RetryMenu nowRetryMenu;
+	Menu nowMenu;
 	bool isRetryProcess;
+	bool isPauseProcess;
 
 };
 

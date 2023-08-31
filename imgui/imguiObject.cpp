@@ -25,7 +25,6 @@ imguiObject::imguiObject(GameObject* parent)
 
     isImmortality = true;
     isGameLevelHard = false;
-    isStopDrawing = false;
 }
 
 imguiObject::~imguiObject()
@@ -40,12 +39,9 @@ void imguiObject::Initialize()
     attackStateStr = "AttackState : ";
     aiStateStr = "AIState : ";
 
-    // プレイヤーを不死にするかどうか
-    if (isImmortality)
-    {
-        pPlayer = (Player*)FindObject("Player");
-        pPlayer->Immortality();
-    }
+    // プレイヤーを不死にする
+    pPlayer = (Player*)FindObject("Player");
+    pPlayer->Immortality();
 
 #endif
 }
@@ -59,6 +55,21 @@ void imguiObject::Update()
     // デバッグ機能
     if (ImGui::TreeNode("DebugMaster"))
     {
+        static bool isNormalPlay = false;
+        ImGui::Checkbox("NormalPlayMode", &isNormalPlay);
+
+        // 通常プレイに移行する(タイトルから一連の動きをプレイする)
+        if (isNormalPlay)
+        {            
+            // プレイヤーの不死の解除
+            pPlayer = (Player*)FindObject("Player");
+            pPlayer->ImmortalityCancellation();
+
+            // タイトルシーンへ移行
+            SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+            pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+        }
+
         // 難易度選択
         if (ImGui::TreeNode("GameLevel"))
         {
@@ -85,13 +96,14 @@ void imguiObject::Update()
                 pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
             }
 
-
             ImGui::TreePop();
         }
 
         // 敵ボス
         if (ImGui::TreeNode("EnemyBossDebug"))
         {
+            pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+
             // 攻撃手段
             if (ImGui::TreeNode("AttackSelect"))
             {
@@ -243,18 +255,6 @@ void imguiObject::Update()
                             ImGui::Text("position_x : %g", pEnemy->GetPosition().x);
                             ImGui::Text("position_y : %g", pEnemy->GetPosition().y);
                             ImGui::Text("position_z : %g", pEnemy->GetPosition().z);
-
-
-                            std::string damegeStr = "isDamage : ";
-                            if (pEnemy->IsDamage())
-                            {
-                                damegeStr += "true";
-                            }
-                            else
-                            {
-                                damegeStr += "false";
-                            }
-                            ImGui::Text(damegeStr.c_str());
                         }
 
                         ImGui::TreePop();
@@ -269,7 +269,7 @@ void imguiObject::Update()
         // EnemyBoss情報
         if (ImGui::TreeNode("EnemyBossInformation"))
         {
-           pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+           
 
             if (pBoss != nullptr)
             {

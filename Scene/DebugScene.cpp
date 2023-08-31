@@ -26,7 +26,6 @@ DebugScene::DebugScene(GameObject* parent)
 {
 	pPlayer = nullptr;
 	pBoss = nullptr;
-	pPlayer = nullptr;
 	timer = 0;
 }
 
@@ -83,6 +82,7 @@ void DebugScene::Update()
 	//	}		
 	//}
 
+	//// 敵ボスキャラを登場させる処理
 	//if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty())
 	//{
 	//	// プレイヤーの入力を受け付けなくする
@@ -93,17 +93,6 @@ void DebugScene::Update()
 	//		pPlayer->SetInputReception(true);
 	//		pBoss->ProcessStart();
 	//	}
-	//}
-
-	//if (pPlayer->GetHP() <= 0)
-	//{
-	//	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-	//	pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
-	//}
-	//else if (pBoss->GetHP() <= 0)
-	//{
-	//	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-	//	pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
 	//}
 }
 

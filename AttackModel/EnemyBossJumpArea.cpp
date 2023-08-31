@@ -5,6 +5,11 @@ EnemyBossJumpArea::EnemyBossJumpArea(GameObject* parent)
 	: AttackModelBase(parent, "EnemyBossJumpArea")
 {
 	moveArea = Transform();
+
+	hModelFloor = -1;
+	hModelCircle = -1;
+
+	scaleTimer = 0;
 }
 
 EnemyBossJumpArea::~EnemyBossJumpArea()

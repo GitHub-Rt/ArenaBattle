@@ -7,6 +7,7 @@ class EnemyBossBullet;
 class EnemyBossJumpArea;
 class EnemyBossSpecialArea;
 class Warning;
+class PolyLine;
 
 enum class EnemyBossData
 {
@@ -18,6 +19,7 @@ enum class EnemyBossData
 	BulletAtkIntervalTime,
 	BulletAtkMaxCount,
 	BulletAtkMagnification,
+	SpiralMoveAtkMagnification,
 	WavesAtkMaxCount,
 	WavesAtkMagnification,
 	JumpAtkMaxCount,
@@ -144,21 +146,22 @@ public:
 private:
 	
 	// InternalDataから取得する定数
-	float ENTRY_FIRST_POS_Y;		// 初期y座標
-	int ATTACK_INTERVAL_TIME;		// 攻撃間隔時間
-	int DAMAGE_TIME;				// 被ダメージ時間
-	int RATE_FOR_MAX_STRENGTH;		// 特殊攻撃を行う際の最大体力に対する割合
-	int TOTAL_DAMAGES_UP_AI_LEVEl;	// AIレベルを上げる合計ダメージ量
-	int BULLET_ATK_INTERVAL_TIME;	// 弾攻撃の間隔時間
-	int BULLET_ATK_MAX_COUNT;		// 弾攻撃の最大回数
-	float BULLET_ATK_MAGNIFICATION;	// 弾攻撃の倍率
-	int WAVES_ATK_MAX_COUNT;		// 波状攻撃の最大回数
-	float WAVES_ATK_MAGNIFICATION;	// 波状攻撃の倍率
-	int JUMP_ATK_MAX_COUNT;			// ジャンプ攻撃の最大回数
-	int JUMP_ATK_BET_TIMER;			// ジャンプ攻撃の間隔時間
-	float JUMP_ATK_MAGNIFICATION;	// ジャンプ攻撃の攻撃倍率
-	int TIME_UP_TO_SPECIAL_ATTACK;	// 特殊攻撃実行までの時間
-	float SPECIAL_ATK_MAGNIFICATION;// 特殊攻撃の倍率
+	float ENTRY_FIRST_POS_Y;				// 初期y座標
+	int ATTACK_INTERVAL_TIME;				// 攻撃間隔時間
+	int DAMAGE_TIME;						// 被ダメージ時間
+	int RATE_FOR_MAX_STRENGTH;				// 特殊攻撃を行う際の最大体力に対する割合
+	int TOTAL_DAMAGES_UP_AI_LEVEl;			// AIレベルを上げる合計ダメージ量
+	int BULLET_ATK_INTERVAL_TIME;			// 弾攻撃の間隔時間
+	int BULLET_ATK_MAX_COUNT;				// 弾攻撃の最大回数
+	float BULLET_ATK_MAGNIFICATION;			// 弾攻撃の倍率
+	float SPIRAL_MOVE_ATK_MAGNIFICATION;	// 渦巻移動の倍率
+	int WAVES_ATK_MAX_COUNT;				// 波状攻撃の最大回数
+	float WAVES_ATK_MAGNIFICATION;			// 波状攻撃の倍率
+	int JUMP_ATK_MAX_COUNT;					// ジャンプ攻撃の最大回数
+	int JUMP_ATK_BET_TIMER;					// ジャンプ攻撃の間隔時間
+	float JUMP_ATK_MAGNIFICATION;			// ジャンプ攻撃の攻撃倍率
+	int TIME_UP_TO_SPECIAL_ATTACK;			// 特殊攻撃実行までの時間
+	float SPECIAL_ATK_MAGNIFICATION;		// 特殊攻撃の倍率
 
 	// その他の定数
 	float ENTRY_POS_Y;				// 着地時のy座標
@@ -180,9 +183,12 @@ private:
 
 
 	// 渦巻移動攻撃周りの変数
+	PolyLine* pLine;
 	float spiralAngle;		// 回転角度
 	float spiralRadius;		// 半径
 	bool isEndLine;			// 端に到達したかどうか
+	bool isDrawPolyLine;	// PolyLineを描画するかどうか
+	
 
 
 	// 波状攻撃の変数
@@ -191,17 +197,18 @@ private:
 
 
 	// ジャンプ攻撃周りの変数
+	EnemyBossJumpArea* pArea;
 	int jumpBetTimer;			// ジャンプ攻撃の間隔
 	int jumpCount;				// ジャンプ攻撃の攻撃回数
 	XMFLOAT3 landingPosition;	// 着地地点(プレイヤーのポジション)
-	EnemyBossJumpArea* pArea;
 	bool isPointGetting;		// 着地地点の情報を取得したかどうか
 
 
 	// 特殊攻撃周りの変数
+	EnemyBossSpecialArea* pSpecialArea;
 	int specialTimer;					// 特殊攻撃開始までの時間
 	bool isSpecialAttack;				// 特殊攻撃を行ったかどうか
-	EnemyBossSpecialArea* pSpecialArea;
+	
 
 	// 体力周りの変数
 	EnemyBossGauge* pGauge;

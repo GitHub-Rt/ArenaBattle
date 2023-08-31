@@ -48,21 +48,22 @@ Player::Player(GameObject* parent)
 	DODGE_TIME = 0;
 	RECOVERY_POTION_NUMBER = 0;
 	RECOVERY_QUANTITY = 0;
+	MAX_DAMAGE_TIMER = 0;
 
 	pGauge = nullptr;
 	pPotion = nullptr;
-
 	hRecoveryEffect = -1;
 	hp = 0;
 
 	isTrrigerReset = true;
 	isInputReception = true;
 
-	movingDistance = XMFLOAT3(0, 0, 0);
+	movingDistance = { 0,0,0 };
 	vPrevPos = { 0,0,0,0 };
 
 	beforeJumpY = 0;
 	jumpSpeed = 0;
+	isJumpSummit = false;
 
 	pEffect = nullptr;
 	attackState = AttackState::NoAttack;
@@ -77,12 +78,31 @@ Player::Player(GameObject* parent)
 
 	angleX = 0;
 	angleY = 0;
-	cameraDirection = XMFLOAT3(0, 0, 0);
+	cameraDirection = { 0,0,0 };
+	cameraPosition = { 0,0,0 };
+	cameraFocus = { 0,0,0 };
+
+#ifdef _DEBUG
+	
+	isImmortality = false;
+
+#endif
 }
 
 Player::~Player()
 {
-
+	if (pLine != nullptr)
+	{
+		pLine->Release();
+		SAFE_DELETE(pLine);
+	}
+	
+	if (pEffect != nullptr)
+	{
+		pEffect->Release();
+		SAFE_DELETE(pEffect);
+	}
+	
 }
 
 void Player::Initialize()
@@ -110,7 +130,7 @@ void Player::Initialize()
 		pGauge = Instantiate<PlayerGauge>(GetParent());
 		
 		pLine = new PolyLine();
-		pLine->Load("Effect/Player/tex.png");
+		pLine->Load("Effect/tex.png");
 
 		pEffect = new PlayerEffect();
 
@@ -124,11 +144,17 @@ void Player::Initialize()
 
 void Player::Release()
 {
-	pLine->Release();
-	pEffect->Release();
+	if (pLine != nullptr)
+	{
+		pLine->Release();
+		SAFE_DELETE(pLine);
+	}
 
-	SAFE_DELETE(pLine);
-	SAFE_DELETE(pEffect);
+	if (pEffect != nullptr)
+	{
+		pEffect->Release();
+		SAFE_DELETE(pEffect);
+	}
 }
 
 void Player::CharacterUpdate()
@@ -811,18 +837,3 @@ bool Player::IsJumpEntry()
 	
 	return false;
 }
-
-
-#ifdef _DEBUG
-
-void Player::Immortality()
-{
-	if (isImmortality == false)
-	{
-		isImmortality = true;
-	}
-	
-}
-
-
-#endif

@@ -201,6 +201,7 @@
     <ClCompile Include="UI\LevelSelectImage.cpp" />
     <ClCompile Include="UI\LoadingImage.cpp" />
     <ClCompile Include="UI\OverImage.cpp" />
+    <ClCompile Include="UI\PauseImage.cpp" />
     <ClCompile Include="UI\PlayerGauge.cpp" />
     <ClCompile Include="UI\RecorveryNumber.cpp" />
     <ClCompile Include="UI\RecoveryPotion.cpp" />
@@ -290,6 +291,7 @@
     <ClInclude Include="UI\LevelSelectImage.h" />
     <ClInclude Include="UI\LoadingImage.h" />
     <ClInclude Include="UI\OverImage.h" />
+    <ClInclude Include="UI\PauseImage.h" />
     <ClInclude Include="UI\PlayerGauge.h" />
     <ClInclude Include="UI\RecorveryNumber.h" />
     <ClInclude Include="UI\RecoveryPotion.h" />

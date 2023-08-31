@@ -39,15 +39,20 @@ void SceneManager::Initialize()
 	pSound = new GameSound();
 
 	//Å‰‚ÌƒV[ƒ“‚ğ€”õ
-	/*currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
-	nextSceneID_ = currentSceneID_;
-	prevSceneID_ = currentSceneID_;
-	Instantiate<TitleScene>(this);*/
+#ifdef _DEBUG
 
 	currentSceneID_ = SCENE_ID::SCENE_ID_DEBUG;
 	nextSceneID_ = currentSceneID_;
 	prevSceneID_ = currentSceneID_;
 	Instantiate<DebugScene>(this);
+	return;
+
+#endif
+
+	currentSceneID_ = SCENE_ID::SCENE_ID_TITLE;
+	nextSceneID_ = currentSceneID_;
+	prevSceneID_ = currentSceneID_;
+	Instantiate<TitleScene>(this);	
 }
 
 void SceneManager::Update()

@@ -11,7 +11,11 @@ PlayerEffect::PlayerEffect()
 	eLimitFire = -1;
 	eLimitSparks = -1;
 	eLimitGround = -1;
+
 	eLimitTornado = -1;
+	
+	ventilationDir = { 0,0,0 };
+	ventilationRotate = { 0,0,0 };
 	eLimitVentilation = -1;
 };
 

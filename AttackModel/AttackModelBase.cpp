@@ -5,6 +5,9 @@
 #include "../Scene/SceneManager.h"
 #include "../Stage/StageBase.h"
 
+#include "../Character/EnemyBoss.h"
+
+
 AttackModelBase::AttackModelBase(GameObject* parent, std::string fileName)
 	: GameObject(parent, fileName)
 {
@@ -18,8 +21,18 @@ AttackModelBase::~AttackModelBase()
 
 void AttackModelBase::Update()
 {
-	GameObject* parentObj = GetParent();
-	if (parentObj->IsEntered())
+	std::string objName = this->GetObjectName();
+	
+	if (pBoss == nullptr)
+	{
+		pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+	}
+
+	if (objName == "RobotBullet")
+	{
+		AttackModelUpdate();
+	}
+	else if (pBoss->IsEntered())
 	{
 		AttackModelUpdate();
 	}
@@ -37,6 +50,8 @@ void AttackModelBase::Release()
 
 void AttackModelBase::AttackModelLoad(std::string fileName)
 {
+	
+
 	hModel = Model::Load("AttackModel/" + fileName);
 	assert(hModel >= 0);
 }

@@ -20,8 +20,4 @@ private:
 	EnemyBoss* pBoss;
 	Player* pPlayer;
 	int timer;
-
-
-
-	
 };

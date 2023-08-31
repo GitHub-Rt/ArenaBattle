@@ -14,11 +14,16 @@
 #include "../Manager/EnemyManager.h"
 
 #include "../UI/RetryImage.h"
+#include "../UI/PauseImage.h"
 #include "../UI/SelectBox.h";
 #include "../Engine/Input.h"
 
 const int ENEMY_COUNT = 3;
 
+// UIの表示位置定数(PauseImage)
+const float BOX_POS_X = -0.02f;
+const float BACKGAME_POS_Y = -0.0125f;
+const float START_POS_Y = -0.35f;
 
 BattleScene::BattleScene(GameObject* parent)
 	: GameObject(parent, "BattleScene")
@@ -29,8 +34,11 @@ BattleScene::BattleScene(GameObject* parent)
 	pPlayer = nullptr;
 
 	pBox = nullptr;
-	nowMenu = RetryMenu::Retry;
+	pPause = nullptr;
+	nowRetryMenu = RetryMenu::Retry;
+	nowMenu = Menu::BackGame;
 	isRetryProcess = false;
+	isPauseProcess = false;
 }
 
 BattleScene::~BattleScene()
@@ -43,10 +51,15 @@ void BattleScene::Initialize()
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
 
+	// サウンド、効果音のロード
 	pSound->SetSoundALLFalse();
+	pSound->SoundLoad(SoundTrack::TitleSound);
 	pSound->SoundLoad(SoundTrack::BattleSound);
+	pSound->SoundLoad(SoundTrack::Alert);
 	pSound->SoundLoad(SoundTrack::BossSound);
 	pSound->SoundLoad(SoundTrack::LastBossSound);
+	pSound->EffectLoad(SoundEffect::Determinant);
+	pSound->EffectLoad(SoundEffect::MoveSelection);
 
 	// リストの全要素を削除
 	if (EnemyManager::IsListEmpty() == false)
@@ -88,7 +101,6 @@ void BattleScene::Initialize()
 	}
 
 	// バトル音楽の再生
-	
 	switch (point)
 	{
 	case RetryPoint::NormalEnemyBattle:
@@ -110,26 +122,35 @@ void BattleScene::Initialize()
 void BattleScene::Update()
 {
 	// ボス登場処理
-	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty() && isRetryProcess == false)
+	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty() && isRetryProcess == false && isPauseProcess == false)
 	{
-		// 音楽の変更
-		if (pSound->GetSoundFlg(SoundTrack::BossSound) == false)
-		{
-			pSound->SoundStop(SoundTrack::BattleSound);
-			pSound->SoundPlay(SoundTrack::BossSound);
-		}
-
 		// プレイヤーの入力を受け付けなくする
 		pPlayer->SetInputReception(false);
 
 		if (pBoss->BossEntry())
 		{
+			// 音楽の変更
+			if (pSound->GetSoundFlg(SoundTrack::BossSound) == false)
+			{
+				pSound->SoundStop(SoundTrack::Alert);
+				pSound->SoundPlay(SoundTrack::BossSound);
+			}
+
 			// プレイヤーの入力受付を再開する
 			pPlayer->SetInputReception(true);
 			pBoss->ProcessStart();
 
 			// リトライポイントの更新
 			pManager->SetRetryPoint(RetryPoint::BossBattle);
+		}
+		else
+		{
+			// Warningのアラート音を鳴らす
+			if (pSound->GetSoundFlg(SoundTrack::BattleSound))
+			{
+				pSound->SoundStop(SoundTrack::BattleSound);
+				pSound->SoundPlay(SoundTrack::Alert);
+			}
 		}
 	}
 
@@ -142,7 +163,7 @@ void BattleScene::Update()
 			const float RETORY_POS_Y = -0.06f;
 			const float OVER_POS_Y = -0.425f;
 
-			// リトライするかどうかの確認の機能追加予定
+			// リトライするかどうかの選択をさせるオブジェクトを呼び出す
 			if (pBox == nullptr)
 			{
 				Instantiate<RetryImage>(this);
@@ -151,19 +172,30 @@ void BattleScene::Update()
 
 				// ポーズ状態にする
 				PoseProcess();
+				isRetryProcess = true;
 			}
 
 			// UI入力処理
 			{
 				if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP) || Input::IsKeyDown(DIK_UP))
 				{
-					nowMenu = RetryMenu::Retry;
+					if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
+					{
+						pSound->EffectStop(SoundEffect::MoveSelection);
+					}
+					pSound->EffectPlay(SoundEffect::MoveSelection);
+					nowRetryMenu = RetryMenu::Retry;
 					pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, RETORY_POS_Y, 0));
 				}
 
 				if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
 				{
-					nowMenu = RetryMenu::GameOver;
+					if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
+					{
+						pSound->EffectStop(SoundEffect::MoveSelection);
+					}
+					pSound->EffectPlay(SoundEffect::MoveSelection);
+					nowRetryMenu = RetryMenu::GameOver;
 					pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, OVER_POS_Y, 0));
 				}
 			}
@@ -171,15 +203,22 @@ void BattleScene::Update()
 			// 選択
 			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
 			{
+				if (pSound->GetEffectFlg(SoundEffect::Determinant))
+				{
+					pSound->EffectStop(SoundEffect::Determinant);
+				}
+				pSound->EffectPlay(SoundEffect::Determinant);
+
 				isRetryProcess = false;
 
-				switch (nowMenu)
+				switch (nowRetryMenu)
 				{
 				case RetryMenu::Retry:
 					BattleRetry();
 					break;
 				case RetryMenu::GameOver:
 					pSound->SetSoundALLFalse();
+					pManager->SetRetryPoint(RetryPoint::NormalEnemyBattle);
 					pManager->ChangeScene(SCENE_ID::SCENE_ID_OVER);
 					break;
 				default:
@@ -195,6 +234,80 @@ void BattleScene::Update()
 		}
 	}
 	
+	// バトル中のメニュー処理
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_START) || Input::IsKeyDown(DIK_ESCAPE))
+	{
+		// メニュー画像呼び出し
+		if (pBox == nullptr && pPause == nullptr)
+		{
+			pSound->SetSoundALLFalse();
+			pSound->SoundPlay(SoundTrack::TitleSound);
+
+			pPause = Instantiate<PauseImage>(this);
+			pBox = Instantiate<SelectBox>(this);
+			pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, BACKGAME_POS_Y, 0), true);
+
+			PoseProcess();
+			isPauseProcess = true;
+		}
+	}
+
+	// ポーズ画像表示中の処理
+	if (isPauseProcess)
+	{
+		// UI入力処理
+		{
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP) || Input::IsKeyDown(DIK_UP))
+			{
+				if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
+				{
+					pSound->EffectStop(SoundEffect::MoveSelection);
+				}
+				pSound->EffectPlay(SoundEffect::MoveSelection);
+				nowMenu = Menu::BackGame;
+				pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, BACKGAME_POS_Y, 0), true);
+			}
+
+			if (Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN) || Input::IsKeyDown(DIK_DOWN))
+			{
+				if (pSound->GetEffectFlg(SoundEffect::MoveSelection))
+				{
+					pSound->EffectStop(SoundEffect::MoveSelection);
+				}
+				pSound->EffectPlay(SoundEffect::MoveSelection);
+				nowMenu = Menu::ToStart;
+				pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, START_POS_Y, 0));
+			}
+		}
+
+		// 選択
+		if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A) || Input::IsKeyDown(DIK_RETURN))
+		{
+			if (pSound->GetEffectFlg(SoundEffect::Determinant))
+			{
+				pSound->EffectStop(SoundEffect::Determinant);
+			}
+			pSound->EffectPlay(SoundEffect::Determinant);
+
+			isPauseProcess = false;
+
+			switch (nowMenu)
+			{
+			case Menu::BackGame:
+				BackBattle();
+				break;
+			case Menu::ToStart:
+				pSound->SetSoundALLFalse();
+				pManager->SetRetryPoint(RetryPoint::NormalEnemyBattle);
+				pManager->ChangeScene(SCENE_ID::SCENE_ID_START);
+				break;
+			default:
+				break;
+			}
+
+			pPlayer->SetInputReception(true);
+		}
+	}
 }
 
 void BattleScene::Draw()
@@ -224,10 +337,55 @@ void BattleScene::BattleRetry()
 	pManager->ReLoadScene(SCENE_ID::SCENE_ID_BATTLE);
 }
 
+void BattleScene::BackBattle()
+{
+	RetryPoint point = pManager->GetRetryPoint();
+
+	pSound->SoundStop(SoundTrack::TitleSound);
+
+	// サウンドの再生
+	switch (point)
+	{
+	case RetryPoint::NormalEnemyBattle:
+		pSound->SoundPlay(SoundTrack::BattleSound);
+		break;
+	case RetryPoint::BossBattle:
+		pSound->SoundPlay(SoundTrack::BossSound);
+		break;
+	case RetryPoint::BossLastBattle:
+		pSound->SoundPlay(SoundTrack::LastBossSound);
+		break;
+	default:
+		break;
+	}
+
+	// オブジェクトの更新を再開
+	if (EnemyManager::IsListEmpty() == false)
+	{
+		int nowEnemyCount = EnemyManager::GetVectorSize();
+
+		for (int i = 0; i < nowEnemyCount; i++)
+		{
+			Enemy* pEnemy = EnemyManager::GetEnemyContent(i);
+			pEnemy->Enter();
+		}
+	}
+
+	if (point != RetryPoint::NormalEnemyBattle)
+	{
+		pBoss->Enter();
+	}
+
+
+	// 変数のリセット
+	pBox->KillMe();
+	pBox = nullptr;
+	pPause->KillMe();
+	pPause = nullptr;
+}
+
 void BattleScene::PoseProcess()
 {
-	isRetryProcess = true;
-
 	if (EnemyManager::IsListEmpty() == false)
 	{
 		int nowEnemyCount = EnemyManager::GetVectorSize();

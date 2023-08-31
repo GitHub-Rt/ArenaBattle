@@ -16,6 +16,7 @@ Enemy::Enemy(GameObject* parent)
 {
 	ATTACK_START_RANGE = 0;
 	ATTACK_TIME = 0;
+	DAMAGE_TIME = 0;
 
 	hp = 0;
 
@@ -28,6 +29,8 @@ Enemy::Enemy(GameObject* parent)
 	jumpSpeed = 0;
 	isJumpSummit = false;
 	isStartingAttackMoving = false;
+
+	damageTimer = 0;
 
 	isHittingPlayer = false;
 }
@@ -246,18 +249,12 @@ void Enemy::CharacterTakeDamage(float damage)
 		// ïœêîÇÃçXêV
 		hp -= damage;
 		isHittingPlayer = false;
-#ifdef _DEBUG
-		isDamage = true;
-#endif
 		SetDamageStage(DamageStage::TakeDamage);
 		break;
 	case DamageStage::TakeDamage:
 		DamageMotion();
 		break;
 	case DamageStage::EndDamage:
-#ifdef _DEBUG
-		isDamage = false;
-#endif
 		SetDamageStage(DamageStage::NoDamage);
 		break;
 	default:

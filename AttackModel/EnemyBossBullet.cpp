@@ -9,6 +9,8 @@ EnemyBossBullet::EnemyBossBullet(GameObject* parent)
 	: AttackModelBase(parent, "EnemyBossBullet")
 {
 	pBoss = nullptr;
+	travelingDirection = { 0,0,0 };
+	vMove = { 0,0,0,0 };
 }
 
 EnemyBossBullet::~EnemyBossBullet()

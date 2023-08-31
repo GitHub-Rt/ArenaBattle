@@ -12,6 +12,7 @@ RobotBullet::RobotBullet(GameObject* parent)
 	: AttackModelBase(parent, "RobotBullet")
 {
     pRobot = nullptr;
+    timer = 0;
     travelingDirection = XMFLOAT3(0, 0, 0);
 }
 

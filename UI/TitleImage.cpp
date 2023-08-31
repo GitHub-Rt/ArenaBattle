@@ -7,6 +7,7 @@ TitleImage::TitleImage(GameObject* parent)
 {
 	hPict = -1;
 	alpha = 0;
+	ease = 0;
 }
 
 TitleImage::~TitleImage()

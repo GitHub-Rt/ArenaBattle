@@ -3,6 +3,8 @@
 
 enum class SCENE_ID;
 
+class EnemyBoss;
+
 class AttackModelBase : public GameObject
 {
 public:
@@ -30,6 +32,8 @@ public:
 	virtual void AttackModelUpdate() = 0;
 
 private:
+
 	int hModel;
+	EnemyBoss* pBoss;
 };
 

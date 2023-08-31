@@ -3,6 +3,13 @@
 HPGaugeBase::HPGaugeBase(GameObject* parent, std::string fileName)
 	: UIBase(parent, fileName)
 {
+    MAX_HP = 0;
+
+    nowHp = 0;
+    maxHp = 0;
+
+    stopRatio = 0;
+    moveRatio = 0;
 }
 
 HPGaugeBase::~HPGaugeBase()
