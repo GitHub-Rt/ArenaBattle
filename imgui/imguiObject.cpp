@@ -269,7 +269,7 @@ void imguiObject::Update()
         // EnemyBossèÓïÒ
         if (ImGui::TreeNode("EnemyBossInformation"))
         {
-           
+            pBoss = (EnemyBoss*)FindObject("EnemyBoss");
 
             if (pBoss != nullptr)
             {

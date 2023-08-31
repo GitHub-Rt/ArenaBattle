@@ -67,7 +67,7 @@ EnemyBoss::EnemyBoss(GameObject* parent)
 
 	pSpecialArea = nullptr;
 	specialTimer = 0;
-	isSelectAttack = false;
+	isSpecialAttack = false;
 
 	pGauge = nullptr;
 	maxHp = 0;
@@ -706,9 +706,21 @@ void EnemyBoss::Damage(float damage)
 
 #endif
 
-	pGauge->Damage(damage);
-	hp -= damage;
-	totalDamages += damage;
+	
+
+	// 特殊攻撃を行っていないのに、体力が特殊攻撃開始よりも少なくならないようにする
+	if (isSpecialAttack == false && hp - damage <= maxHp / RATE_FOR_MAX_STRENGTH)
+	{
+		hp = maxHp / RATE_FOR_MAX_STRENGTH;
+	}
+	else
+	{
+		hp -= damage;
+		totalDamages += damage;
+		pGauge->Damage(damage);
+	}
+	
+	
 
 	// 一定以上ダメージを与えられAIレベルが最大状態じゃないときに一段階上げる
 	if (totalDamages >= TOTAL_DAMAGES_UP_AI_LEVEl && bossAIState != BossAIState::Caution)
