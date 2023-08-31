@@ -8,6 +8,13 @@ class Robot;
 class Enemy;
 class EnemyBoss;
 
+struct SceneFlg
+{
+   bool isTitle, isStart, isRelease, isPlay, isBattle, isClear, isOver = false;
+};
+
+
+
 class imguiObject : public GameObject
 {
 public:
@@ -24,6 +31,8 @@ public:
     std::string GetEnemyBossAttackStateString();
     std::string GetAIStateString();
 
+    void SceneChange();
+
 private:
 
     Player* pPlayer;
@@ -35,6 +44,7 @@ private:
     std::string attackStateStr;
     std::string aiStateStr;
 
+    SceneFlg sceneFlg;
     bool isImmortality;
     bool isGameLevelHard;
 };

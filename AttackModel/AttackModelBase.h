@@ -29,7 +29,17 @@ public:
 	// 行動範囲外ならtrueを返す
 	bool IsMoveLimit(XMFLOAT3 nextPosition);
 
+	int GetAttackModelHandle() { return hModel; }
+
 	virtual void AttackModelUpdate() = 0;
+
+	/// <summary>
+	/// 真下にあるオブジェクトが該当オブジェクトかどうかを返す関数
+	/// </summary>
+	/// <param name="position">オブジェクトの現在位置</param>
+	/// <param name="position">調べたいオブジェクト</param>
+	/// <returns>真下にあるオブジェクトのポインタ</returns>
+	bool IsObjectUnder(XMFLOAT3 position, int handle);
 
 private:
 

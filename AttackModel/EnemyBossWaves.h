@@ -22,9 +22,6 @@ private:
 	EnemyBoss* pBoss;
 	Player* pPlayer;
 	int scalingTimer;	// Šg‘åŽžŠÔ
-	float inside;		// “à‘¤‚Ì“–‚½‚è”»’è—p
-	float outside;		// ŠO‘¤‚Ì“–‚½‚è”»’è—p
-
 
 };
 

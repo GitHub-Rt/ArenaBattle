@@ -61,13 +61,32 @@ void imguiObject::Update()
         // 通常プレイに移行する(タイトルから一連の動きをプレイする)
         if (isNormalPlay)
         {            
-            // プレイヤーの不死の解除
-            pPlayer = (Player*)FindObject("Player");
-            pPlayer->ImmortalityCancellation();
-
             // タイトルシーンへ移行
             SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
             pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+        }
+
+
+        // 該当シーンへ移行する
+        if (ImGui::TreeNode("SceneChange"))
+        {
+            ImGui::Checkbox("TitleScene", &sceneFlg.isTitle);
+            ImGui::SameLine();
+            ImGui::Checkbox("StartScene", &sceneFlg.isStart);
+            ImGui::SameLine();
+            ImGui::Checkbox("ReleaseScene", &sceneFlg.isRelease);
+            
+            ImGui::Checkbox("PlayScene", &sceneFlg.isPlay);
+            ImGui::SameLine();
+            ImGui::Checkbox("BattleScene", &sceneFlg.isBattle);
+
+            ImGui::Checkbox("ClearScene", &sceneFlg.isClear);
+            ImGui::SameLine();
+            ImGui::Checkbox("OverScene", &sceneFlg.isOver);
+
+            SceneChange();
+
+            ImGui::TreePop();
         }
 
         // 難易度選択
@@ -455,4 +474,18 @@ std::string imguiObject::GetAIStateString()
     }
 
     return aiStateStr + nowAIState;
+}
+
+void imguiObject::SceneChange()
+{
+    SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+    if (sceneFlg.isTitle)    pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+    if (sceneFlg.isStart)    pManager->ChangeScene(SCENE_ID::SCENE_ID_START);
+    if (sceneFlg.isRelease)  pManager->ChangeScene(SCENE_ID::SCENE_ID_RELEASE);
+    if (sceneFlg.isPlay)     pManager->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+    if (sceneFlg.isBattle)   pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);
+    if (sceneFlg.isClear)    pManager->ChangeScene(SCENE_ID::SCENE_ID_CLEAR);
+    if (sceneFlg.isOver)     pManager->ChangeScene(SCENE_ID::SCENE_ID_OVER);
+
 }

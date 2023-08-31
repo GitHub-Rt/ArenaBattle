@@ -14,7 +14,7 @@
 
 // ’è”éŒ¾
 const XMFLOAT3 HIT_TEST_RANGE_OUTSIDE = { 18, 9,18 };	//outside‚Ì“–‚½‚è”»’è˜g
-const XMFLOAT3 HIT_TEST_RANGE_INSIDE = { 12, 9, 12 };	//inside‚Ì“–‚½‚è”»’è˜g
+const XMFLOAT3 HIT_TEST_RANGE_INSIDE = { 12, 16, 12 };	//inside‚Ì“–‚½‚è”»’è˜g
 const FLOAT ENTRY_FALL_SPEED = 1.6f;
 
 EnemyBoss::EnemyBoss(GameObject* parent)

@@ -149,3 +149,18 @@ float AttackModelBase::PositionAdjustment(XMFLOAT3 position)
 		}
 	}
 }
+
+bool AttackModelBase::IsObjectUnder(XMFLOAT3 position, int handle)
+{
+	RayCastData data;
+	data.start = position;
+	data.dir = { 0,-1,0 };
+	Model::RayCast(handle, &data);
+
+	if (data.hit)
+	{
+		return true;
+	}
+
+	return false;
+}

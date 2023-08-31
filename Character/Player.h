@@ -90,10 +90,8 @@ public:
 
 #ifdef _DEBUG	// デバッグ関数
 
-	void Immortality() { isImmortality = true; }
-
-	// 不死の解除
-	void ImmortalityCancellation() { isImmortality = false; }	
+	// 不死にする
+	void Immortality() { isImmortality = true; }	
 
 #endif
 

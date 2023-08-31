@@ -233,6 +233,7 @@ void Player::CharacterUpdate()
 
 
 	CharacterCheckHP();
+
 }
 
 void Player::CharacterIdleAction()
