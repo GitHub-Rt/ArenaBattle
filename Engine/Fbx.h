@@ -109,5 +109,8 @@ public:
 
 
 	void SetDamageColor(bool isDamage);
+
+
+	void SetAlpha(float alpha);
 };
 

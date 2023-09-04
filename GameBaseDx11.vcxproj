@@ -137,7 +137,6 @@
     <ClCompile Include="Character\EnemyBoss.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Character\Robot.cpp" />
-    <ClCompile Include="Character\SecretEnemyBoss.cpp" />
     <ClCompile Include="Effect\PlayerEffect.cpp" />
     <ClCompile Include="Effect\PolyLine.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
@@ -227,7 +226,6 @@
     <ClInclude Include="Character\EnemyBoss.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Character\Robot.h" />
-    <ClInclude Include="Character\SecretEnemyBoss.h" />
     <ClInclude Include="Effect\PlayerEffect.h" />
     <ClInclude Include="Effect\PolyLine.h" />
     <ClInclude Include="Engine\Audio.h" />
@@ -274,7 +272,6 @@
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\StartScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
-    <ClInclude Include="SecretBoss.h" />
     <ClInclude Include="Sound\GameSound.h" />
     <ClInclude Include="Stage\BattleBackGround.h" />
     <ClInclude Include="Stage\BattleStartCylinder.h" />

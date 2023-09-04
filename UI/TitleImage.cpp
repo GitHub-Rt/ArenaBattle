@@ -28,7 +28,7 @@ void TitleImage::UIUpdate()
 	//“§–¾“x‚ªÅ‘å’l‚¶‚á‚È‚¢ŠÔ“§–¾“x‚ğã‚°‘±‚¯‚é
 	if (alpha != 1)
 	{
-		alpha =Easing::EaseInQuad(ease);
+		alpha = Easing::EaseInQuad(ease);
 		UIAlpha(hPict, alpha);
 
 		ease += EASING_STEP;

@@ -72,6 +72,7 @@ public:
 	void DrawEffect() override;
 	void CharacterStunAction() override;
 	void OnCollision(GameObject* pTarget, Collider* nowCollider) override;
+	void DiedAction() override;
 
 	// UŒ‚í—Ş‚Ì‘I‘ğ
 	void AttackTypeSelection();

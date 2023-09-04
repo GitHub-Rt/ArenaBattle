@@ -5,6 +5,8 @@
 #include "../Scene/SceneManager.h"
 #include "../Stage/StageBase.h"
 
+#include "../Engine/Easing.h"
+
 //定数宣言
 
 const XMFLOAT3 RAY_DIRECTION = { 0,-1,0 };	// レイの方向
@@ -36,6 +38,8 @@ CharacterBase::CharacterBase(GameObject* parent, std::string fileName)
 	internalData = -1;
 	calCount = 0;
 	damage = 0;
+	ease = 0;
+	timer = 0;
 
 	//外部データファイルのロード
 	ParameterCSV.Load("Character/Data/characterParameter.csv");
@@ -713,4 +717,53 @@ SCENE_ID CharacterBase::GetSceneID()
 {
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 	return pManager->GetSceneID();
+}
+
+void CharacterBase::DiedStaging(CharacterID charaID)
+{
+	CharacterBase* pTarget = nullptr;
+
+	switch (charaID)
+	{
+	case CharacterID::Player:
+		pTarget = (CharacterBase*)FindObject("Player");
+		break;
+	case CharacterID::Robot:
+		break;
+	case CharacterID::NormalEnemy:
+		pTarget = (CharacterBase*)FindObject("NormalEnemy");
+		break;
+	case CharacterID::EnemyBoss:
+		pTarget = (CharacterBase*)FindObject("EnemyBoss");
+		break;
+	default:
+		break;
+	}
+
+	// 死亡時の行動を呼び出す
+	if (pTarget != nullptr)
+	{
+		pTarget->DiedAction();
+	}
+
+}
+
+void CharacterBase::GraduallyTransparency()
+{
+	const int CALLTIMER = 5;			// 更新フレーム数
+	const float EASING_STEP = 0.05f;	// 変化量
+
+	// モデルの透明度
+	float alpha = 0;
+
+	timer++;
+
+	if (timer > CALLTIMER)
+	{
+		alpha = 1 - Easing::EaseOutQuint(ease);
+		Model::SetAlpha(hModel, alpha);
+
+		timer = 0;
+		ease += EASING_STEP;
+	}
 }

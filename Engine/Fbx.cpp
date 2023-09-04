@@ -176,3 +176,11 @@ void Fbx::SetDamageColor(bool isDamage)
 		parts_[k]->SetDamageColor(isDamage);
 	}
 }
+
+void Fbx::SetAlpha(float alpha)
+{
+	for (int k = 0; k < parts_.size(); k++)
+	{
+		parts_[k]->SetAlpha(alpha);
+	}
+}

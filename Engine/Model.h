@@ -100,10 +100,33 @@ namespace Model
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(int handle, RayCastData *data);
 
-
+	/// <summary>
+	/// マテリアルを変更する
+	/// </summary>
+	/// <param name="handle">モデルハンドル</param>
+	/// <param name="red">Rの値</param>
+	/// <param name="green">Gの値</param>
+	/// <param name="blue">Bの値</param>
+	/// <param name="alpha">透明度</param>
 	void ChangeColor(int handle, float red, float green, float blue, float alpha);
 
+	/// <summary>
+	/// マテリアルを元通りに戻す
+	/// </summary>
+	/// <param name="handle">モデルハンドル</param>
 	void RestoreOriginalColor(int handle);
 
+	/// <summary>
+	/// オブジェクトをダメージカラー(赤)に変更する
+	/// </summary>
+	/// <param name="handle">モデルハンドル</param>
+	/// <param name="isDamage">ダメージの有無</param>
 	void SetDamageColor(int handle, bool isDamage);
+
+	/// <summary>
+	/// 透明度をセット
+	/// </summary>
+	/// <param name="handle">モデルハンドル</param>
+	/// <param name="alpha">透明度</param>
+	void SetAlpha(int handle, float alpha);
 };

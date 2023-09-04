@@ -31,39 +31,23 @@ DebugScene::DebugScene(GameObject* parent)
 
 void DebugScene::Initialize()
 {
-	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-	//pManager->SetHardModeFlg();
-
-	/*if (EnemyManager::IsListEmpty() == false)
+	if (EnemyManager::IsListEmpty() == false)
 	{
 		EnemyManager::ClearEnemy();
-	}*/
+	}
 	
 	Instantiate<Stage>(this);
 	Instantiate<BattleWall>(this);
 	//Instantiate<BattleBackGround>(this);
 	Instantiate<WaterFloor>(this);
 
-	/*for (int i = 0; i < ENEMY_COUNT; i++)
-	{
-		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
-	}*/
+	//for (int i = 0; i < ENEMY_COUNT; i++)
+	//{
+	//	EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+	//}
 
-	BossScene nowBoss = pManager->GetBossScene();
-	
-	switch (nowBoss)
-	{
-	case BossScene::NormalBoss:
-		pBoss = Instantiate<EnemyBoss>(this);
-		pBoss->ProcessStart();
-		break;
-	case BossScene::SecretBoss:
-
-		break;
-	default:
-		break;
-	}
 	pBoss = Instantiate<EnemyBoss>(this);
+	// ボス線から始める
 	pBoss->ProcessStart();
 
 	// 第二形態からスタートさせる
@@ -109,6 +93,12 @@ void DebugScene::Update()
 	//		pBoss->ProcessStart();
 	//	}
 	//}
+
+
+	if (pBoss->GetHP() < 0)
+	{
+		pBoss->DiedAction();
+	}
 }
 
 void DebugScene::Draw()

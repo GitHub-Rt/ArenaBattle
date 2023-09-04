@@ -774,3 +774,10 @@ void FbxParts::SetDamageColor(bool isDamage)
 	}
 }
 
+void FbxParts::SetAlpha(float alpha)
+{
+	for (DWORD i = 0; i < materialCount_; i++)
+	{
+		pMaterial_[i].diffuse = XMFLOAT4(pMaterial_[i].defaultDiffuse.x, pMaterial_[i].defaultDiffuse.y, pMaterial_[i].defaultDiffuse.z, alpha);
+	}
+}

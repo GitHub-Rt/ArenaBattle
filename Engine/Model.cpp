@@ -209,4 +209,9 @@ namespace Model
 		_datas[handle]->pFbx->SetDamageColor(isDamage);
 	}
 
+	void SetAlpha(int handle, float alpha)
+	{
+		_datas[handle]->pFbx->SetAlpha(alpha);
+	}
+
 }

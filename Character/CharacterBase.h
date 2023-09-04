@@ -301,6 +301,18 @@ public:
 	SCENE_ID GetSceneID();
 
 	/// <summary>
+	/// オブジェクトの死亡演出
+	/// </summary>
+	/// <param name="charaID">該当キャラクターのID</param>
+	void DiedStaging(CharacterID charaID);
+
+	/// <summary>
+	/// 徐々に透明化をする処理
+	/// </summary>
+	void GraduallyTransparency();
+
+
+	/// <summary>
 	/// 定数として扱うデータを初期化する関数
 	/// </summary>
 	virtual void SetData() = 0;
@@ -355,6 +367,11 @@ public:
 	/// </summary>
 	virtual void DrawEffect() = 0;
 
+	/// <summary>
+	/// 死亡時のアクション
+	/// </summary>
+	virtual void DiedAction() {}
+
 private:
 
 	//各パラメータの値を取得する関数
@@ -369,6 +386,8 @@ private:
 	float internalData; // キャラクターの内部データの数値
 	int calCount;		// キャラクター内部データの列数
 	float damage;		// 受けるダメージ量
+	float ease;			// イージング関数の変動値
+	int timer;			
 
 	// 各種データ
 	CsvReader ParameterCSV;

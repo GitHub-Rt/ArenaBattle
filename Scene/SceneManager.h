@@ -26,12 +26,6 @@ enum class RetryPoint
 	BossLastBattle
 };
 
-enum class BossScene
-{
-	NormalBoss,
-	SecretBoss
-};
-
 //-----------------------------------------------------------
 //シーン切り替えを担当するオブジェクト
 //-----------------------------------------------------------
@@ -83,10 +77,6 @@ public:
 
 	bool GetHardMode() { return isHardMode; }
 
-
-	void SetBossScene(BossScene number) { bossScene = number; }
-	BossScene GetBossScene() { return bossScene; }
-
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
@@ -98,6 +88,4 @@ private:
 	bool isCleared;				// クリアしたかどうか
 	bool isHardMode;			// ハードモードかどうか
 	bool isReLoad;				// 再作成するかどうか
-
-	BossScene bossScene;		// どのボスの戦闘を行わせるか
 };

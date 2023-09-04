@@ -60,6 +60,7 @@ public:
 	void CharacterCheckHP() override;
 	void DrawEffect() override;
 	void OnCollision(GameObject* pTarget, Collider* nowCollider) override;
+	void DiedAction() override;
 
 	// カメラ周り
 	void NormalCamera();	// 通常時カメラ関数
@@ -87,6 +88,8 @@ public:
 	bool IsAttackEntry();		// 攻撃周りの入力
 	bool IsRecoverEntry();		// 回復周りの入力
 	bool IsJumpEntry();			// ジャンプ周りの入力
+
+	
 
 #ifdef _DEBUG	// デバッグ関数
 

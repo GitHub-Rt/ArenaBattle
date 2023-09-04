@@ -838,3 +838,8 @@ bool Player::IsJumpEntry()
 	
 	return false;
 }
+
+void Player::DiedAction()
+{
+	
+}

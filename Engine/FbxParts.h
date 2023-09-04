@@ -200,5 +200,8 @@ public:
 	/// 描画をダメージ仕様に変更する
 	/// </summary>
 	void SetDamageColor(bool isDamage);
+
+
+	void SetAlpha(float alpha);
 };
 

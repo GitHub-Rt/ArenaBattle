@@ -32,8 +32,6 @@ SceneManager::SceneManager(GameObject * parent)
 	isCleared = false;
 	isHardMode = false;
 	isReLoad = false;
-
-	bossScene = BossScene::NormalBoss;
 }
 
 void SceneManager::Initialize()

@@ -55,43 +55,21 @@ void imguiObject::Update()
     // デバッグ機能
     if (ImGui::TreeNode("DebugMaster"))
     {
-        static bool isNormalPlay = false;
-        ImGui::Checkbox("NormalPlayMode", &isNormalPlay);
-
-        // 通常プレイに移行する(タイトルから一連の動きをプレイする)
-        if (isNormalPlay)
-        {            
-            // タイトルシーンへ移行
-            SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-            pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
-        }
-
-
-        // 該当シーンへ移行する
-        if (ImGui::TreeNode("SceneChange"))
+        // 通常プレイに移行する
         {
-            ImGui::Checkbox("TitleScene", &sceneFlg.isTitle);
-            ImGui::SameLine();
-            ImGui::Checkbox("StartScene", &sceneFlg.isStart);
-            ImGui::SameLine();
-            ImGui::Checkbox("ReleaseScene", &sceneFlg.isRelease);
-            
-            ImGui::Checkbox("PlayScene", &sceneFlg.isPlay);
-            ImGui::SameLine();
-            ImGui::Checkbox("BattleScene", &sceneFlg.isBattle);
+            static bool isNormalPlay = false;
+            ImGui::Checkbox("NormalPlayMode", &isNormalPlay);
 
-            ImGui::Checkbox("ClearScene", &sceneFlg.isClear);
-            ImGui::SameLine();
-            ImGui::Checkbox("OverScene", &sceneFlg.isOver);
-
-            SceneChange();
-
-            ImGui::TreePop();
+            // 通常プレイに移行する(タイトルから一連の動きをプレイする)
+            if (isNormalPlay)
+            {
+                // タイトルシーンへ移行
+                SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+                pManager->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+            }
         }
-
 
         // 難易度選択
-        if (ImGui::TreeNode("GameLevel"))
         {
             static bool isChangeMode = false;
 
@@ -115,134 +93,122 @@ void imguiObject::Update()
                 SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
                 pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
             }
+        }
+        
+        // 該当シーンへ移行する
+        if (ImGui::TreeNode("SceneChange"))
+        {
+            ImGui::Checkbox("TitleScene", &sceneFlg.isTitle);
+            ImGui::SameLine();
+            ImGui::Checkbox("StartScene", &sceneFlg.isStart);
+            ImGui::SameLine();
+            ImGui::Checkbox("ReleaseScene", &sceneFlg.isRelease);
+            
+            ImGui::Checkbox("PlayScene", &sceneFlg.isPlay);
+            ImGui::SameLine();
+            ImGui::Checkbox("BattleScene", &sceneFlg.isBattle);
+
+            ImGui::Checkbox("ClearScene", &sceneFlg.isClear);
+            ImGui::SameLine();
+            ImGui::Checkbox("OverScene", &sceneFlg.isOver);
+
+            SceneChange();
 
             ImGui::TreePop();
         }
 
-        // ボス選択
-        if (ImGui::TreeNode("BossSelect"))
+        // 敵ボス
+        if (ImGui::TreeNode("BossDebug"))
         {
-            static bool isNormal, isSecret = false;
+            pBoss = (EnemyBoss*)FindObject("EnemyBoss");
 
-            ImGui::Checkbox("NormalBoss", &isNormal);
-            ImGui::SameLine();
-            ImGui::Checkbox("SecretBoss", &isSecret);
-
-            if (isNormal)
+            // 攻撃手段
+            if (ImGui::TreeNode("AttackSelect"))
             {
-                // 通常ボスをセットしてデバッグシーンをリロードする
-                SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-                pManager->SetBossScene(BossScene::NormalBoss);
-                pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
-            }
+                // 攻撃手段を未攻撃で初期化する
+                static int attackNum = 1;
 
-            if (isSecret)
-            {
-                // 隠しボスをセットしてデバッグシーンをリロードする
-                SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
-                pManager->SetBossScene(BossScene::SecretBoss);
-                pManager->ReLoadScene(SCENE_ID::SCENE_ID_DEBUG);
-            }
-        }
-
-        if (ImGui::TreeNode("EnemyBossDebug"))
-        {
-
-            // 通常敵ボス
-            if (ImGui::TreeNode("NormalBossDebug"))
-            {
+                // 現在攻撃を保存する
                 pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+                int prevAttack = pBoss->GetAttackState();
 
-                // 攻撃手段
-                if (ImGui::TreeNode("AttackSelect"))
+                // 攻撃手段を設定する
+                ImGui::RadioButton("NoAttack", &attackNum, (int)BossAttackState::NoAttack);
+                ImGui::SameLine();
+                ImGui::RadioButton("BulletAttack", &attackNum, (int)BossAttackState::BulletAttack);
+
+                ImGui::RadioButton("SpiralMoveAttack", &attackNum, (int)BossAttackState::SpiralMoveAttack);
+                ImGui::SameLine();
+                ImGui::RadioButton("WavesAttack", &attackNum, (int)BossAttackState::WavesAttack);
+
+                ImGui::RadioButton("JumpAttack", &attackNum, (int)BossAttackState::JumpAttack);
+                ImGui::SameLine();
+                ImGui::RadioButton("SpecialAttack", &attackNum, (int)BossAttackState::SpecialAttack);
+
+                // 該当攻撃を行う用にセットする
+                if (prevAttack != attackNum)
                 {
-                    // 攻撃手段を未攻撃で初期化する
-                    static int attackNum = 1;
-
-                    // 現在攻撃を保存する
-                    pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-                    int prevAttack = pBoss->GetAttackState();
-
-                    // 攻撃手段を設定する
-                    ImGui::RadioButton("NoAttack", &attackNum, (int)BossAttackState::NoAttack);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("BulletAttack", &attackNum, (int)BossAttackState::BulletAttack);
-
-                    ImGui::RadioButton("SpiralMoveAttack", &attackNum, (int)BossAttackState::SpiralMoveAttack);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("WavesAttack", &attackNum, (int)BossAttackState::WavesAttack);
-
-                    ImGui::RadioButton("JumpAttack", &attackNum, (int)BossAttackState::JumpAttack);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("SpecialAttack", &attackNum, (int)BossAttackState::SpecialAttack);
-
-                    // 該当攻撃を行う用にセットする
-                    if (prevAttack != attackNum)
+                    // 初期位置に戻す
+                    pBoss->ReturnFirstPos();
+                    if (pBoss->IsFirstPosAround(pBoss->GetPosition()))
                     {
-                        // 初期位置に戻す
-                        pBoss->ReturnFirstPos();
-                        if (pBoss->IsFirstPosAround(pBoss->GetPosition()))
-                        {
-                            // 攻撃変数を初期化して選択した新しい攻撃を開始させる
-                            pBoss->AttackVariableReset((BossAttackState)prevAttack);
-                            pBoss->SetAttackSlect((BossAttackState)attackNum);
-                        }
-
+                        // 攻撃変数を初期化して選択した新しい攻撃を開始させる
+                        pBoss->AttackVariableReset((BossAttackState)prevAttack);
+                        pBoss->SetAttackSlect((BossAttackState)attackNum);
                     }
 
-                    ImGui::TreePop();
                 }
 
-                // AIレベル
-                if (ImGui::TreeNode("AILevel"))
+                ImGui::TreePop();
+            }
+
+            // AIレベル
+            if (ImGui::TreeNode("AILevel"))
+            {
+                // AIレベルを余裕で初期化する
+                static int aiLevel = 1;
+
+                // AIレベル選択RadioButton
+                ImGui::RadioButton("Allowance", &aiLevel, (int)BossAIState::Allowance);
+                ImGui::SameLine();
+                ImGui::RadioButton("Normal", &aiLevel, (int)BossAIState::Normal);
+                ImGui::SameLine();
+                ImGui::RadioButton("Caution", &aiLevel, (int)BossAIState::Caution);
+
+                // 選択したAIレベルに変更する
+                pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+                pBoss->SetAIState((BossAIState)aiLevel);
+
+
+                ImGui::TreePop();
+            }
+
+            // 不死にするかどうか
+            {
+                static bool isImmortality = false;
+
+                ImGui::Checkbox("Immortality", &isImmortality);
+
+                if (isImmortality)
                 {
-                    // AIレベルを余裕で初期化する
-                    static int aiLevel = 1;
-
-                    // AIレベル選択RadioButton
-                    ImGui::RadioButton("Allowance", &aiLevel, (int)BossAIState::Allowance);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("Normal", &aiLevel, (int)BossAIState::Normal);
-                    ImGui::SameLine();
-                    ImGui::RadioButton("Caution", &aiLevel, (int)BossAIState::Caution);
-
-                    // 選択したAIレベルに変更する
-                    pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-                    pBoss->SetAIState((BossAIState)aiLevel);
-
-
-                    ImGui::TreePop();
-                }
-
-                // 不死にするかどうか
-                if (ImGui::TreeNode("Immortality"))
-                {
-                    static bool isImmortality = false;
-
-                    ImGui::Checkbox("Immortality", &isImmortality);
-
                     // 状態をセットする
                     pBoss = (EnemyBoss*)FindObject("EnemyBoss");
                     pBoss->Immortality(isImmortality);
-
-
-                    ImGui::TreePop();
                 }
-
-                ImGui::TreePop();
             }
 
-
-            // 隠しボス
-            if (ImGui::TreeNode("SecretBoss"))
+            // 即死させる
             {
+                static bool isInstantDeath = false;
 
+                ImGui::Checkbox("InstantDeath", &isInstantDeath);
 
-
-
-                ImGui::TreePop();
+                if (isInstantDeath)
+                {
+                    pBoss = (EnemyBoss*)FindObject("EnemyBoss");
+                    pBoss->DiedAction();
+                }
             }
-
 
             ImGui::TreePop();
         }
@@ -253,35 +219,35 @@ void imguiObject::Update()
     // オブジェクト情報
     if (ImGui::TreeNode("ObjectInformation"))
     {
-        //// プレイヤー情報
-        //if (ImGui::TreeNode("PlayerInformation"))
-        //{
-        //    pPlayer = (Player*)FindObject("Player");
-        //    if (pPlayer != nullptr)
-        //    {
-        //        ImGui::Text("position_x : %g", pPlayer->GetPosition().x);
-        //        ImGui::Text("position_y : %g", pPlayer->GetPosition().y);
-        //        ImGui::Text("position_z : %g", pPlayer->GetPosition().z);
-        //
-        //        ImGui::Text("HP : %g", pPlayer->GetHP());
-        //
-        //        std::string str = GetCharacterStateString(pPlayer);
-        //        ImGui::Text(str.c_str());
-        //
-        //        std::string attack = GetPlayerAttackStateString();
-        //        ImGui::Text(attack.c_str());
-        //    }
-        //
-        //    ImGui::TreePop();
-        //}
+        // プレイヤー情報
+        if (ImGui::TreeNode("PlayerInformation"))
+        {
+            pPlayer = (Player*)FindObject("Player");
+            if (pPlayer != nullptr)
+            {
+                ImGui::Text("position_x : %g", pPlayer->GetPosition().x);
+                ImGui::Text("position_y : %g", pPlayer->GetPosition().y);
+                ImGui::Text("position_z : %g", pPlayer->GetPosition().z);
+        
+                ImGui::Text("HP : %g", pPlayer->GetHP());
+        
+                std::string str = GetCharacterStateString(pPlayer);
+                ImGui::Text(str.c_str());
+        
+                std::string attack = GetPlayerAttackStateString();
+                ImGui::Text(attack.c_str());
+            }
+        
+            ImGui::TreePop();
+        }
 
-        //// ロボット情報
+        // ロボット情報
         //if (ImGui::TreeNode("RobotInformation"))
         //{
         //    pRobot = (Robot*)FindObject("Robot");
         //    if (pRobot != nullptr)
         //    {
-        //        /*ImGui::Text("position_x : %g", pRobot->GetPosition().x);
+        //        ImGui::Text("position_x : %g", pRobot->GetPosition().x);
         //        ImGui::Text("position_y : %g", pRobot->GetPosition().y);
         //        ImGui::Text("position_z : %g", pRobot->GetPosition().z);
         //        std::string str = GetCharacterStateString(pRobot);
@@ -330,40 +296,27 @@ void imguiObject::Update()
         // EnemyBoss情報
         if (ImGui::TreeNode("EnemyBossInformation"))
         {
-            //// 通常敵ボス
-            //if (ImGui::TreeNode("NormalBoss"))
-            //{
-            //
-            //    pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-            //
-            //    if (pBoss != nullptr)
-            //    {
-            //        ImGui::Text("position_x : %g", pBoss->GetPosition().x);
-            //        ImGui::Text("position_y : %g", pBoss->GetPosition().y);
-            //        ImGui::Text("position_z : %g", pBoss->GetPosition().z);
-            //
-            //        ImGui::Text("HP : %g", pBoss->GetHP());
-            //
-            //        std::string str = GetCharacterStateString(pBoss);
-            //        ImGui::Text(str.c_str());
-            //
-            //        std::string attack = GetEnemyBossAttackStateString();
-            //        ImGui::Text(attack.c_str());
-            //
-            //        std::string ai = GetAIStateString();
-            //        ImGui::Text(ai.c_str());
-            //    }
-            //
-            //    ImGui::TreePop();
-            //   
-            //}
+            pBoss = (EnemyBoss*)FindObject("EnemyBoss");
 
-            // 隠しボス
-            if (ImGui::TreeNode("SecretBoss"))
+            if (pBoss != nullptr)
             {
+                ImGui::Text("position_x : %g", pBoss->GetPosition().x);
+                ImGui::Text("position_y : %g", pBoss->GetPosition().y);
+                ImGui::Text("position_z : %g", pBoss->GetPosition().z);
 
-                ImGui::TreePop();
+                ImGui::Text("HP : %g", pBoss->GetHP());
+
+                std::string str = GetCharacterStateString(pBoss);
+                ImGui::Text(str.c_str());
+
+                std::string attack = GetEnemyBossAttackStateString();
+                ImGui::Text(attack.c_str());
+
+                std::string ai = GetAIStateString();
+                ImGui::Text(ai.c_str());
             }
+
+            ImGui::TreePop();
 
             ImGui::TreePop();
         }
