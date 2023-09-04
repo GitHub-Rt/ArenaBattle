@@ -195,6 +195,7 @@
     <ClCompile Include="UI\BackGroundImage.cpp" />
     <ClCompile Include="UI\ClearImage.cpp" />
     <ClCompile Include="UI\ControllerOperationImage.cpp" />
+    <ClCompile Include="UI\DefeatImage.cpp" />
     <ClCompile Include="UI\EnemyBossGauge.cpp" />
     <ClCompile Include="UI\HPGaugeBase.cpp" />
     <ClCompile Include="UI\KeyboardOperationImage.cpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="UI\StartImage.cpp" />
     <ClCompile Include="UI\TitleImage.cpp" />
     <ClCompile Include="UI\UIBase.cpp" />
+    <ClCompile Include="UI\VictoryImage.cpp" />
     <ClCompile Include="UI\Warning.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +287,7 @@
     <ClInclude Include="UI\BackGroundImage.h" />
     <ClInclude Include="UI\ClearImage.h" />
     <ClInclude Include="UI\ControllerOperationImage.h" />
+    <ClInclude Include="UI\DefeatImage.h" />
     <ClInclude Include="UI\EnemyBossGauge.h" />
     <ClInclude Include="UI\HPGaugeBase.h" />
     <ClInclude Include="UI\KeyboardOperationImage.h" />
@@ -301,6 +304,7 @@
     <ClInclude Include="UI\StartImage.h" />
     <ClInclude Include="UI\TitleImage.h" />
     <ClInclude Include="UI\UIBase.h" />
+    <ClInclude Include="UI\VictoryImage.h" />
     <ClInclude Include="UI\Warning.h" />
   </ItemGroup>
   <ItemGroup>

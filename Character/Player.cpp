@@ -841,5 +841,6 @@ bool Player::IsJumpEntry()
 
 void Player::DiedAction()
 {
-	
+	GraduallyTransparency();
+
 }

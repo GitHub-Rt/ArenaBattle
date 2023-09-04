@@ -380,6 +380,12 @@
     <ClCompile Include="UI\PauseImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClCompile>
+    <ClCompile Include="UI\VictoryImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\DefeatImage.cpp">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -644,6 +650,12 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="UI\PauseImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\VictoryImage.h">
+      <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\DefeatImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
     </ClInclude>
   </ItemGroup>

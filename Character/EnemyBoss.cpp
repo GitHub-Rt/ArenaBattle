@@ -930,4 +930,7 @@ bool EnemyBoss::IsFirstPosAround(XMFLOAT3 pos)
 void EnemyBoss::DiedAction()
 {
 	GraduallyTransparency();
+
+
+
 }
