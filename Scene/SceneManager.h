@@ -77,6 +77,9 @@ public:
 
 	bool GetHardMode() { return isHardMode; }
 
+	void ContinueCountIncrease() { continueCount++; }
+	int GetContinueCount() { return continueCount; }
+
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
@@ -88,4 +91,6 @@ private:
 	bool isCleared;				// クリアしたかどうか
 	bool isHardMode;			// ハードモードかどうか
 	bool isReLoad;				// 再作成するかどうか
+
+	int continueCount;
 };

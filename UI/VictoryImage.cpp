@@ -13,7 +13,7 @@ VictoryImage::~VictoryImage()
 
 void VictoryImage::Initialize()
 {
-
+	hPict = UILoad("Victory.png");
 }
 
 void VictoryImage::UIUpdate()
@@ -23,5 +23,5 @@ void VictoryImage::UIUpdate()
 
 void VictoryImage::Draw()
 {
-
+	UIDraw(hPict, transform_);
 }

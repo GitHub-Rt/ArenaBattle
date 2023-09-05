@@ -13,7 +13,7 @@ DefeatImage::~DefeatImage()
 
 void DefeatImage::Initialize()
 {
-
+	hPict = UILoad("Dead.png");
 }
 
 void DefeatImage::UIUpdate()
@@ -23,6 +23,6 @@ void DefeatImage::UIUpdate()
 
 void DefeatImage::Draw()
 {
-
+	UIDraw(hPict, transform_);
 }
 

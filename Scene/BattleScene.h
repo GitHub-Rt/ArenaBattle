@@ -8,6 +8,9 @@ class Player;
 
 class SelectBox;
 class PauseImage;
+class RetryImage;
+class DefeatImage;
+class VictoryImage;
 
 enum class RetryMenu
 {
@@ -39,6 +42,7 @@ public:
 	void BattleRetry();
 	void BackBattle();
 	void PoseProcess();
+	void ContinueProcess();
 
 private:
 
@@ -53,6 +57,9 @@ private:
 	Menu nowMenu;
 	bool isRetryProcess;
 	bool isPauseProcess;
+
+	DefeatImage* pDefeat;
+	VictoryImage* pVictory;
 
 };
 
