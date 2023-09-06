@@ -94,11 +94,16 @@ void DebugScene::Update()
 	//	}
 	//}
 
-
 	if (pBoss->GetHP() < 0)
 	{
-		pBoss->DiedAction();
+		if (pBoss->DiedAction())
+		{
+			// ゲームオーバー処理の追加
+
+		}
 	}
+	
+	
 }
 
 void DebugScene::Draw()

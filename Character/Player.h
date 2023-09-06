@@ -2,7 +2,7 @@
 #include "CharacterBase.h"
 
 class PolyLine;
-class PlayerEffect;
+class Effect;
 class PlayerGauge;
 class RecoveryPotion;
 
@@ -60,7 +60,7 @@ public:
 	void CharacterCheckHP() override;
 	void DrawEffect() override;
 	void OnCollision(GameObject* pTarget, Collider* nowCollider) override;
-	void DiedAction() override;
+	bool DiedAction() override;
 
 	// カメラ周り
 	void NormalCamera();	// 通常時カメラ関数
@@ -133,7 +133,7 @@ private:
 
 
 	// 攻撃周りの変数
-	PlayerEffect* pEffect;
+	Effect* pEffect;
 	AttackState attackState;		// 攻撃状態
 	int attackTimer;				// 攻撃時間
 	XMVECTOR attackVector;			// 入力ベクトル

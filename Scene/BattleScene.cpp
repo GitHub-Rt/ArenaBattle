@@ -127,39 +127,6 @@ void BattleScene::Initialize()
 
 void BattleScene::Update()
 {
-	// ボス登場処理
-	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty() && isRetryProcess == false && isPauseProcess == false)
-	{
-		// プレイヤーの入力を受け付けなくする
-		pPlayer->SetInputReception(false);
-
-		if (pBoss->BossEntry())
-		{
-			// 音楽の変更
-			if (pSound->GetSoundFlg(SoundTrack::BossSound) == false)
-			{
-				pSound->SoundStop(SoundTrack::Alert);
-				pSound->SoundPlay(SoundTrack::BossSound);
-			}
-
-			// プレイヤーの入力受付を再開する
-			pPlayer->SetInputReception(true);
-			pBoss->ProcessStart();
-
-			// リトライポイントの更新
-			pManager->SetRetryPoint(RetryPoint::BossBattle);
-		}
-		else
-		{
-			// Warningのアラート音を鳴らす
-			if (pSound->GetSoundFlg(SoundTrack::BattleSound))
-			{
-				pSound->SoundStop(SoundTrack::BattleSound);
-				pSound->SoundPlay(SoundTrack::Alert);
-			}
-		}
-	}
-
 	// 勝利、敗北画像表示中の処理
 	if (pDefeat != nullptr || pVictory != nullptr)
 	{
@@ -184,24 +151,31 @@ void BattleScene::Update()
 	{
 		if (pPlayer->GetHP() <= 0)
 		{
-			const int MAX_CONTINUE = 3;	// 最大コンテニュー回数
+			// プレイヤーの死亡演出
+			if (pPlayer->DiedAction())
+			{
+				const int MAX_CONTINUE = 3;	// 最大コンテニュー回数
 
-			// まだコンテニュー可能かどうか
-			if (pManager->GetContinueCount() < MAX_CONTINUE)
-			{
-				ContinueProcess();
+				// まだコンテニュー可能かどうか
+				if (pManager->GetContinueCount() < MAX_CONTINUE)
+				{
+					ContinueProcess();
+				}
+				else
+				{
+					pDefeat = Instantiate<DefeatImage>(this);
+					PoseProcess();
+				}
 			}
-			else
-			{
-				pDefeat = Instantiate<DefeatImage>(this);
-				PoseProcess();
-			}
-			
 		}
 		else if (pBoss->GetHP() <= 0)
 		{
-			pVictory = Instantiate<VictoryImage>(this);
-			PoseProcess();
+			// 敵ボスの死亡演出
+			if (pBoss->DiedAction())
+			{
+				pVictory = Instantiate<VictoryImage>(this);
+				PoseProcess();
+			}
 		}
 	}
 	
@@ -274,9 +248,38 @@ void BattleScene::Update()
 		pPlayer->SetInputReception(true);
 	}
 
-	
+	// ボス登場処理
+	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty() && isRetryProcess == false && isPauseProcess == false)
+	{
+		// プレイヤーの入力を受け付けなくする
+		pPlayer->SetInputReception(false);
 
+		if (pBoss->BossEntry())
+		{
+			// 音楽の変更
+			if (pSound->GetSoundFlg(SoundTrack::BossSound) == false)
+			{
+				pSound->SoundStop(SoundTrack::Alert);
+				pSound->SoundPlay(SoundTrack::BossSound);
+			}
 
+			// プレイヤーの入力受付を再開する
+			pPlayer->SetInputReception(true);
+			pBoss->ProcessStart();
+
+			// リトライポイントの更新
+			pManager->SetRetryPoint(RetryPoint::BossBattle);
+		}
+		else
+		{
+			// Warningのアラート音を鳴らす
+			if (pSound->GetSoundFlg(SoundTrack::BattleSound))
+			{
+				pSound->SoundStop(SoundTrack::BattleSound);
+				pSound->SoundPlay(SoundTrack::Alert);
+			}
+		}
+	}
 
 }
 

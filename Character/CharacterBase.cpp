@@ -748,7 +748,7 @@ void CharacterBase::DiedStaging(CharacterID charaID)
 
 }
 
-void CharacterBase::GraduallyTransparency()
+bool CharacterBase::GraduallyTransparency()
 {
 	const int CALLTIMER = 5;			// 更新フレーム数
 	const float EASING_STEP = 0.05f;	// 変化量
@@ -763,7 +763,14 @@ void CharacterBase::GraduallyTransparency()
 		alpha = 1 - Easing::EaseOutQuint(ease);
 		Model::SetAlpha(hModel, alpha);
 
+		if (alpha == 0)
+		{
+			return true;
+		}
+
 		timer = 0;
 		ease += EASING_STEP;
 	}
+
+	return false;
 }

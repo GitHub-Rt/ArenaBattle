@@ -1,4 +1,4 @@
-#include "PlayerEffect.h"
+#include "Effect.h"
 
 #include "../Engine/VFX.h"
 #include "../Engine/Global.h"
@@ -6,7 +6,7 @@
 #include "../Character/Player.h"
 
 
-PlayerEffect::PlayerEffect()
+Effect::Effect()
 {
 	eLimitFire = -1;
 	eLimitSparks = -1;
@@ -19,12 +19,12 @@ PlayerEffect::PlayerEffect()
 	eLimitVentilation = -1;
 };
 
-void PlayerEffect::Release()
+void Effect::Release()
 {
 	VFX::Release();
 }
 
-void PlayerEffect::StartEffectDetonation()
+void Effect::StartEffectDetonation()
 {
 	//‰Š
 	data_Detonation.textureFileName = "Effect/Player/cloudA.png";
@@ -79,7 +79,7 @@ void PlayerEffect::StartEffectDetonation()
 
 }
 
-void PlayerEffect::StopEffectDetonation()
+void Effect::StopEffectDetonation()
 {
 	VFX::End(eLimitFire);
 	VFX::End(eLimitSparks);
@@ -89,7 +89,7 @@ void PlayerEffect::StopEffectDetonation()
 }
 
 
-void PlayerEffect::StartEffectAtHardAttack()
+void Effect::StartEffectAtHardAttack()
 {
 	data_Tornado.textureFileName = "Effect/Player/RingCloud.png";
 	data_Tornado.rotate.x = 90;
@@ -108,14 +108,14 @@ void PlayerEffect::StartEffectAtHardAttack()
 	eLimitTornado = VFX::Start(data_Tornado);
 }
 
-void PlayerEffect::StopEffectAtHardAttack()
+void Effect::StopEffectAtHardAttack()
 {
 	VFX::End(eLimitTornado);
 
 	Release();
 }
 
-void PlayerEffect::StartEffectAtNormalAttack()
+void Effect::StartEffectAtNormalAttack()
 {
 	XMFLOAT3 vr = ventilationRotate;
 	vr.z += 45;
@@ -160,14 +160,14 @@ void PlayerEffect::StartEffectAtNormalAttack()
 	eLimitVentilation = VFX::Start(data_Ventilation);
 }
 
-void PlayerEffect::StopEffectAtNormalAttack()
+void Effect::StopEffectAtNormalAttack()
 {
 	VFX::End(eLimitVentilation);
 
 	Release();
 }
 
-void PlayerEffect::SetEmitterPosition(XMFLOAT3 pos, EmitterType type)
+void Effect::SetEmitterPosition(XMFLOAT3 pos, EmitterType type)
 {
 	switch (type)
 	{

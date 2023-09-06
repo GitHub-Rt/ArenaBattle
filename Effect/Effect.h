@@ -11,12 +11,12 @@ enum class EmitterType
 };
 
 
-class PlayerEffect
+class Effect
 {
 
 public:
 
-	PlayerEffect();
+	Effect();
 	void Release();
 
 

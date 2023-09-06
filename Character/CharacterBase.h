@@ -309,7 +309,7 @@ public:
 	/// <summary>
 	/// 徐々に透明化をする処理
 	/// </summary>
-	void GraduallyTransparency();
+	bool GraduallyTransparency();
 
 
 	/// <summary>
@@ -370,7 +370,7 @@ public:
 	/// <summary>
 	/// 死亡時のアクション
 	/// </summary>
-	virtual void DiedAction() {}
+	virtual bool DiedAction() { return false; }
 
 private:
 

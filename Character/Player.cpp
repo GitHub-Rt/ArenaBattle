@@ -5,7 +5,7 @@
 #include "../Engine/Global.h"
 
 #include "../Effect/PolyLine.h"
-#include "../Effect/PlayerEffect.h"
+#include "../Effect/Effect.h"
 
 #include "../UI/PlayerGauge.h"
 #include "../UI/RecoveryPotion.h"
@@ -132,7 +132,7 @@ void Player::Initialize()
 		pLine = new PolyLine();
 		pLine->Load("Effect/tex.png");
 
-		pEffect = new PlayerEffect();
+		pEffect = new Effect();
 
 		pPotion = Instantiate<RecoveryPotion>(GetParent());
 		pPotion->SetPotionCount(RECOVERY_POTION_NUMBER);
@@ -839,8 +839,18 @@ bool Player::IsJumpEntry()
 	return false;
 }
 
-void Player::DiedAction()
+bool Player::DiedAction()
 {
-	GraduallyTransparency();
+	if (GraduallyTransparency())
+	{
+		return true;
+	}
+	else
+	{
+		// Effectの呼び出し
+	}
 
+
+
+	return false;
 }

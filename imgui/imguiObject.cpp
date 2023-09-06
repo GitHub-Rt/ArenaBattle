@@ -206,7 +206,7 @@ void imguiObject::Update()
                 if (isInstantDeath)
                 {
                     pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-                    pBoss->DiedAction();
+                    pBoss->Damage(1000);
                 }
             }
 
@@ -315,8 +315,6 @@ void imguiObject::Update()
                 std::string ai = GetAIStateString();
                 ImGui::Text(ai.c_str());
             }
-
-            ImGui::TreePop();
 
             ImGui::TreePop();
         }
