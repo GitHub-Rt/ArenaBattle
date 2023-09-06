@@ -17,6 +17,9 @@ Effect::Effect()
 	ventilationDir = { 0,0,0 };
 	ventilationRotate = { 0,0,0 };
 	eLimitVentilation = -1;
+
+	eLimitDead_smoke = -1;
+	eLimitDead_bubble = -1;
 };
 
 void Effect::Release()
@@ -27,7 +30,7 @@ void Effect::Release()
 void Effect::StartEffectDetonation()
 {
 	//炎
-	data_Detonation.textureFileName = "Effect/Player/cloudA.png";
+	data_Detonation.textureFileName = "Effect/cloudA.png";
 	data_Detonation.delay = 0;
 	data_Detonation.number = 80;
 	data_Detonation.lifeTime = 30;
@@ -63,7 +66,7 @@ void Effect::StartEffectDetonation()
 
 
 	//地面
-	data_Detonation.textureFileName = "Effect/Player/flashA_R.png";
+	data_Detonation.textureFileName = "Effect/flashA_R.png";
 	data_Detonation.positionRnd = XMFLOAT3(0, 0, 0);
 	data_Detonation.isBillBoard = false;
 	data_Detonation.rotate.x = 90;
@@ -88,10 +91,9 @@ void Effect::StopEffectDetonation()
 	Release();
 }
 
-
 void Effect::StartEffectAtHardAttack()
 {
-	data_Tornado.textureFileName = "Effect/Player/RingCloud.png";
+	data_Tornado.textureFileName = "Effect/RingCloud.png";
 	data_Tornado.rotate.x = 90;
 	data_Tornado.delay = 20;
 	data_Tornado.speed = 0.3f;
@@ -119,7 +121,7 @@ void Effect::StartEffectAtNormalAttack()
 {
 	XMFLOAT3 vr = ventilationRotate;
 	vr.z += 45;
-	data_Ventilation.textureFileName = "Effect/Player/flashA_R.png";
+	data_Ventilation.textureFileName = "Effect/flashA_R.png";
 	{
 		XMVECTOR vView = {0,0,1,0};
 		XMVECTOR vDir = XMLoadFloat3(&ventilationDir);
@@ -153,7 +155,6 @@ void Effect::StartEffectAtNormalAttack()
 	data_Ventilation.isBillBoard = false;
 	eLimitVentilation = VFX::Start(data_Ventilation);
 	{
-		
 		vr.z += 90;
 		data_Ventilation.rotate = vr;
 	}
@@ -180,7 +181,42 @@ void Effect::SetEmitterPosition(XMFLOAT3 pos, EmitterType type)
 	case EmitterType::Tornado:	//竜巻エフェクト
 		data_Tornado.position = pos;
 		break;
+	case EmitterType::Dead:		// 死亡エフェクト
+		data_Dead.position = pos;
+		break;
 	default:
 		break;
 	}
+}
+
+void Effect::StartEffectDead()
+{
+	// 煙エフェクト
+	data_Dead.textureFileName = "Effect/cloudA.png";
+	data_Dead.positionRnd.y = 5;
+	data_Dead.speed = 0.5f;
+	data_Dead.speedRnd = 0.5f;
+	data_Dead.accel = 0.3f;
+	data_Dead.number = 5;
+	data_Dead.gravity = 0.4f;
+	data_Dead.lifeTime = 60;
+	data_Dead.size = { 2, 4 };
+	data_Dead.isBillBoard = false;
+
+	eLimitDead_smoke = VFX::Start(data_Dead);
+
+	// 泡エフェクト
+	data_Dead.textureFileName = "Effect/bubble.png";
+	data_Dead.positionRnd.y = 10;
+
+	eLimitDead_bubble = VFX::Start(data_Dead);
+}
+
+
+void Effect::StopEffectDead()
+{
+	VFX::End(eLimitDead_smoke);
+	//VFX::End(eLimitDead_bubble);
+
+	Release();
 }

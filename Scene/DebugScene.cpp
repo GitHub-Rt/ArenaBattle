@@ -15,6 +15,7 @@
 
 #include "../Scene/SceneManager.h"
 #include "../Engine/Input.h"
+#include "../Effect/Effect.h"
 
 // 定数宣言
 const int EnemyTimer = 30;	// 敵が全滅してから再登場するまでのフレーム数
@@ -46,9 +47,9 @@ void DebugScene::Initialize()
 	//	EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	//}
 
-	pBoss = Instantiate<EnemyBoss>(this);
+	//pBoss = Instantiate<EnemyBoss>(this);
 	// ボス線から始める
-	pBoss->ProcessStart();
+	//pBoss->ProcessStart();
 
 	// 第二形態からスタートさせる
 	///pBoss->SecondFormStart();
@@ -57,6 +58,8 @@ void DebugScene::Initialize()
 	Instantiate<Robot>(this);
 
 	Instantiate<imguiObject>(this);
+
+	pEffect = new Effect();
 }
 
 void DebugScene::Update()
@@ -94,13 +97,10 @@ void DebugScene::Update()
 	//	}
 	//}
 
-	if (pBoss->GetHP() < 0)
+	if (Input::IsKey(DIK_SPACE))
 	{
-		if (pBoss->DiedAction())
-		{
-			// ゲームオーバー処理の追加
-
-		}
+		pEffect->SetEmitterPosition(XMFLOAT3(0,0,0), EmitterType::Dead);
+		pEffect->StartEffectDead();
 	}
 	
 	
@@ -108,11 +108,15 @@ void DebugScene::Update()
 
 void DebugScene::Draw()
 {
-
+	
 }
 
 void DebugScene::Release()
 {
-
+	if (pEffect != nullptr)
+	{
+		pEffect->Release();
+		SAFE_DELETE(pEffect);
+	}
 }
 
