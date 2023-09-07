@@ -77,7 +77,7 @@ void BattleScene::Initialize()
 	Instantiate<Stage>(this);
 	Instantiate<BattleWall>(this);
 	Instantiate<WaterFloor>(this);
-	//Instantiate<BattleBackGround>(this);
+	Instantiate<BattleBackGround>(this);
 
 	// リトライポイントを取得する
 	RetryPoint point = pManager->GetRetryPoint();

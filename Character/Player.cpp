@@ -442,7 +442,7 @@ void Player::DamageMotion()
 
 void Player::NormalCamera()
 {
-	const XMVECTOR VECTOR_FROM_PLAYER_TO_CAMERA = { 0, 3.0f, -30.0f, 0 };	// プレイヤーからみたカメラへのベクトル
+	const XMVECTOR VECTOR_FROM_PLAYER_TO_CAMERA = { 0, 3.0f, -32.0f, 0 };	// プレイヤーからみたカメラへのベクトル
 	const float VECTOR_LENGTH_UP_TO_FOCUS = 4.5f;	// 焦点までのベクトルのスカラー倍の値
 
 	// カメラの回転角度とベクトル設定
