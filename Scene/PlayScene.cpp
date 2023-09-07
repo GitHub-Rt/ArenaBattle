@@ -92,6 +92,8 @@ void PlayScene::BattleStart()
 			pBox = Instantiate<SelectBox>(this);
 			pBox->SetScale(BOX_SCALE);
 			pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, EASY_Y, 0));
+
+			nowLevel = GameLevel::Easy;
 		}
 		
 		// ƒŒƒxƒ‹‘I‘ð“ü—Í

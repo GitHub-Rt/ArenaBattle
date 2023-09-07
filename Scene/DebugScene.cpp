@@ -16,6 +16,7 @@
 #include "../Scene/SceneManager.h"
 #include "../Engine/Input.h"
 
+
 // ’è”éŒ¾
 const int EnemyTimer = 30;	// “G‚ª‘S–Å‚µ‚Ä‚©‚çÄ“oê‚·‚é‚Ü‚Å‚ÌƒtƒŒ[ƒ€”
 const int ENEMY_COUNT = 3;
@@ -52,6 +53,8 @@ void DebugScene::Initialize()
 
 	pBoss = Instantiate<EnemyBoss>(this);
 	pBoss->ProcessStart();
+
+	//pBoss->SecondFormStart();
 
 	pPlayer = Instantiate<Player>(this);
 	Instantiate<Robot>(this);

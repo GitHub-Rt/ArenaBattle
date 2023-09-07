@@ -45,6 +45,7 @@ BattleScene::BattleScene(GameObject* parent)
 
 	pDefeat = nullptr;
 	pVictory = nullptr;
+	isFinishedStaging = false;
 }
 
 BattleScene::~BattleScene()
@@ -182,6 +183,13 @@ void BattleScene::Update()
 			if (pBoss->DiedAction())
 			{
 				pVictory = Instantiate<VictoryImage>(this);
+				isFinishedStaging = true;
+			}
+			else
+			{
+				pPlayer->SetInputReception(false);
+				pBoss->Leave();
+				return;
 			}
 		}
 	}
@@ -258,6 +266,11 @@ void BattleScene::Update()
 	// ボス登場処理
 	if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty() && isRetryProcess == false && isPauseProcess == false)
 	{
+		if (isFinishedStaging)
+		{
+			return;
+		}
+
 		// プレイヤーの入力を受け付けなくする
 		pPlayer->SetInputReception(false);
 

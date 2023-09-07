@@ -721,7 +721,7 @@ void EnemyBoss::Damage(float damage)
 	// 特殊攻撃を行っていないのに、体力が特殊攻撃開始よりも少なくならないようにする
 	if (isSpecialAttack == false && hp - damage <= maxHp / RATE_FOR_MAX_STRENGTH)
 	{
-		// リトライ時もゲージを減らす
+		// リトライ時はゲージをラインまで減らす
 		if (hp == maxHp)
 		{
 			pGauge->Damage(damage);

@@ -60,6 +60,6 @@ private:
 
 	DefeatImage* pDefeat;
 	VictoryImage* pVictory;
-
+	bool isFinishedStaging;
 };
 

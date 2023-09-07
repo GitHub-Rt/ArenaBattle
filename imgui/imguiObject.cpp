@@ -206,7 +206,7 @@ void imguiObject::Update()
                 if (isInstantDeath)
                 {
                     pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-                    pBoss->Damage(1000);
+                    pBoss->Damage(999999);
                 }
             }
 
