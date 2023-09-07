@@ -78,6 +78,7 @@ public:
 	bool GetHardMode() { return isHardMode; }
 
 	void ContinueCountIncrease() { continueCount++; }
+	void ContinueCountReset() { continueCount = 0; }
 	int GetContinueCount() { return continueCount; }
 
 private:

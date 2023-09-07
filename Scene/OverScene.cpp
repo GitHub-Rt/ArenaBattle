@@ -24,6 +24,8 @@ void OverScene::Initialize()
 	pSound = pManager->GetSound();
 	pSound->SoundLoad(SoundTrack::GameOverSound);
 
+	pManager->ContinueCountReset();
+
 	Instantiate<BackGroundImage>(this);
 	Instantiate<OverImage>(this);
 

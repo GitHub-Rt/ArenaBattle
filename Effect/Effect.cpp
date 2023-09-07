@@ -8,6 +8,8 @@
 
 Effect::Effect()
 {
+	isCalledDeadEffect = false;
+
 	eLimitFire = -1;
 	eLimitSparks = -1;
 	eLimitGround = -1;
@@ -152,7 +154,7 @@ void Effect::StartEffectAtNormalAttack()
 	//data_Ventilation.sizeRnd = XMFLOAT2(0.4f, 0.4f);
 	data_Ventilation.scale = XMFLOAT2(1.04f, 1.04f);
 	data_Tornado.color = XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f);
-	data_Ventilation.isBillBoard = false;
+	//data_Ventilation.isBillBoard = false;
 	eLimitVentilation = VFX::Start(data_Ventilation);
 	{
 		vr.z += 90;
@@ -192,31 +194,53 @@ void Effect::SetEmitterPosition(XMFLOAT3 pos, EmitterType type)
 void Effect::StartEffectDead()
 {
 	// 煙エフェクト
-	data_Dead.textureFileName = "Effect/cloudA.png";
-	data_Dead.positionRnd.y = 5;
-	data_Dead.speed = 0.5f;
-	data_Dead.speedRnd = 0.5f;
-	data_Dead.accel = 0.3f;
-	data_Dead.number = 5;
-	data_Dead.gravity = 0.4f;
-	data_Dead.lifeTime = 60;
-	data_Dead.size = { 2, 4 };
-	data_Dead.isBillBoard = false;
-
-	eLimitDead_smoke = VFX::Start(data_Dead);
+	{
+		data_Dead.textureFileName = "Effect/cloudA.png";
+		data_Dead.positionRnd = XMFLOAT3(0.5, 0, 0.5);
+		data_Dead.direction = XMFLOAT3(0.2, 1, 0.2);
+		data_Dead.directionRnd = XMFLOAT3(3, 3, 3);
+		data_Dead.speed = 0.2f;
+		data_Dead.accel = 0.98f;
+		data_Dead.delay = 5;
+		data_Dead.lifeTime = 30;
+		data_Dead.color = XMFLOAT4(1, 1, 1, 0.1);
+		data_Dead.deltaColor = XMFLOAT4(0, 0, 0, -0.002);
+		data_Dead.rotateRnd.z = 180;
+		data_Dead.spin.z = 0.1;
+		data_Dead.size = XMFLOAT2(16, 16);
+		data_Dead.sizeRnd = XMFLOAT2(0.5, 0.5);
+		data_Dead.scale = XMFLOAT2(1.01, 1.01);
+		eLimitDead_smoke = VFX::Start(data_Dead);
+	}
+	
 
 	// 泡エフェクト
-	data_Dead.textureFileName = "Effect/bubble.png";
-	data_Dead.positionRnd.y = 10;
+	{
+		data_Dead.textureFileName = "Effect/bubble.png";
 
-	eLimitDead_bubble = VFX::Start(data_Dead);
+		data_Dead.positionRnd = XMFLOAT3(5, 3, 5);
+		data_Dead.directionRnd = XMFLOAT3(20, 10, 20);
+		data_Dead.speed = 0.4f;
+		data_Dead.speedRnd = 0.4f;
+		data_Dead.accel = 0.98f;
+		data_Dead.delay = 20;
+		data_Dead.number = 5;
+		data_Dead.lifeTime = 45;
+		data_Dead.color = XMFLOAT4(1, 1, 1, 0.6);
+		data_Dead.deltaColor = XMFLOAT4(0, 0, 0, -0.02);
+		data_Dead.size = XMFLOAT2(0.3, 0.3);
+		data_Dead.sizeRnd = XMFLOAT2(0.2, 0.2);
+
+		eLimitDead_bubble = VFX::Start(data_Dead);
+	}
+	
 }
 
 
 void Effect::StopEffectDead()
 {
 	VFX::End(eLimitDead_smoke);
-	//VFX::End(eLimitDead_bubble);
+	VFX::End(eLimitDead_bubble);
 
 	Release();
 }

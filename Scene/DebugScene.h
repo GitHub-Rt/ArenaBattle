@@ -4,8 +4,6 @@
 class EnemyBoss;
 class Player;
 
-class Effect;
-
 class DebugScene : public GameObject
 {
 public:
@@ -22,6 +20,4 @@ private:
 	EnemyBoss* pBoss;
 	Player* pPlayer;
 	int timer;
-
-	Effect* pEffect;
 };

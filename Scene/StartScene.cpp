@@ -34,6 +34,8 @@ void StartScene::Initialize()
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
 
+	pManager->ContinueCountReset();
+
 	pSound->EffectLoad(SoundEffect::Determinant);
 	pSound->EffectLoad(SoundEffect::MoveSelection);
 

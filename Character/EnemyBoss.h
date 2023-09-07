@@ -8,6 +8,7 @@ class EnemyBossJumpArea;
 class EnemyBossSpecialArea;
 class Warning;
 class PolyLine;
+class Effect;
 
 enum class EnemyBossData
 {
@@ -170,6 +171,7 @@ private:
 	
 	// ‘S‘Ì•Ï”
 	Player* pPlayer;
+	Effect* pEffect;
 	unsigned int bossAttackState;
 	BossAIState bossAIState;
 	XMFLOAT3 firstPos;

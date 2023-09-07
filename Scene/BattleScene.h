@@ -41,7 +41,7 @@ public:
 	// リトライ、ポーズ回りの関数
 	void BattleRetry();
 	void BackBattle();
-	void PoseProcess();
+	void PauseProcess();
 	void ContinueProcess();
 
 private:

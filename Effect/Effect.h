@@ -20,7 +20,8 @@ public:
 	Effect();
 	void Release();
 
-
+	void SetCalledDeadFlg() { isCalledDeadEffect = true; }
+	bool IsCalledDeadEffect() { return isCalledDeadEffect; }
 
 	//爆破エフェクトに関する関数
 
@@ -98,6 +99,8 @@ public:
 	void StopEffectDead();
 
 private:
+
+	bool isCalledDeadEffect;
 
 	// 爆破エフェクト回りの変数
 	EmitterData data_Detonation;

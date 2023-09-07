@@ -127,6 +127,9 @@ void BattleScene::Initialize()
 
 void BattleScene::Update()
 {
+
+	
+
 	// 勝利、敗北画像表示中の処理
 	if (pDefeat != nullptr || pVictory != nullptr)
 	{
@@ -151,6 +154,11 @@ void BattleScene::Update()
 	{
 		if (pPlayer->GetHP() <= 0)
 		{
+			if (pPlayer->IsInputReception())
+			{
+				pPlayer->SetInputReception(false);
+			}
+
 			// プレイヤーの死亡演出
 			if (pPlayer->DiedAction())
 			{
@@ -160,11 +168,11 @@ void BattleScene::Update()
 				if (pManager->GetContinueCount() < MAX_CONTINUE)
 				{
 					ContinueProcess();
+					return;
 				}
 				else
 				{
 					pDefeat = Instantiate<DefeatImage>(this);
-					PoseProcess();
 				}
 			}
 		}
@@ -174,7 +182,6 @@ void BattleScene::Update()
 			if (pBoss->DiedAction())
 			{
 				pVictory = Instantiate<VictoryImage>(this);
-				PoseProcess();
 			}
 		}
 	}
@@ -192,7 +199,7 @@ void BattleScene::Update()
 			pBox = Instantiate<SelectBox>(this);
 			pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, BACKGAME_POS_Y, 0), true);
 
-			PoseProcess();
+			PauseProcess();
 			isPauseProcess = true;
 		}
 	}
@@ -243,7 +250,7 @@ void BattleScene::Update()
 			}
 		}
 	}
-	else
+	else if(pPlayer->IsInputReception() == false)
 	{
 		pPlayer->SetInputReception(true);
 	}
@@ -280,7 +287,6 @@ void BattleScene::Update()
 			}
 		}
 	}
-
 }
 
 void BattleScene::Draw()
@@ -359,7 +365,7 @@ void BattleScene::BackBattle()
 	pPause = nullptr;
 }
 
-void BattleScene::PoseProcess()
+void BattleScene::PauseProcess()
 {
 	if (EnemyManager::IsListEmpty() == false)
 	{
@@ -391,7 +397,7 @@ void BattleScene::ContinueProcess()
 		pBox->SetSelectBox(XMFLOAT3(BOX_POS_X, RETORY_POS_Y, 0));
 
 		// ポーズ状態にする
-		PoseProcess();
+		PauseProcess();
 		isRetryProcess = true;
 	}
 

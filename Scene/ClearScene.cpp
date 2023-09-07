@@ -27,6 +27,8 @@ void ClearScene::Initialize()
 	// リトライポイントのリセット
 	pManager->SetRetryPoint(RetryPoint::NormalEnemyBattle);
 
+	pManager->ContinueCountReset();
+
 	pSound->SoundLoad(SoundTrack::ClearSound);
 
 	if (pManager->GetClearFlg() == false)

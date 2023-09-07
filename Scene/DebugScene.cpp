@@ -15,7 +15,6 @@
 
 #include "../Scene/SceneManager.h"
 #include "../Engine/Input.h"
-#include "../Effect/Effect.h"
 
 // 定数宣言
 const int EnemyTimer = 30;	// 敵が全滅してから再登場するまでのフレーム数
@@ -32,34 +31,33 @@ DebugScene::DebugScene(GameObject* parent)
 
 void DebugScene::Initialize()
 {
+	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
+
+	// リストの全要素を削除
 	if (EnemyManager::IsListEmpty() == false)
 	{
 		EnemyManager::ClearEnemy();
 	}
-	
+
 	Instantiate<Stage>(this);
 	Instantiate<BattleWall>(this);
-	//Instantiate<BattleBackGround>(this);
 	Instantiate<WaterFloor>(this);
+	//Instantiate<BattleBackGround>(this);
 
-	//for (int i = 0; i < ENEMY_COUNT; i++)
-	//{
-	//	EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
-	//}
 
-	//pBoss = Instantiate<EnemyBoss>(this);
-	// ボス線から始める
-	//pBoss->ProcessStart();
+	/*for (int i = 0; i < ENEMY_COUNT; i++)
+	{
+		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
+	}*/
 
-	// 第二形態からスタートさせる
-	///pBoss->SecondFormStart();
-	
+	pBoss = Instantiate<EnemyBoss>(this);
+	pBoss->ProcessStart();
+
 	pPlayer = Instantiate<Player>(this);
 	Instantiate<Robot>(this);
 
 	Instantiate<imguiObject>(this);
-
-	pEffect = new Effect();
+	
 }
 
 void DebugScene::Update()
@@ -96,14 +94,6 @@ void DebugScene::Update()
 	//		pBoss->ProcessStart();
 	//	}
 	//}
-
-	if (Input::IsKey(DIK_SPACE))
-	{
-		pEffect->SetEmitterPosition(XMFLOAT3(0,0,0), EmitterType::Dead);
-		pEffect->StartEffectDead();
-	}
-	
-	
 }
 
 void DebugScene::Draw()
@@ -113,10 +103,6 @@ void DebugScene::Draw()
 
 void DebugScene::Release()
 {
-	if (pEffect != nullptr)
-	{
-		pEffect->Release();
-		SAFE_DELETE(pEffect);
-	}
+
 }
 

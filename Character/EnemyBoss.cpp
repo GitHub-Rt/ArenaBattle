@@ -2,6 +2,7 @@
 #include "../UI/EnemyBossGauge.h"
 
 #include "../Effect/PolyLine.h"
+#include "../Effect/Effect.h"
 
 #include "Player.h"
 #include "../AttackModel/EnemyBossBullet.h"
@@ -40,6 +41,7 @@ EnemyBoss::EnemyBoss(GameObject* parent)
 	ENTRY_POS_Y = 0;
 
 	pPlayer = nullptr;
+	pEffect = nullptr;
 	bossAttackState = (unsigned int)BossAttackState::NoAttack;
 	bossAIState = BossAIState::Allowance;
 	firstPos = { 0,0,0 };
@@ -143,6 +145,8 @@ void EnemyBoss::Initialize()
 		pLine = new PolyLine();
 		pLine->Load("Effect/tex.png");
 
+		pEffect = new Effect();
+
 		// 各種該当状態を拒否
 		Leave();		// Update
 		Invisible();	// Draw
@@ -155,6 +159,12 @@ void EnemyBoss::EnemyRelease()
 	{
 		pLine->Release();
 		SAFE_DELETE(pLine);
+	}
+
+	if (pEffect != nullptr)
+	{
+		pEffect->Release();
+		SAFE_DELETE(pEffect);
 	}
 }
 
@@ -711,6 +721,12 @@ void EnemyBoss::Damage(float damage)
 	// 特殊攻撃を行っていないのに、体力が特殊攻撃開始よりも少なくならないようにする
 	if (isSpecialAttack == false && hp - damage <= maxHp / RATE_FOR_MAX_STRENGTH)
 	{
+		// リトライ時もゲージを減らす
+		if (hp == maxHp)
+		{
+			pGauge->Damage(damage);
+		}
+
 		hp = maxHp / RATE_FOR_MAX_STRENGTH;
 	}
 	else
@@ -931,14 +947,17 @@ bool EnemyBoss::DiedAction()
 {
 	if (GraduallyTransparency())
 	{
+		pEffect->StopEffectDead();
 		return true;
 	}
-	else
+	else if (pEffect->IsCalledDeadEffect() == false)
 	{
-		// Effectの呼び出し
-	}
-	
+		pEffect->SetCalledDeadFlg();
 
+		// Effectの呼び出し
+		pEffect->SetEmitterPosition(GetPosition(), EmitterType::Dead);
+		pEffect->StartEffectDead();
+	}
 
 	return false;
 }

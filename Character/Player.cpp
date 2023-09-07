@@ -162,75 +162,50 @@ void Player::CharacterUpdate()
 	//カメラ設定
 	NormalCamera();
 
-	// 回避を再度行える用になったかどうか
-	float trrigerR = Input::GetPadTrrigerR();
-	if (trrigerR == 0)
+	if (GetHP() > 0)
 	{
-		isTrrigerReset = true;
-	}
+		// 回避を再度行える用になったかどうか
+		float trrigerR = Input::GetPadTrrigerR();
+		if (trrigerR == 0)
+			isTrrigerReset = true;
 
-	// 回復
-	if (IsRecoverEntry())
-	{
-		HPRecovery(RECOVERY_QUANTITY);
-	}
+		// 回復
+		if (IsRecoverEntry())	HPRecovery(RECOVERY_QUANTITY);
 
-	// 現在の状態関係なく行えるアクション
-	{
-		if (IsDodEntry())
+		// 現在の状態関係なく行えるアクション
+		if (IsDodEntry())	ChangeState(CharacterState::Dodging);
+			
+
+
+		// 特定の状態じゃないときに使えるアクション
 		{
-			// 回避
-			ChangeState(CharacterState::Dodging);
-		}
-	}
-
-	// 特定の状態じゃないときに使えるアクション
-	{
-		// 攻撃中は使用できないアクション
-		if (IsStateSet(CharacterState::Attacking) == false)
-		{
-			// ジャンプ
-			if (IsJumpEntry())
+			// 攻撃中は使用できないアクション
+			if (IsStateSet(CharacterState::Attacking) == false)
 			{
-				ChangeState(CharacterState::Jumping);
+				if (IsJumpEntry())	ChangeState(CharacterState::Jumping);
+				if (IsMoveEntry())	ChangeState(CharacterState::Moving);
+			}
+			else
+			{
+				// 状態フラグが立っていたら下げる
+				if (IsStateSet(CharacterState::Jumping))	ClearState(CharacterState::Jumping);
+				if (IsStateSet(CharacterState::Moving))		ClearState(CharacterState::Moving);
+
 			}
 
-			// 移動
-			if (IsMoveEntry())
-			{
-				ChangeState(CharacterState::Moving);
-			}
-		}
-		else
-		{
-			// 状態フラグが立っていたら下げる
-			if (IsStateSet(CharacterState::Jumping))
-			{
-				ClearState(CharacterState::Jumping);
-			}
-
-			if (IsStateSet(CharacterState::Moving))
-			{
-				ClearState(CharacterState::Moving);
-			}
-		}
-
-		// ジャンプ中には行えないアクション
-		if (IsStateSet(CharacterState::Jumping) == false)
-		{
-			if (IsAttackEntry())
+			// ジャンプ中には行えないアクション
+			if (IsStateSet(CharacterState::Jumping) == false)
 			{
 				// 攻撃
-				ChangeState(CharacterState::Attacking);
+				if (IsAttackEntry())	ChangeState(CharacterState::Attacking);
 			}
 		}
-	}
 
-	if (IsStateSet(CharacterState::Jumping) == false)
-	{
-		transform_.position_.y -= PositionAdjustment(transform_.position_);
+		if (IsStateSet(CharacterState::Jumping) == false)
+		{
+			transform_.position_.y -= PositionAdjustment(transform_.position_);
+		}
 	}
-
 
 	CharacterCheckHP();
 
@@ -238,23 +213,27 @@ void Player::CharacterUpdate()
 
 void Player::CharacterIdleAction()
 {
-	// 各状態に応じた入力が行われたら状態を変化させる
-	if (IsMoveEntry()) 
+	if (GetHP() > 0)
 	{
-		ChangeState(CharacterState::Moving);
+		// 各状態に応じた入力が行われたら状態を変化させる
+		if (IsMoveEntry())
+		{
+			ChangeState(CharacterState::Moving);
+		}
+		if (IsDodEntry())
+		{
+			ChangeState(CharacterState::Dodging);
+		}
+		if (IsAttackEntry())
+		{
+			ChangeState(CharacterState::Attacking);
+		}
+		if (IsJumpEntry())
+		{
+			ChangeState(CharacterState::Jumping);
+		}
 	}
-	if (IsDodEntry())
-	{
-		ChangeState(CharacterState::Dodging);
-	}
-	if (IsAttackEntry())
-	{	
-		ChangeState(CharacterState::Attacking);
-	}
-	if (IsJumpEntry())
-	{
-		ChangeState(CharacterState::Jumping);
-	}
+	
 }
 
 void Player::CharacterMove()
@@ -843,14 +822,17 @@ bool Player::DiedAction()
 {
 	if (GraduallyTransparency())
 	{
+		pEffect->StopEffectDead();
 		return true;
 	}
-	else
+	else if(pEffect->IsCalledDeadEffect() == false)
 	{
+		pEffect->SetCalledDeadFlg();
+
 		// Effectの呼び出し
+		pEffect->SetEmitterPosition(GetPosition(), EmitterType::Dead);
+		pEffect->StartEffectDead();
 	}
-
-
 
 	return false;
 }
