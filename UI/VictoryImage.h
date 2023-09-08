@@ -15,6 +15,7 @@ public:
 private:
 
 	int hPict;
-
+	float alpha;
+	float ease;
 };
 

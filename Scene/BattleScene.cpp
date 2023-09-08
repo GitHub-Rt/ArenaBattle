@@ -128,9 +128,6 @@ void BattleScene::Initialize()
 
 void BattleScene::Update()
 {
-
-	
-
 	// 勝利、敗北画像表示中の処理
 	if (pDefeat != nullptr || pVictory != nullptr)
 	{
@@ -271,8 +268,9 @@ void BattleScene::Update()
 			return;
 		}
 
-		// プレイヤーの入力を受け付けなくする
+		// プレイヤーの入力を受け付けなくする、ステージの端に飛ばす
 		pPlayer->SetInputReception(false);
+		pPlayer->BlowAway();
 
 		if (pBoss->BossEntry())
 		{

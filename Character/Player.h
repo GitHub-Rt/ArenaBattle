@@ -89,7 +89,8 @@ public:
 	bool IsRecoverEntry();		// 回復周りの入力
 	bool IsJumpEntry();			// ジャンプ周りの入力
 
-	
+	// 円の端まで飛ばす処理
+	void BlowAway();
 
 #ifdef _DEBUG	// デバッグ関数
 

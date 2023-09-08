@@ -836,3 +836,26 @@ bool Player::DiedAction()
 
 	return false;
 }
+
+void Player::BlowAway()
+{
+	const float MOVING_DISTANCE_ADJUSTMENT = 1.5f;	// プレイヤーの移動量の調節
+
+
+	// 進行方向ベクトルを用意する
+	XMVECTOR vNowPosition = XMVectorSet(transform_.position_.x, 0, transform_.position_.z, 0);
+	XMVECTOR vCenter = XMVectorSet(0, 0, 0, 0);
+	XMVECTOR dir = XMVector3Normalize(vNowPosition - vCenter) * MOVING_DISTANCE_ADJUSTMENT;
+
+
+	XMFLOAT3 moveValue = { 0,0,0 };
+	XMStoreFloat3(&moveValue, dir);
+
+	moveValue = Transform::Float3Add(moveValue, transform_.position_);
+	
+
+	if (IsMoveLimit(moveValue) == false)
+	{
+		transform_.position_ = moveValue;
+	}
+}
