@@ -63,8 +63,9 @@ public:
 	// 一周目(Easy)をクリアしたときに呼ぶ関数
 	void SetClearedFlg() { isCleared = true; }
 	
-	// ハードモードにセットする
+	// ゲーム難易度をセットする
 	void SetHardModeFlg() { isHardMode = true; }
+	void SetEasyModeFlg() { isHardMode = false; }
 
 	// シーンの再作成を行う関数
 	void ReLoadScene(SCENE_ID targetScene);

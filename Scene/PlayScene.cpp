@@ -118,6 +118,10 @@ void PlayScene::BattleStart()
 			{
 				pManager->SetHardModeFlg();
 			}
+			else
+			{
+				pManager->SetEasyModeFlg();
+			}
 			pSound->SoundStop(SoundTrack::PlaySceneSound);
 			Instantiate<LoadingImage>(this);
 			pManager->ChangeScene(SCENE_ID::SCENE_ID_BATTLE);

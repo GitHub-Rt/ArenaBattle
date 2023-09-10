@@ -33,17 +33,6 @@ class Player : public CharacterBase
 {
 public:
 
-	// カメラの方向ベクトルを返す
-	XMFLOAT3 GetCameraDirection() { return cameraDirection; }
-
-
-	// カメラのポジション、焦点を返す
-	XMFLOAT3 GetCameraPosition() { return cameraPosition; }
-	XMFLOAT3 GetCameraFocas() { return cameraFocus; }
-
-	// 攻撃状態を返す
-	AttackState GetAttackState() { return attackState; }
-
 	void SetData() override;
 	Player(GameObject* parent);
 	~Player();
@@ -64,23 +53,27 @@ public:
 
 	// カメラ周り
 	void NormalCamera();	// 通常時カメラ関数
+	XMFLOAT3 GetCameraDirection() { return cameraDirection; }	// カメラの方向ベクトルを返す
+	XMFLOAT3 GetCameraPosition() { return cameraPosition; }	    // カメラのポジションを返す
+	XMFLOAT3 GetCameraFocas() { return cameraFocus; }			// カメラの焦点を返す
 	
 	// 攻撃周り
 	void NormalAttackAction();	// 通常攻撃アクション
 	void HardAttackAction();	// 強攻撃アクション
+	AttackState GetAttackState() { return attackState; }	// 攻撃状態を返す
 
 	// 被ダメージモーション周り
 	void DamageMotion();
-	void SetDamageDirection(XMVECTOR dir) { vTraveling = dir; }
+	void SetDamageDirection(XMVECTOR dir) { vTraveling = dir; }	// ダメージ時の移動方向をセットする
 
 	// HP周り
-	float GetHP() { return hp; }
+	float GetHP() { return hp; }	// HPを返す
 	void HPDamage(float value);		// HPゲージ減少、hp減少
 	void HPRecovery(float value);	// HPゲージ増加、hp増加
 	
-	// 入力の受付を行うかどうか
-	void SetInputReception(bool nextState) { isInputReception = nextState; }
-	bool IsInputReception() { return isInputReception; }
+	// 入力の受付周り
+	void SetInputReception(bool nextState) { isInputReception = nextState; }	// 入力の受付の有無をセットする
+	bool IsInputReception() { return isInputReception; }						// 現在入力を受け付けているかどうかを返す
 
 	// 各入力が行われたかどうか
 	bool IsMoveEntry();			// 動き周りの入力
@@ -116,43 +109,42 @@ private:
 	// 体力周りの変数
 	PlayerGauge* pGauge;
 	RecoveryPotion* pPotion;
-	int hRecoveryEffect;	// 回復効果音の番号
-	float hp;				// 体力
+	int hRecoveryEffect;
+	float hp;
 
 	// 入力周りの変数
-	bool isTrrigerReset;		// 回避の入力をリセットしたかどうか
-	bool isInputReception;		// 入力を受け付けるかどうか
+	bool isTrrigerReset;
+	bool isInputReception;
 
 	// 移動周りの変数
-	XMFLOAT3 movingDistance;	// 移動量
-	XMVECTOR vPrevPos;			// 前回の位置ベクトル
+	XMFLOAT3 movingDistance;
+	XMVECTOR vPrevPos;
 
 	// ジャンプ周りの変数
-	float beforeJumpY;			// ジャンプする前のy座標
-	float jumpSpeed;			// ジャンプ速度
-	bool isJumpSummit;			// ジャンプの頂上に到達したかどうか
-
+	float beforeJumpY;
+	float jumpSpeed;
+	bool isJumpSummit;
 
 	// 攻撃周りの変数
 	Effect* pEffect;
-	AttackState attackState;		// 攻撃状態
-	int attackTimer;				// 攻撃時間
-	XMVECTOR attackVector;			// 入力ベクトル
+	AttackState attackState;
+	int attackTimer;
+	XMVECTOR attackVector;
 
 	// 回避周りの変数
-	PolyLine* pLine;			// ポリラインのポインタ
-	int dodgeTimer;				// 回避時間
+	PolyLine* pLine;
+	int dodgeTimer;
 
 	// 被ダメージ周りの変数
-	int damageTimer;				// ダメージタイマー
-	XMVECTOR vTraveling;			// 進行方向ベクトル
+	int damageTimer;
+	XMVECTOR vTraveling;
 
 	// カメラ周りの変数
 	float angleX;				// 水平方向のカメラ回転角度
 	float angleY;				// 鉛直方向のカメラ回転角度
-	XMFLOAT3 cameraDirection;	// カメラの方向ベクトル
-	XMFLOAT3 cameraPosition;	// カメラのポジション
-	XMFLOAT3 cameraFocus;		// カメラの焦点
+	XMFLOAT3 cameraDirection;
+	XMFLOAT3 cameraPosition;
+	XMFLOAT3 cameraFocus;
 
 
 #ifdef _DEBUG	// デバッグ変数

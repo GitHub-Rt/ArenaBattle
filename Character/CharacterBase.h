@@ -84,13 +84,13 @@ public:
 	/// <summary>
 	/// キャラクターモデルをLoadする関数
 	/// </summary>
-	/// <param name="fileName"></param>
+	/// <param name="fileName">モデルファイル名</param>
 	void CharacterModelLoad(std::string fileName);
 
 	/// <summary>
 	/// キャラクターのモデル番号を取得する関数
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>モデル番号</returns>
 	int GetCharacterModel() { return hModel; }
 
 	/// <summary>
@@ -120,7 +120,7 @@ public:
 	/// <summary>
 	/// キャラクターをDrawする関数
 	/// </summary>
-	/// <param name="charaModel"></param>
+	/// <param name="charaModel">モデル番号</param>
 	void CharacterDraw(int charaModel);
 
 
@@ -144,7 +144,7 @@ public:
 	/// <summary>
 	/// ダメージ段階を変更する関数
 	/// </summary>
-	/// <param name="nextStage"></param>
+	/// <param name="nextStage">次のダメージ段階</param>
 	void SetDamageStage(DamageStage nextStage) 
 	{
 		damageStage = nextStage; 
@@ -154,21 +154,21 @@ public:
 	/// <summary>
 	/// ダメージ段階を取得する関数
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ダメージ段階</returns>
 	DamageStage GetDamageState() { return damageStage; }
 
 	/// <summary>
 	/// 該当キャラクターが受けるダメージ量をセットする
 	/// </summary>
-	/// <param name="attackDamage"></param>
+	/// <param name="attackDamage">ダメージ量</param>
 	void SetDamage(float attackDamage) { damage = attackDamage; }
 
 	/// <summary>
 	/// パラメータに値をセットする関数
 	/// </summary>
-	/// <param name="hp_"></param>
-	/// <param name="attack_"></param>
-	/// <param name="defense_"></param>
+	/// <param name="hp_">体力</param>
+	/// <param name="attack_">攻撃力</param>
+	/// <param name="defense_">防御力</param>
 	void SetParameter(int hp_, int attack_, int defense_);
 
 	/// <summary>
@@ -186,7 +186,7 @@ public:
 	/// <summary>
 	/// ゲーム効果音を停止する関数
 	/// </summary>
-	/// <param name="effect"></param>
+	/// <param name="effect">該当効果音</param>
 	void SoundEffectStop(SoundEffect effect);
 
 	/// <summary>
@@ -200,13 +200,13 @@ public:
 	/// <summary>
 	/// 受けるダメージ量を返す
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ダメージ量</returns>
 	float GetDamage() { return damage; }
 
 	/// <summary>
 	/// 状態を変化させる(状態フラグを立てる)
 	/// </summary>
-	/// <param name="nextState">次の状態</param>
+	/// <param name="nextState">次のキャラクター状態</param>
 	void ChangeState(CharacterState nextState) 
 	{
 		characterStateFlg |= (unsigned int)nextState;
@@ -220,7 +220,7 @@ public:
 	/// <summary>
 	/// 状態をクリアにする(状態フラグを下す)
 	/// </summary>
-	/// <param name="clearState"></param>
+	/// <param name="clearState">下げるキャラクター状態</param>
 	void ClearState(CharacterState clearState) 
 	{
 		characterStateFlg &= ~(unsigned int)clearState;
@@ -235,7 +235,7 @@ public:
 	/// <summary>
 	/// 状態を取得する(状態が立っているかどうかを返す)
 	/// </summary>
-	/// <param name="state"></param>
+	/// <param name="state">該当キャラクター状態</param>
 	/// <returns>状態が立っていたらtrue</returns>
 	bool IsStateSet(CharacterState state) const { return (characterStateFlg & (unsigned int)state) != 0; }
 

@@ -136,7 +136,6 @@ void Player::Initialize()
 
 		pPotion = Instantiate<RecoveryPotion>(GetParent());
 		pPotion->SetPotionCount(RECOVERY_POTION_NUMBER);
-
 	}
 
 	NormalCamera();
@@ -853,7 +852,7 @@ void Player::BlowAway()
 
 	moveValue = Transform::Float3Add(moveValue, transform_.position_);
 	
-
+	// 移動処理
 	if (IsMoveLimit(moveValue) == false)
 	{
 		transform_.position_ = moveValue;
