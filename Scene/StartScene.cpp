@@ -33,8 +33,16 @@ void StartScene::Initialize()
 {
 	pManager = (SceneManager*)FindObject("SceneManager");
 	pSound = pManager->GetSound();
+	
+	if (pManager->GetPrevScene() == SCENE_ID::SCENE_ID_BATTLE)
+	{
+		pSound->SetSoundALLFalse();
+		pSound->SoundLoad(SoundTrack::TitleSound);
+		pSound->SoundPlay(SoundTrack::TitleSound);
+	}
 
 	pManager->ContinueCountReset();
+	pManager->SetRetryPoint(RetryPoint::NormalEnemyBattle);
 
 	pSound->EffectLoad(SoundEffect::Determinant);
 	pSound->EffectLoad(SoundEffect::MoveSelection);

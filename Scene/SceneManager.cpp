@@ -87,7 +87,6 @@ void SceneManager::Update()
 		case SCENE_ID::SCENE_ID_DEBUG:		Instantiate<DebugScene>(this);			break;
 		default:	break;
 		}
-		//pSound->SetEffectALLFalse();
 		currentSceneID_ = nextSceneID_;
 	}
 }
