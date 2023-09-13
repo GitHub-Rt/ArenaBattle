@@ -19,7 +19,7 @@
 #include "../Sound/GameSound.h"
 
 // 定数宣言
-const XMFLOAT3 HIT_TEST_RANGE = { 4, 4, 4 };	// 当たり判定枠
+const XMFLOAT3 HIT_TEST_RANGE = { 1.5f, 4, 1.5f };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
 
 void Player::SetData()
@@ -659,24 +659,22 @@ void Player::OnCollision(GameObject* pTarget, Collider* nowCollider)
 
 		if (IsStateSet(CharacterState::Attacking))
 		{
+
 			EnemyBoss* pBoss = (EnemyBoss*)FindObject("EnemyBoss");
-			
-			if (pBoss->GetDamageState() == DamageStage::NoDamage)
+
+			switch (attackState)
 			{
-				switch (attackState)
-				{
-				case AttackState::NoAttack:
-					break;
-				case AttackState::NormalAttack:
-					CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, NORMAL_ATTACK_INCREASE_RATE);
-					pBoss->SetDamageStage(DamageStage::DamageStart);
-					break;
-				case AttackState::HardAttack:
-					CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, HARD_ATTACK_INCREASE_RATE);
-					pBoss->SetDamageStage(DamageStage::DamageStart);
-				default:
-					break;
-				}
+			case AttackState::NoAttack:
+				break;
+			case AttackState::NormalAttack:
+				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, NORMAL_ATTACK_INCREASE_RATE);
+				pBoss->SetDamageStage(DamageStage::DamageStart);
+				break;
+			case AttackState::HardAttack:
+				CharacterDamageCalculation(CharacterID::Player, CharacterID::EnemyBoss, HARD_ATTACK_INCREASE_RATE);
+				pBoss->SetDamageStage(DamageStage::DamageStart);
+			default:
+				break;
 			}
 			
 		}

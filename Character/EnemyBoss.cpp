@@ -789,7 +789,7 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 		if (IsStateSet(CharacterState::Attacking))
 		{
 			// 攻撃倍率の設定
-			float attackMagnification = 1.0f;
+			float attackMagnification = 0;
 
 			for (unsigned int nowState = (unsigned int)BossAttackState::NoAttack; nowState <= (unsigned int)BossAttackState::MaxAttackState; nowState++)
 			{
@@ -811,7 +811,7 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 			}
 			
 			// プレイヤーがダメージを受けていなかったらダメージ処理を行わせる
-			if (pPlayer->GetDamageState() == DamageStage::NoDamage && attackMagnification != 1.0f)
+			if (pPlayer->GetDamageState() == DamageStage::NoDamage && attackMagnification != 0)
 			{
 				CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, attackMagnification);
 				pPlayer->SetDamageStage(DamageStage::DamageStart);
@@ -836,7 +836,7 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XM
 	pPlayer = (Player*)FindObject("Player");
 
 	// 攻撃倍率の設定
-	float attackMagnification = 1.0f;
+	float attackMagnification = 0;
 
 	// モデルハンドル別に倍率を設定
 	switch (attackSource)
@@ -852,7 +852,7 @@ void EnemyBoss::AttackModelDamageToPlayer(BossAttackModelHandle attackSource, XM
 	}
 
 	// プレイヤーがダメージを受けていなかったらダメージ処理を行わせる
-	if (pPlayer->GetDamageState() == DamageStage::NoDamage && attackMagnification != 1.0f)
+	if (pPlayer->GetDamageState() == DamageStage::NoDamage && attackMagnification != 0)
 	{
 		CharacterDamageCalculation(CharacterID::EnemyBoss, CharacterID::Player, 0, attackMagnification);
 		pPlayer->SetDamageStage(DamageStage::DamageStart);
