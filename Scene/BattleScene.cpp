@@ -150,7 +150,7 @@ void BattleScene::Update()
 
 	// í“¬I—¹Žžˆ—
 	{
-		if (pPlayer->GetHP() <= 0)
+		if (pPlayer->GetHP() <= 0 && pVictory == nullptr)
 		{
 			if (pPlayer->IsInputReception())
 			{
