@@ -41,8 +41,8 @@ void DebugScene::Initialize()
 	}
 
 	Instantiate<Stage>(this);
-	Instantiate<BattleWall>(this);
-	Instantiate<WaterFloor>(this);
+	//Instantiate<BattleWall>(this);
+	//Instantiate<WaterFloor>(this);
 	//Instantiate<BattleBackGround>(this);
 
 

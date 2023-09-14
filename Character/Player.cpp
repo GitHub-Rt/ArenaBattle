@@ -314,9 +314,6 @@ void Player::NormalAttackAction()
 {
 	// エフェクト
 	pEffect->SetEmitterPosition(transform_.position_, EmitterType::Ventilation);
-	XMFLOAT3 dir = { 0,0,0 };
-	XMStoreFloat3(&dir, GetFrontVector());
-	pEffect->SetDirection(dir, transform_.rotate_);
 	pEffect->StartEffectAtNormalAttack();
 
 	if (attackTimer > NORMAL_ATTACK_TIME)

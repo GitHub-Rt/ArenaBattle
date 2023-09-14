@@ -73,19 +73,6 @@ public:
 	/// /// <param name="type">エフェクト種類</param>
 	void SetEmitterPosition(XMFLOAT3 pos, EmitterType type);
 
-
-
-	void SetDirection(XMFLOAT3 dir, XMFLOAT3 rotate) 
-	{
-		XMVECTOR vec = XMLoadFloat3(&dir);
-		XMVECTOR vInverse = -vec;
-		
-		XMStoreFloat3(&ventilationDir, vec);
-		ventilationDir.z -= 0.25f;
-		ventilationRotate = rotate;
-	}
-
-
 	// 死亡エフェクト周りの関数
 
 	/// <summary>
