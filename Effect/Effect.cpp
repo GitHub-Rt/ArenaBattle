@@ -76,7 +76,7 @@ void Effect::StartEffectDetonation()
 	data_Detonation.number = 1;
 	data_Detonation.lifeTime = 7;
 	data_Detonation.speed = 0;
-	data_Detonation.size = XMFLOAT2(5, 5);
+	data_Detonation.size = XMFLOAT2(4, 4);
 	data_Detonation.sizeRnd = XMFLOAT2(0, 0);
 	data_Detonation.scale = XMFLOAT2(1.25f, 1.25f);
 	data_Detonation.color = XMFLOAT4(1, 1, 1, 0.3f);
@@ -123,14 +123,15 @@ void Effect::StartEffectAtNormalAttack()
 {
 	data_Ventilation.textureFileName = "Effect/rlingB_W.png";
 	data_Ventilation.rotate.x = 90;
-	data_Ventilation.positionRnd.y = 0.2f;
-	data_Ventilation.speed = 0.3f;
-	data_Ventilation.accel = 0.75f;
+	data_Ventilation.positionRnd.y = 0.5f;
+	data_Ventilation.speed = 0.2f;
+	data_Ventilation.accel = 0.98f;
 	data_Ventilation.delay = 5;
-	data_Ventilation.number = 4;
+	data_Ventilation.number = 8;
 	data_Ventilation.lifeTime = 10;
-	data_Ventilation.deltaColor = XMFLOAT4(0, 0, 0, -0.25f);
-	data_Ventilation.size = XMFLOAT2(5, 5);
+	data_Ventilation.deltaColor = XMFLOAT4(0, 0, 0, -0.35f);
+	data_Ventilation.spin.z = -5;
+	data_Ventilation.size = XMFLOAT2(4, 4);
 	data_Ventilation.scale = XMFLOAT2(1.2f, 1.2f);
 	data_Ventilation.isBillBoard = false;
 	eLimitVentilation = VFX::Start(data_Ventilation);

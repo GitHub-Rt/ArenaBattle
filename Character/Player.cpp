@@ -777,6 +777,8 @@ bool Player::IsAttackEntry()
 
 				return true;
 			}
+
+			
 		}
 	}
 
