@@ -51,8 +51,8 @@ void DebugScene::Initialize()
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}*/
 
-	pBoss = Instantiate<EnemyBoss>(this);
-	pBoss->ProcessStart();
+	//pBoss = Instantiate<EnemyBoss>(this);
+	//pBoss->ProcessStart();
 
 	//pBoss->SecondFormStart();
 

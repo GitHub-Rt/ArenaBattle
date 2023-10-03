@@ -18,9 +18,12 @@
 
 #include "../Sound/GameSound.h"
 
+#include "../Object/Shadow.h"
+
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 1.5f, 4, 1.5f };	// 当たり判定枠
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
+const XMFLOAT3 ShadowScale = { 1.8f, 1, 1.8f };	// 影の大きさ
 
 void Player::SetData()
 {
@@ -49,6 +52,8 @@ Player::Player(GameObject* parent)
 	RECOVERY_POTION_NUMBER = 0;
 	RECOVERY_QUANTITY = 0;
 	MAX_DAMAGE_TIMER = 0;
+
+	pShadow = nullptr;
 
 	pGauge = nullptr;
 	pPotion = nullptr;
@@ -102,7 +107,6 @@ Player::~Player()
 		pEffect->Release();
 		SAFE_DELETE(pEffect);
 	}
-	
 }
 
 void Player::Initialize()
@@ -123,6 +127,9 @@ void Player::Initialize()
 	{
 		transform_.position_.z = -45.0f;
 		vPrevPos = XMLoadFloat3(&transform_.position_);
+
+		pShadow = Instantiate<Shadow>(this);
+		pShadow->SetScale(ShadowScale);
 
 		hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;

@@ -5,6 +5,7 @@ class PolyLine;
 class Effect;
 class PlayerGauge;
 class RecoveryPotion;
+class Shadow;
 
 // 攻撃の状態を管理
 enum class AttackState
@@ -105,6 +106,8 @@ private:
 	float RECOVERY_POTION_NUMBER;			// 回復ポーションの最大数
 	float RECOVERY_QUANTITY;				// 回復量
 	float MAX_DAMAGE_TIMER;					// 被ダメージ最大時間
+
+	Shadow* pShadow;
 
 	// 体力周りの変数
 	PlayerGauge* pGauge;

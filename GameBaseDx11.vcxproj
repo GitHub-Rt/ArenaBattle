@@ -171,6 +171,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Manager\EnemyManager.cpp" />
+    <ClCompile Include="Object\Shadow.cpp" />
     <ClCompile Include="Scene\BattleScene.cpp" />
     <ClCompile Include="Scene\ClearScene.cpp" />
     <ClCompile Include="Scene\ControllerOperationScene.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Manager\EnemyManager.h" />
+    <ClInclude Include="Object\Shadow.h" />
     <ClInclude Include="Scene\BattleScene.h" />
     <ClInclude Include="Scene\ClearScene.h" />
     <ClInclude Include="Scene\ControllerOperationScene.h" />

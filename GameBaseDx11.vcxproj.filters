@@ -117,6 +117,9 @@
     <Filter Include="10Effect">
       <UniqueIdentifier>{56d5f319-2e6b-406b-abc7-4ceb043632b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="12Object">
+      <UniqueIdentifier>{21674d19-8a75-4c8e-ac6c-509dda981b92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -385,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="UI\DefeatImage.cpp">
       <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Shadow.cpp">
+      <Filter>12Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -657,6 +663,9 @@
     </ClInclude>
     <ClInclude Include="UI\DefeatImage.h">
       <Filter>08UI\UIObject\Scene\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Shadow.h">
+      <Filter>12Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
