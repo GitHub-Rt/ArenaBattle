@@ -128,8 +128,12 @@ void Player::Initialize()
 		transform_.position_.z = -45.0f;
 		vPrevPos = XMLoadFloat3(&transform_.position_);
 
+		transform_.position_.y -= PositionAdjustment(transform_.position_);
+
 		pShadow = Instantiate<Shadow>(this);
 		pShadow->SetScale(ShadowScale);
+
+		XMStoreFloat3(&transform_.position_, vPrevPos);
 
 		hp = GetParameterValue(CharacterID::Player, CharacterStatus::HP);
 		jumpSpeed = JUMP_FIRST_SPEED;
@@ -523,7 +527,6 @@ void Player::CharacterJumpAction()
 	const float LOWEST_JUMP_VELOCITY_CHANGE_QUANTITY = 0.1f;	// 最低ジャンプ速度変化量
 	const float JUMP_GRAVTY_DEGREES = 0.85f;					// ジャンプ重力度
 	const float JUMP_DESCENDING_SPEED = 1.09f;					// ジャンプ降下速度
-
 
 	if (jumpSpeed > LOWEST_JUMP_VELOCITY_CHANGE_QUANTITY && isJumpSummit == false)
 	{// 上昇中の処理

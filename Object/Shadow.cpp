@@ -3,6 +3,7 @@
 #include "../Scene/SceneManager.h"
 
 #include "../Stage/StageBase.h"
+#include "../Character/CharacterBase.h"
 
 Shadow::Shadow(GameObject* parent)
 	:GameObject(parent, "Shadow")
@@ -68,6 +69,7 @@ void Shadow::SetShadow()
 		if (pStage != nullptr)
 		{
 			const XMFLOAT3 RAY_DIRECTION = XMFLOAT3(0, -1, 0);
+			const float POS_Y_ADJUSTMENT = 0.35f;
 
 			int groundHundle = pStage->GetModelHandle();
 
@@ -78,10 +80,8 @@ void Shadow::SetShadow()
 
 			if (data.hit)
 			{
-				transform_.position_.y = pos.y - data.dist;
+				transform_.position_.y -= data.dist - POS_Y_ADJUSTMENT;
 			}
 		}
-
-
 	}
 }
