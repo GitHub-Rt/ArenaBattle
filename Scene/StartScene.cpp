@@ -9,6 +9,7 @@
 #include "../Engine/Input.h"
 
 const float SELECT_BOX_POS_X = -0.0375f;
+const float SELECT_BOX_CONTROLLER_X = -0.03f;
 const float START_PLAY_Y = 0.22f;
 const float START_CONTROLLER_Y = -0.38f;
 const float START_KEYBOARD_Y = -0.615f;
@@ -139,7 +140,7 @@ void StartScene::ChangeStateUIPosition()
 			pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, START_PLAY_Y, 0));
 			break;
 		case StartState::Controller:
-			pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, START_CONTROLLER_Y, 0));
+			pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_CONTROLLER_X, START_CONTROLLER_Y, 0),true);
 			break;
 		case StartState::Keyboard:
 			pBox->SetSelectBox(XMFLOAT3(SELECT_BOX_POS_X, START_KEYBOARD_Y, 0));
