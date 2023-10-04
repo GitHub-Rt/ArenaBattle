@@ -219,6 +219,10 @@ void GameObject::AddCollider(Collider* collider)
 	colliderList_.push_back(collider);
 }
 
+void GameObject::DeleteCollider()
+{
+	colliderList_.clear();
+}
 
 Collider* GameObject::GetColliderListFront()
 {

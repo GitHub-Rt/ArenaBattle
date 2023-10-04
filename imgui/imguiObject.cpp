@@ -41,7 +41,7 @@ void imguiObject::Initialize()
 
     // プレイヤーを不死にする
     pPlayer = (Player*)FindObject("Player");
-    pPlayer->Immortality();
+    //pPlayer->Immortality();
 
 #endif
 }

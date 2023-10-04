@@ -179,12 +179,14 @@ void BattleScene::Update()
 			// “Gƒ{ƒX‚ÌŽ€–S‰‰o
 			if (pBoss->DiedAction())
 			{
+				pBoss->Invisible();
 				pVictory = Instantiate<VictoryImage>(this);
 				isFinishedStaging = true;
 			}
 			else
 			{
 				pPlayer->SetInputReception(false);
+				pBoss->DeleteCollider();
 				pBoss->Leave();
 				return;
 			}

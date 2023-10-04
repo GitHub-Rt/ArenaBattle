@@ -34,6 +34,8 @@ void DebugScene::Initialize()
 {
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 
+	
+
 	// リストの全要素を削除
 	if (EnemyManager::IsListEmpty() == false)
 	{
@@ -51,8 +53,8 @@ void DebugScene::Initialize()
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}*/
 
-	//pBoss = Instantiate<EnemyBoss>(this);
-	//pBoss->ProcessStart();
+	pBoss = Instantiate<EnemyBoss>(this);
+	pBoss->ProcessStart();
 
 	//pBoss->SecondFormStart();
 

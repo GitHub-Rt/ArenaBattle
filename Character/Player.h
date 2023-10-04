@@ -89,7 +89,7 @@ public:
 #ifdef _DEBUG	// デバッグ関数
 
 	// 不死にする
-	void Immortality() { isImmortality = true; }	
+	void Immortality() { isImmortality = true; }
 
 #endif
 

@@ -130,8 +130,8 @@ void Player::Initialize()
 
 		transform_.position_.y -= PositionAdjustment(transform_.position_);
 
-		pShadow = Instantiate<Shadow>(this);
-		pShadow->SetScale(ShadowScale);
+		//pShadow = Instantiate<Shadow>(this);
+		//pShadow->SetScale(ShadowScale);
 
 		XMStoreFloat3(&transform_.position_, vPrevPos);
 
