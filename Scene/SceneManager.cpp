@@ -11,6 +11,7 @@
 #include "ReleaseScene.h"
 #include "KeyboardOperationScene.h"
 #include "ControllerOperationScene.h"
+#include "HowToPlayScene.h"
 #include "PlayScene.h"
 #include "BattleScene.h"
 #include "ClearScene.h"
@@ -81,6 +82,7 @@ void SceneManager::Update()
 		case SCENE_ID::SCENE_ID_RELEASE:	Instantiate<ReleaseScene>(this);		break;
 		case SCENE_ID::SCENE_ID_KEYBOARDOPERATION:  Instantiate<KeyboardOperationScene>(this);		break;
 		case SCENE_ID::SCENE_ID_CONTROLLEROPERATION: Instantiate<ControllerOperationScene>(this);		break;
+		case SCENE_ID::SCENE_ID_HOWTOPLAY:	Instantiate<HowToPlayScene>(this);	break;
 		case SCENE_ID::SCENE_ID_PLAY:       Instantiate<PlayScene>(this);			break;
 		case SCENE_ID::SCENE_ID_CLEAR:		Instantiate<ClearScene>(this);			break;
 		case SCENE_ID::SCENE_ID_OVER:		Instantiate<OverScene>(this);		break;

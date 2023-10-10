@@ -176,6 +176,7 @@
     <ClCompile Include="Scene\ClearScene.cpp" />
     <ClCompile Include="Scene\ControllerOperationScene.cpp" />
     <ClCompile Include="Scene\DebugScene.cpp" />
+    <ClCompile Include="Scene\HowToPlayScene.cpp" />
     <ClCompile Include="Scene\KeyboardOperationScene.cpp" />
     <ClCompile Include="Scene\OverScene.cpp" />
     <ClCompile Include="Scene\PlayScene.cpp" />
@@ -198,6 +199,7 @@
     <ClCompile Include="UI\ControllerOperationImage.cpp" />
     <ClCompile Include="UI\DefeatImage.cpp" />
     <ClCompile Include="UI\EnemyBossGauge.cpp" />
+    <ClCompile Include="UI\HowToPlayImage.cpp" />
     <ClCompile Include="UI\HPGaugeBase.cpp" />
     <ClCompile Include="UI\KeyboardOperationImage.cpp" />
     <ClCompile Include="UI\LevelSelectImage.cpp" />
@@ -269,6 +271,7 @@
     <ClInclude Include="Scene\ClearScene.h" />
     <ClInclude Include="Scene\ControllerOperationScene.h" />
     <ClInclude Include="Scene\DebugScene.h" />
+    <ClInclude Include="Scene\HowToPlayScene.h" />
     <ClInclude Include="Scene\KeyboardOperationScene.h" />
     <ClInclude Include="Scene\OverScene.h" />
     <ClInclude Include="Scene\PlayScene.h" />
@@ -291,6 +294,7 @@
     <ClInclude Include="UI\ControllerOperationImage.h" />
     <ClInclude Include="UI\DefeatImage.h" />
     <ClInclude Include="UI\EnemyBossGauge.h" />
+    <ClInclude Include="UI\HowToPlayImage.h" />
     <ClInclude Include="UI\HPGaugeBase.h" />
     <ClInclude Include="UI\KeyboardOperationImage.h" />
     <ClInclude Include="UI\LevelSelectImage.h" />

@@ -73,7 +73,7 @@ void PlayScene::Release()
 
 void PlayScene::BattleStart()
 {
-	// “ñŽü–Ú‚©‚Ç‚¤‚©‚ð’²‚×‚ÄŠY“–‚µ‚Ä‚¢‚½‚ç‰æ‘œ‚Å“ïˆÕ“x‘I‘ð‚ðs‚í‚¹‚é—\’è
+	// “ñŽü–Ú‚©‚Ç‚¤‚©‚ð’²‚×‚ÄŠY“–‚µ‚Ä‚¢‚½‚ç‰æ‘œ‚Å“ïˆÕ“x‘I‘ð‚ðs‚í‚¹‚é
 	if (pManager->GetClearFlg())
 	{
 		const float SELECT_BOX_POS_X = 0;

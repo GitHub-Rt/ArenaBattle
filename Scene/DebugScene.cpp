@@ -16,7 +16,6 @@
 #include "../Scene/SceneManager.h"
 #include "../Engine/Input.h"
 
-
 // 定数宣言
 const int EnemyTimer = 30;	// 敵が全滅してから再登場するまでのフレーム数
 const int ENEMY_COUNT = 3;
@@ -34,8 +33,6 @@ void DebugScene::Initialize()
 {
 	SceneManager* pManager = (SceneManager*)FindObject("SceneManager");
 
-	
-
 	// リストの全要素を削除
 	if (EnemyManager::IsListEmpty() == false)
 	{
@@ -45,13 +42,13 @@ void DebugScene::Initialize()
 	Instantiate<Stage>(this);
 	Instantiate<BattleWall>(this);
 	Instantiate<WaterFloor>(this);
-	//Instantiate<BattleBackGround>(this);
+	Instantiate<BattleBackGround>(this);
 
 
-	/*for (int i = 0; i < ENEMY_COUNT; i++)
+	for (int i = 0; i < ENEMY_COUNT; i++)
 	{
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
-	}*/
+	}
 
 	pBoss = Instantiate<EnemyBoss>(this);
 	pBoss->ProcessStart();

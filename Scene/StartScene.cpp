@@ -72,8 +72,12 @@ void StartScene::Update()
 		switch (nowState)
 		{
 		case StartState::GameStart:
-			pSound->SoundStop(SoundTrack::TitleSound);
-			pManager->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+			if (pManager->GetClearFlg())
+			{
+				pManager->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+				break;
+			}
+			pManager->ChangeScene(SCENE_ID::SCENE_ID_HOWTOPLAY);
 			break;
 		case StartState::Controller:
 			pManager->ChangeScene(SCENE_ID::SCENE_ID_CONTROLLEROPERATION);
