@@ -50,8 +50,8 @@ void DebugScene::Initialize()
 		EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 	}
 
-	pBoss = Instantiate<EnemyBoss>(this);
-	pBoss->ProcessStart();
+	//pBoss = Instantiate<EnemyBoss>(this);
+	//pBoss->ProcessStart();
 
 	//pBoss->SecondFormStart();
 
@@ -70,7 +70,7 @@ void DebugScene::Update()
 	}
 
 	// “G‚ª‚·‚×‚Ä“|‚³‚ê‚½‚çˆê’èŽžŠÔŒo‰ßŒãAÄ“oê‚·‚é
-	/*if (EnemyManager::IsListEmpty())
+	if (EnemyManager::IsListEmpty())
 	{
 		timer++;
 		if (timer > EnemyTimer)
@@ -82,7 +82,7 @@ void DebugScene::Update()
 				EnemyManager::AddEnemyList(Instantiate<Enemy>(this));
 			}
 		}		
-	}*/
+	}
 
 	//// “Gƒ{ƒXƒLƒƒƒ‰‚ð“oê‚³‚¹‚éˆ—
 	//if (pBoss->IsEntered() == false && EnemyManager::IsListEmpty())

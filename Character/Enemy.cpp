@@ -336,6 +336,13 @@ void Enemy::OnCollision(GameObject* pTarget, Collider* nowCollider)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
+
+		Collider* check = pTarget->GetColliderListFront();
+		if (nowCollider != check)
+		{
+			return;
+		}
+
 		Player* pPlayer = (Player*)FindObject("Player");
 
 		if (pPlayer->IsStateSet(CharacterState::Dodging) == false)

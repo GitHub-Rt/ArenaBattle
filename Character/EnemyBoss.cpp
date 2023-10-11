@@ -784,6 +784,12 @@ void EnemyBoss::OnCollision(GameObject* pTarget, Collider* nowCollider)
 {	
 	if (pTarget->GetObjectName() == "Player")
 	{
+		Collider* check = pTarget->GetColliderListFront();
+		if (nowCollider != check)
+		{
+			return;
+		}
+
 		pPlayer = (Player*)FindObject("Player");
 
 		if (IsStateSet(CharacterState::Attacking))

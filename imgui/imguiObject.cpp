@@ -257,41 +257,41 @@ void imguiObject::Update()
         //}
 
         //// EnemyèÓïÒ
-        //if (ImGui::TreeNode("EnemyInformation"))
-        //{
-        //    if (EnemyManager::IsListEmpty() == false)
-        //    {
-        //        int size = EnemyManager::GetVectorSize();
-        //        for (int i = 0; i < size; i++)
-        //        {
-        //            char numStr[256];
-        //            sprintf_s(numStr, "IndexNumber : %d", i);
-        //
-        //            if (ImGui::TreeNode(numStr))
-        //            {
-        //                // EnemyèÓïÒÇvectorÇ©ÇÁéÊìæ
-        //                pEnemy = EnemyManager::GetEnemyContent(i);
-        //
-        //                // é¿ç€ÇÃäeEnemyèÓïÒ
-        //                if (pEnemy != nullptr)
-        //                {
-        //                    std::string str = GetCharacterStateString(pEnemy);
-        //                    ImGui::Text(str.c_str());
-        //
-        //                    ImGui::Text("HP : %g", pEnemy->GetHP());
-        //
-        //                    ImGui::Text("position_x : %g", pEnemy->GetPosition().x);
-        //                    ImGui::Text("position_y : %g", pEnemy->GetPosition().y);
-        //                    ImGui::Text("position_z : %g", pEnemy->GetPosition().z);
-        //                }
-        //
-        //                ImGui::TreePop();
-        //            }
-        //        }
-        //    }
-        //   
-        //    ImGui::TreePop();
-        //}
+        if (ImGui::TreeNode("EnemyInformation"))
+        {
+            if (EnemyManager::IsListEmpty() == false)
+            {
+                int size = EnemyManager::GetVectorSize();
+                for (int i = 0; i < size; i++)
+                {
+                    char numStr[256];
+                    sprintf_s(numStr, "IndexNumber : %d", i);
+        
+                    if (ImGui::TreeNode(numStr))
+                    {
+                        // EnemyèÓïÒÇvectorÇ©ÇÁéÊìæ
+                        pEnemy = EnemyManager::GetEnemyContent(i);
+        
+                        // é¿ç€ÇÃäeEnemyèÓïÒ
+                        if (pEnemy != nullptr)
+                        {
+                            std::string str = GetCharacterStateString(pEnemy);
+                            ImGui::Text(str.c_str());
+        
+                            ImGui::Text("HP : %g", pEnemy->GetHP());
+        
+                            ImGui::Text("position_x : %g", pEnemy->GetPosition().x);
+                            ImGui::Text("position_y : %g", pEnemy->GetPosition().y);
+                            ImGui::Text("position_z : %g", pEnemy->GetPosition().z);
+                        }
+        
+                        ImGui::TreePop();
+                    }
+                }
+            }
+           
+            ImGui::TreePop();
+        }
 
         // EnemyBossèÓïÒ
         if (ImGui::TreeNode("EnemyBossInformation"))

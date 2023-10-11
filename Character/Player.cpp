@@ -22,8 +22,9 @@
 
 // 定数宣言
 const XMFLOAT3 HIT_TEST_RANGE = { 1.5f, 4, 1.5f };	// 当たり判定枠
+const XMFLOAT3 HIT_ATTACK_RANGE = { 3, 4, 3 };
 const float JUMP_FIRST_SPEED = 1.4f;			// ジャンプの初速度
-const XMFLOAT3 ShadowScale = { 1.8f, 1, 1.8f };	// 影の大きさ
+//const XMFLOAT3 ShadowScale = { 1.8f, 1, 1.8f };	// 影の大きさ
 
 void Player::SetData()
 {
@@ -116,6 +117,7 @@ void Player::Initialize()
 
 	CharacterModelLoad("player.fbx");
 	CharacterAddCollider(HIT_TEST_RANGE);
+	CharacterAddCollider(HIT_ATTACK_RANGE);
 
 	// 効果音のロード(回復の効果音のみ番号取得する)
 	hRecoveryEffect = SoundEffectLoad(SoundEffect::GaugeRecovery);
