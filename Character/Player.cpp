@@ -688,6 +688,12 @@ void Player::OnCollision(GameObject* pTarget, Collider* nowCollider)
 			
 		}
 	}
+
+	if (pTarget->GetObjectName() == "BattleStartCylinder")
+	{
+		XMStoreFloat3(&transform_.position_, vPrevPos);
+	}
+
 }
 
 void Player::HPDamage(float value)
